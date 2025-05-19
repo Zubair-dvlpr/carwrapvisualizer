@@ -44,6 +44,7 @@ const ViewRoutes = () => {
       {/* Dashboard Routes */}
       <Route path="/dashboard" element={<PrivateRoute><DashboardLayout><Overview /></DashboardLayout></PrivateRoute>} />
       <Route path="/tool" element={<PrivateRoute><DashboardLayout><CarFillPage /></DashboardLayout></PrivateRoute>} />
+      <Route path="/aitool" element={<PrivateRoute><DashboardLayout><CarFillPage /></DashboardLayout></PrivateRoute>} />
       {/* <Route path="/NewProject" element={<PrivateRoute><DashboardLayout><NewProject /></DashboardLayout></PrivateRoute>} /> */}
       <Route path="/myprojects" element={<PrivateRoute><DashboardLayout><MyProjects /></DashboardLayout></PrivateRoute>} />
       <Route path="/Subscription" element={<PrivateRoute><DashboardLayout><BillingSubscription /></DashboardLayout></PrivateRoute>} />

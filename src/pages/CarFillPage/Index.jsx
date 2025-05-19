@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import YearSelector from './Components/YearSelector';
 import MakeSelector from './Components/MakeSelector';
 import ModelSelector from './Components/ModelSelector';
 import garage from '../../assets/images/garage.png'
-import colorfullcar from '../../assets/images/colorful-car.png'
+import colorfullcar from '../../assets/images/carshowRoom.png'
+import logo3m from '../../assets/images/3m.png'
+import vector from '../../assets/images/vector.png'
+import avery from '../../assets/images/avery.png'
+import vvivid from '../../assets/images/vvivid.png'
+import inozetek from '../../assets/images/inozetek.png'
+import { AuthContext } from '../../context/AuthContext';
+// import loaderGif from "../../assets/loading.gif";
+import loaderGif from "../../assets/loading.gif";
 const CarFillPage = () => {
+ const { user } = useContext(AuthContext);
 
     const wrapFilmColors = {
         'Gloss': [
@@ -73,19 +82,50 @@ const CarFillPage = () => {
         ]
     };
 
-
+    const brands = [
+        {
+            name: "3M",
+            logo: logo3m, // Replace with your path
+            colors: wrapFilmColors
+        },
+        {
+            name: "vector",
+            logo: vector, // Replace with your path
+            colors: wrapFilmColors
+        },
+        {
+            name: "avery",
+            logo: avery, // Replace with your path
+            colors: wrapFilmColors
+        },
+        {
+            name: "vvivid",
+            logo: vvivid, // Replace with your path
+            colors: wrapFilmColors
+        },
+        {
+            name: "inozetek",
+            logo: inozetek, // Replace with your path
+            colors: wrapFilmColors
+        }
+    ];
+    const { animation, setAnimation } = useContext(AuthContext);
+    const [selectedBrand, setSelectedBrand] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedFinish, setSelectedFinish] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
     const [selectedYear, setSelectedYear] = useState('');
     const [selectedMake, setSelectedMake] = useState('');
     const [selectedModel, setSelectedModel] = useState('');
     const [generatedImage, setGeneratedImage] = useState('');
-
+    const imageRef = useRef(null);
     const generateImage = async (year, make, model, finish, color) => {
+        setAnimation(true);
         const response = await fetch('http://localhost/carApi/generateCarImage.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                user_id: user?.user.id,  // ensure this is current logged-in user ID from context or state
                 year,
                 make,
                 model,
@@ -96,8 +136,10 @@ const CarFillPage = () => {
         });
         const data = await response.json();
         if (data.status === 'success') {
+            setAnimation(false);
             return 'data:image/png;base64,' + data.imageBase64;
         } else {
+            setAnimation(false);
             throw new Error(data.message || 'Error generating image');
         }
     };
@@ -118,105 +160,148 @@ const CarFillPage = () => {
     };
 
 
-    const colorOptions = selectedFinish ? wrapFilmColors[selectedFinish] : [];
+    const handleBrandClick = (brand) => {
+        setSelectedBrand(brand);
+        setSelectedCategory(null); // Reset category
+    };
+
+    const handleCategoryClick = (category) => {
+        setSelectedCategory(category);
+    };
 
     return (
-        <div className="flex max-w-7xl mx-auto  flex-col md:flex-row h-full ">
-            {/* Left Side Image */}
-            <div className="md:w-1/2 flex flex-col justify-center items-center p-4">
-                <div className="">
-                    {generatedImage ? (
-                        <img src={generatedImage} alt="Generated Car" className="w-full" />
-                    ) : (
-                        <div className="w-full bg-cover bg-center" style={{ backgroundImage: `url('${garage}')` }}>
-                            <span className="block text-lg font-bold text-white bg-[#090A1E] bg-opacity-50 p-2 m-4">
-                                INTRODUCING THE WORLD'S FIRST WRAP VISUALIZER
-                            </span>
-                            <img src={colorfullcar} alt="Car" className="mx-auto w-[500px] max-w-full" />
-                        </div>
-                    )}
+        <>
+            {animation && (
+                <div className="absolute top-0 left-0 w-full  bg-[#000000d2] flex justify-center h-screen items-center">
+                    <img src={loaderGif} alt="Loading..." className="w-36" />
                 </div>
-            </div>
-            {/* Right Side Options */}
-            <div className="md:w-1/2 p-6">
-                <h1 className="text-3xl font-bold mb-4">WRAP VISUALIZER</h1>
-                <p className="mb-6 text-gray-100">
-                    See your wrap before you commit. Try different colors, finishes, and graphics with our Wrap Visualizer—it’s all about bringing your vision to life.
-                </p>
+             )}
+            <div className="flex max-w-7xl mx-auto  flex-col h-full ">
+                {/* Left Side Image */}
+                <div className=" flex flex-col justify-center items-center p-4">
+                    <div ref={imageRef} className="">
+                        {generatedImage ? (
+                            <img src={generatedImage} alt="Generated Car" className="w-full" />
+                        ) : (
+                            <div className="w-full bg-cover bg-center">
 
-
-                <div className="space-y-4">
-                    {/* Year Selector */}
-                    <div className='grid grid-cols-3 gap-3'>
-
-                        <label className="block">
-                            Year:
-                            <YearSelector onSelect={(year) => {
-                                setSelectedYear(year);
-                                setSelectedMake(''); // Reset make on year change
-                            }} />
-                        </label>
-
-
-                        {/* Make Selector */}
-                        <label className="block">
-                            Make:
-                            <MakeSelector selectedYear={selectedYear} onSelect={setSelectedMake} />
-                        </label>
-
-                        {/* Model Selector */}
-                        <label className="block">
-                            Model:
-                            <ModelSelector selectedYear={selectedYear} selectedMake={selectedMake} onSelect={setSelectedModel} />
-                        </label>
+                                <img src={colorfullcar} alt="Car" className="mx-auto max-w-4xl" />
+                            </div>
+                        )}
                     </div>
+                </div>
+                {/* Right Side Options */}
+                <div className="p-6">
+                    <div className="space-y-4">
+                        <div className='mx-auto max-w-3xl'>
+                            {/* Year Selector */}
+                            <h1 className="text-2xl  font-bold mb-4">Select Vehicle</h1>
 
-                    {/* Surface Finish */}
-                    <label className="block mb-4">
-                        Choose Surface Finish:
-                        <select className="w-full border p-2 mt-1" value={selectedFinish} onChange={handleFinishChange}>
-                            <option className='bg-[#090A1E]' value="">Select Finish</option>
-                            {Object.keys(wrapFilmColors).map((finish) => (
-                                <option className='bg-[#090A1E]' key={finish} value={finish}>{finish}</option>
-                            ))}
-                        </select>
-                    </label>
+                            <div className='grid grid-cols-3  gap-3'>
+
+                                <label className="block">
+                                    Year
+                                    <YearSelector onSelect={(year) => {
+                                        setSelectedYear(year);
+                                        setSelectedMake(''); // Reset make on year change
+                                    }} />
+                                </label>
 
 
-                    {/* Color Selector */}
-                    <label className="block mb-4">
-                        Choose a Color:
-                        <select
-                            className="w-full border p-2 mt-1"
-                            value={selectedColor}
-                            onChange={(e) => setSelectedColor(e.target.value)}
-                            disabled={!selectedFinish}
-                        >
-                            <option className='bg-[#090A1E]' value="">Select Color</option>
-                            {colorOptions.map((color) => (
-                                <option className='bg-[#090A1E]' key={color.colorCode} value={color.colorCode}>
-                                    {color.name}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
+                                {/* Make Selector */}
+                                <label className="block">
+                                    Make
+                                    <MakeSelector selectedYear={selectedYear} onSelect={setSelectedMake} />
+                                </label>
 
-                    {/* Color Preview */}
-                    {selectedColor && (
-                        <div className="mt-4">
-                            <p>Selected Color Preview:</p>
-                            <div className="w-16 h-16 border mt-2" style={{ backgroundColor: selectedColor }}></div>
+                                {/* Model Selector */}
+                                <label className="block">
+                                    Model
+                                    <ModelSelector selectedYear={selectedYear} selectedMake={selectedMake} onSelect={setSelectedModel} />
+                                </label>
+                            </div>
                         </div>
-                    )}
-                    <button
-                        className="mt-4 bg-transparent border cursor-pointer hover:bg-pink-500 hover:text-white border-pink-400 text-pink-500 w-full px-4 py-2 rounded transition hover:scale-105"
-                        onClick={handleConfirmSelection}
-                    >
-                        Confirm Selection
-                    </button>
+                        <div className="mx-auto max-w-4xl px-4 py-10 text-center">
+                            <h4 className="text-2xl font-bold mb-4">Select Wrap Brand</h4>
+                            <div className="flex justify-center gap-6 mb-8">
+                                {brands.map((brand) => (
+                                    <img
+                                        key={brand.name}
+                                        src={brand.logo}
+                                        alt={brand.name}
+                                        className={`h-16 cursor-pointer border-2 rounded-lg p-1 transition ${selectedBrand?.name === brand.name ? 'border-blue-500' : 'border-transparent'
+                                            }`}
+                                        onClick={() => handleBrandClick(brand)}
+                                    />
+                                ))}
+                            </div>
+
+                            {selectedBrand && (
+                                <div>
+                                    <h5 className="text-xl font-semibold mb-4">Select Category</h5>
+                                    <div className="flex flex-wrap justify-center gap-4 mb-6">
+                                        {Object.keys(selectedBrand.colors).map((cat) => (
+                                            <button
+                                                key={cat}
+                                                className={`px-4 py-2 rounded-full border ${selectedCategory === cat ? 'bg-blue-500 text-white' : 'border-gray-300'
+                                                    }`}
+                                                onClick={() => handleCategoryClick(cat)}
+                                            >
+                                                {cat}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    {selectedCategory && (
+                                        <div className="border-t pt-6">
+                                            <h6 className="text-lg font-medium mb-3">{selectedCategory} Colors</h6>
+                                            <div className="grid grid-cols-1 gap-3">
+                                                {selectedBrand.colors[selectedCategory].map((item, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="flex items-center justify-between p-4 border rounded-lg shadow-sm cursor-pointer hover:shadow-md transition"
+                                                        onClick={async () => {
+                                                            try {
+                                                                setSelectedFinish(selectedCategory);
+                                                                setSelectedColor(item.colorCode);
+
+                                                                const img = await generateImage(
+                                                                    selectedYear,
+                                                                    selectedMake,
+                                                                    selectedModel,
+                                                                    selectedCategory,
+                                                                    item.colorCode
+                                                                );
+                                                                setGeneratedImage(img);
+
+                                                                // Scroll to image after slight delay to ensure it has rendered
+                                                                setTimeout(() => {
+                                                                    imageRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                                                }, 100);
+                                                            } catch (err) {
+                                                                alert(err.message);
+                                                            }
+                                                        }}
+                                                    >
+                                                        <div
+                                                            className="w-10 h-10 rounded-full border"
+                                                            style={{ backgroundColor: item.colorCode }}
+                                                        ></div>
+                                                        <p className="text-md font-medium">{item.name}</p>
+                                                        <span className="text-sm text-gray-500">{selectedCategory}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

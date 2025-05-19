@@ -57,36 +57,37 @@ const AuthProvider = ({ children }) => {
 
 
   // Fetch user data after user is set
-  // useEffect(() => {
-  //   if (user) {
-  //     const fetchUserData = async () => {
-  //       const apiUrl = `https://api.theugcmachine.com/user/`;
+  useEffect(() => {
+    if (user) {
+      console.log(user)
+      const fetchUserData = async () => {
+        const apiUrl = `http://localhost/carApi/user.php`;
 
-  //       try {
-  //         const response = await fetch(apiUrl, {
-  //           method: 'GET',
-  //           headers: {
-  //             'Authorization': `Bearer ${user.token}`,
-  //             'Content-Type': 'application/json',
-  //           },
-  //         });
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${user.user.token}`,
+              'Content-Type': 'application/json',
+            },
+          });
 
-  //         const data = await response.json();
+          const data = await response.json();
 
-  //         if (data.success) {
-  //           setCredits(data.user.credits)
-  //           console.log("User API Response:", data.user.credits); // Log the API response
-  //         } else {
-  //           console.log("Failed to fetch user data:", data);
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching user data:", error);
-  //       }
-  //     };
+          if (data.success) {
+            setCredits(data.user.credits)
+            console.log("User API Response:", data.user.credits); // Log the API response
+          } else {
+            console.log("Failed to fetch user data:", data);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
 
-  //     fetchUserData();
-  //   }
-  // }, [user]); // Re-run when the user is set or updated
+      fetchUserData();
+    }
+  }, [animation]); // Re-run when the user is set or updated
 
 
   const login = async ({ email, password }) => {

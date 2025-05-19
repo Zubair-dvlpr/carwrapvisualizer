@@ -39,7 +39,7 @@ const ModelSelector = ({ selectedYear, selectedMake, onSelect }) => {
 
     return (
         <select onChange={(e) => onSelect(e.target.value)} className="border p-2 w-full mt-1">
-            <option value="">Select Model</option>
+            <option className='bg-[#090A1E]' value="">Select Model</option>
             {models.map((model) => (
                 <option className='bg-[#090A1E]' key={model.id} value={model.name}>{model.name}</option>
             ))}

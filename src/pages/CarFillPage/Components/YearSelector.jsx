@@ -23,7 +23,7 @@ const YearSelector = ({ onSelect }) => {
     }, []);
 
     if (loading) return <select className='border p-2 w-full mt-1'>
-        <option>
+        <option className='bg-[#090A1E]'>
             Loading years...
         </option>
     </select>;
@@ -31,7 +31,7 @@ const YearSelector = ({ onSelect }) => {
 
     return (
         <select onChange={(e) => onSelect(e.target.value)} className="border p-2 w-full mt-1">
-            <option value="">Select Year</option>
+            <option className='bg-[#090A1E]' value="">Select Year</option>
             {years.map((year) => (
                 <option className='bg-[#090A1E]' key={year} value={year}>{year}</option>
             ))}
