@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const YearSelector = ({ onSelect }) => {
+const YearSelector = ({ onSelect, value }) => {
     const [years, setYears] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -22,18 +22,18 @@ const YearSelector = ({ onSelect }) => {
             });
     }, []);
 
-    if (loading) return <select className='border p-2 w-full mt-1'>
-        <option className='bg-[#090A1E]'>
+    if (loading) return <select className='w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3'>
+        <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
             Loading years...
         </option>
     </select>;
     if (error) return <p>{error}</p>;
 
     return (
-        <select onChange={(e) => onSelect(e.target.value)} className="border p-2 w-full mt-1">
-            <option className='bg-[#090A1E]' value="">Select Year</option>
+        <select value={value}  onChange={(e) => onSelect(e.target.value)} className="w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3">
+            <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]' value="">Select Year</option>
             {years.map((year) => (
-                <option className='bg-[#090A1E]' key={year} value={year}>{year}</option>
+                <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]' key={year} value={year}>{year}</option>
             ))}
         </select>
     );

@@ -1,0 +1,32 @@
+/* Hide default navigation buttons */
+.react-calendar__navigation__prev-button,
+.react-calendar__navigation__next-button {
+  display: none;
+}
+abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: none;
+}
+/* Active date styling */
+.selected-date {
+  background-color: #EB227C !important;
+  color: white !important;
+  border-radius: 9999px;
+}
+.react-calendar {
+    width: 100%;
+    max-width: 100%;
+    background: white;
+    border: 0px solid #a0a096;
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    line-height: 1.125em;
+}
+/* Round tiles */
+.react-calendar__tile {
+  border-radius: 9999px;
+}
+
+/* Hover effect */
+.react-calendar__tile:hover {
+  background-color: #f3f4f6;
+}

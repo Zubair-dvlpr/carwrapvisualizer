@@ -11,7 +11,7 @@ const DashboardLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex h-screen relative">
+    <div className="flex h-screen relative bg-[#12161F]">
       {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
@@ -26,8 +26,10 @@ const DashboardLayout = ({ children }) => {
         <TopNavbar toggleSidebar={toggleSidebar} />
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-6 text-white bg-[#050611]">
-          {children}
+        <div className="flex-1 overflow-y-auto ">
+          <div className='bg-white p-6 rounded-4xl min-h-full'>
+            {children}
+          </div>
         </div>
       </div>
     </div>

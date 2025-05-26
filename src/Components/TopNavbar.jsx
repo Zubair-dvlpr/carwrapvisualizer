@@ -16,17 +16,17 @@ const notifications = [
 const TopNavbar = ({ toggleSidebar }) => {
   const { logout, credits, user } = useContext(AuthContext);
   return (
-    <div className="w-full h-[92px] border-l border-[#262A5B] bg-[#090A1E] shadow-md p-4 flex justify-between items-center">
+    <div className="w-full   h-[92px] border-l border-[#262A5B] bg-[#12161F] shadow-md p-4 md:hidden block md:justify-between justify-end items-center">
 
       {/* Left: Hamburger Menu */}
-      <div className="flex items-center">
+      <div className="flex justify-end items-center">
         <button className="md:hidden text-white text-2xl mr-4" onClick={() => toggleSidebar(true)}>
           ☰
         </button>
       </div>
 
       {/* Right: Icons with Dropdowns */}
-      <div className="flex items-center space-x-3 text-white">
+      <div className=" items-center hidden space-x-3 text-white">
 
         <div className='text-right bg-gradient-to-r p-[1px] from-[#1AE1AB] to-[#712FFF] rounded-lg '>
           <div className='bg-gradient-to-r p-[13px] relative left-[.3px] h-full rounded-lg from-[#082A47] to-[#382344]'>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const ModelSelector = ({ selectedYear, selectedMake, onSelect }) => {
+const ModelSelector = ({ selectedYear, selectedMake, onSelect, value }) => {
     const [models, setModels] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -26,22 +26,22 @@ const ModelSelector = ({ selectedYear, selectedMake, onSelect }) => {
     }, [selectedYear, selectedMake]);
 
 
-    
-    if (!selectedYear || !selectedMake) return <select className='border p-2 w-full mt-1'>
-        <option className='bg-[#090A1E]'>
-           select year and make first
+
+    if (!selectedYear || !selectedMake) return <select className='w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3'>
+        <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] capitalize'>
+            Select Year and Make First
         </option>
     </select>;
-    if (loading) return <select className='border p-2 w-full mt-1'>
-       <option className='bg-[#090A1E]'> Loading models...</option>
-        </select>;
+    if (loading) return <select className='w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3'>
+        <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'> Loading models...</option>
+    </select>;
     if (error) return <p>{error}</p>;
 
     return (
-        <select onChange={(e) => onSelect(e.target.value)} className="border p-2 w-full mt-1">
-            <option className='bg-[#090A1E]' value="">Select Model</option>
+        <select value={value} onChange={(e) => onSelect(e.target.value)} className="w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3">
+            <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]' value="">Select Model</option>
             {models.map((model) => (
-                <option className='bg-[#090A1E]' key={model.id} value={model.name}>{model.name}</option>
+                <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]' key={model.id} value={model.name}>{model.name}</option>
             ))}
         </select>
     );

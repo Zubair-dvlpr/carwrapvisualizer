@@ -3,6 +3,7 @@
 @theme {
   --font-Inter: "Inter", sans-serif; 
   --font-Poppins: "Poppins", sans-serif; 
+  --font-Lato: "Lato", sans-serif; 
 }
 
 
@@ -100,7 +101,12 @@ html {
 .menuitem {
     @apply border border-[#1AE1AB] px-3 py-3 rounded-2xl;
 }
-
+.inputStyle {
+    @apply bg-[#F6F9FF] rounded-[6px] p-3 border border-[#EEF4FF] focus:outline focus:shadow-xl outline-[#EEF4FF];
+}
+.labelStyle {
+    @apply text-[#111827] font-Poppins text-sm mb-1.5 font-medium leading-5 ;
+}
 .slick-dots {
     bottom: -50px !important;
 }
