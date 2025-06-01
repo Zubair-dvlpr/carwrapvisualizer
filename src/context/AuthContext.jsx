@@ -4,6 +4,10 @@ import axios from "axios";
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
+  // live domain http://34.106.73.252/backend 
+  const domain = "http://localhost/carApi/";
+  const localhost = "http://localhost/carApi/";
+
   const navigate = useNavigate();
   const [credits, setCredits] = useState();
   const [user, setUser] = useState(() => {
@@ -25,13 +29,12 @@ const AuthProvider = ({ children }) => {
 
 
 
-  // Fetch user data after user is set
+  // Fetch user data afterddd user is set
   useEffect(() => {
     if (user) {
       console.log(user)
       const fetchUserData = async () => {
-        const apiUrl = `http://localhost/carApi/user.php`;
-
+        const apiUrl = `${domain}/user.php`;
         try {
           const response = await fetch(apiUrl, {
             method: 'GET',
@@ -59,11 +62,66 @@ const AuthProvider = ({ children }) => {
   }, []); // Re-run when the user is set or updated
 
 
+  // const login = async ({ email, password }) => {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(async () => {
+  //       try {
+  //         const response = await fetch(`${domain}/login.php`, {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({
+  //             email,
+  //             password,
+  //           }),
+  //         });
+
+  //         if (response.ok) {
+  //           const userData = await response.json();
+  //           setUser(userData); // Set user data in state
+  //           localStorage.setItem("user", JSON.stringify(userData)); // Save user data in localStorage
+  //           resolve(userData); // Resolve with user data
+  //         } else {
+  //           const errorData = await response.json();
+  //           reject(errorData.message || "Invalid email or password");
+  //         }
+  //       } catch (error) {
+  //         reject("Error connecting to the server.");
+  //       }
+  //     }, 1000);
+  //   });
+  // };
+
+  // const signup = async ({ fname, sname, email, password }) => {
+  //   try {
+  //     const response = await fetch(`${domain}/signup.php`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ email, password, fname, sname }),
+  //     });
+
+  //     const data = await response.json();
+
+  //     if (response.ok && data.success) {
+  //       setUser(data);
+  //       localStorage.setItem("user", JSON.stringify(data));
+  //       return data;
+  //     } else {
+  //       throw new Error(data.message || "Something went wrong. Try again later.");
+  //     }
+  //   } catch (error) {
+  //     throw new Error(error.message || "Error connecting to the server.");
+  //   }
+  // };
+
   const login = async ({ email, password }) => {
     return new Promise((resolve, reject) => {
       setTimeout(async () => {
         try {
-          const response = await fetch("http://localhost/carApi/login.php", {
+          const response = await fetch("http://13.51.196.87:8000/api/v1/auth/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -74,30 +132,37 @@ const AuthProvider = ({ children }) => {
             }),
           });
 
-          if (response.ok) {
-            const userData = await response.json();
-            setUser(userData); // Set user data in state
-            localStorage.setItem("user", JSON.stringify(userData)); // Save user data in localStorage
-            resolve(userData); // Resolve with user data
+          const data = await response.json();
+
+          if (response.ok && data.success) {
+            setUser(data); // Update this if needed based on actual returned structure
+            localStorage.setItem("user", JSON.stringify(data));
+            resolve(data);
           } else {
-            const errorData = await response.json();
-            reject(errorData.message || "Invalid email or password");
+            reject(data.message || "Invalid email or password");
           }
         } catch (error) {
-          reject("Error connecting to the server.");
+          reject(error.message || "Error connecting to the server.");
         }
       }, 1000);
     });
   };
 
+
+
   const signup = async ({ fname, sname, email, password }) => {
     try {
-      const response = await fetch("http://localhost/carApi/signup.php", {
+      const response = await fetch("http://13.51.196.87:8000/api/v1/auth/sign-up", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password, fname, sname }),
+        body: JSON.stringify({
+          firstName: fname,
+          lastName: sname,
+          email,
+          password,
+        }),
       });
 
       const data = await response.json();
@@ -107,12 +172,13 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("user", JSON.stringify(data));
         return data;
       } else {
-        throw new Error(data.message || "Something went wrong. Try again later.");
+        throw new Error(data.message || "Signup failed. Please try again.");
       }
     } catch (error) {
-      throw new Error(error.message || "Error connecting to the server.");
+      throw new Error(error.message || "Error connecting to the signup server.");
     }
   };
+
 
 
 
@@ -164,7 +230,7 @@ const AuthProvider = ({ children }) => {
 
       const formattedDate = `${year}-${month}-${day}`; // "YYYY-MM-DD"
 
-      const res = await axios.get(`http://localhost/carApi/booking/bookings-by-date.php?date=${formattedDate}`);
+      const res = await axios.get(`${domain}/booking/bookings-by-date.php?date=${formattedDate}`);
       setTodayBookings(res.data.bookings || []);
 
       console.log("Original date object:", date);
@@ -185,7 +251,7 @@ const AuthProvider = ({ children }) => {
       // Format the current date in user's local timezone as YYYY-MM-DD
       const localDate = new Date().toLocaleDateString("sv-SE"); // sv-SE gives "YYYY-MM-DD"
 
-      const response = await fetch(`http://localhost/carApi/booking/todayBookings.php?date=${localDate}`);
+      const response = await fetch(`${domain}/booking/todayBookings.php?date=${localDate}`);
       const data = await response.json();
 
       if (data.success) {
@@ -201,7 +267,7 @@ const AuthProvider = ({ children }) => {
   const fetchTomorrowBookings = async () => {
     try {
 
-      const response = await fetch("http://localhost/carApi/booking/tomorrowBookings.php");
+      const response = await fetch(`${domain}/booking/tomorrowBookings.php`);
       const data = await response.json();
       if (data.success) {
         setTomorrowBookings(data.data);
@@ -217,7 +283,7 @@ const AuthProvider = ({ children }) => {
   const fetchCancelledBookings = async () => {
     try {
 
-      const response = await fetch("http://localhost/carApi/booking/CancelledBooking.php");
+      const response = await fetch(`${domain}/booking/CancelledBooking.php`);
       const data = await response.json();
       if (data.success) {
         setCancelledBookings(data.data);
@@ -240,7 +306,7 @@ const AuthProvider = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{ user, credits, login, signup, logout, loading, animation, setAnimation, handleProjectClick, todayBookings, tomorrowBookings, cancelledBookings, selectedDate, setSelectedDate, bookingsByDate }}>
+    <AuthContext.Provider value={{ user, credits, login, signup, logout, loading, animation, setAnimation, handleProjectClick, todayBookings, domain, tomorrowBookings, cancelledBookings, selectedDate, setSelectedDate, bookingsByDate }}>
       {children}
     </AuthContext.Provider>
   );

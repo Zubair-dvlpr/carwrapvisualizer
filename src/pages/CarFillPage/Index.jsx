@@ -6,14 +6,14 @@ import garage from '../../assets/images/garage.png'
 import colorfullcar from '../../assets/images/carshowRoom.png'
 import logo3m from '../../assets/images/3m.png'
 import vector from '../../assets/images/vector.png'
-import avery from '../../assets/images/avery.png'
+import avery from '../../assets/images/vvivid.svg'
 import vvivid from '../../assets/images/vvivid.png'
 import inozetek from '../../assets/images/inozetek.png'
 import { AuthContext } from '../../context/AuthContext';
 // import loaderGif from "../../assets/loading.gif";
 import loaderGif from "../../assets/loading.gif";
 const CarFillPage = () => {
- const { user } = useContext(AuthContext);
+    const { user, domain } = useContext(AuthContext);
 
     const wrapFilmColors = {
         'Gloss': [
@@ -121,7 +121,7 @@ const CarFillPage = () => {
     const imageRef = useRef(null);
     const generateImage = async (year, make, model, finish, color) => {
         setAnimation(true);
-        const response = await fetch('http://localhost/carApi/generateCarImage.php', {
+        const response = await fetch(`${domain}/generateCarImage.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -175,8 +175,8 @@ const CarFillPage = () => {
                 <div className="absolute top-0 left-0 w-full  bg-[#000000d2] flex justify-center h-screen items-center">
                     <img src={loaderGif} alt="Loading..." className="w-36" />
                 </div>
-             )}
-            <div className="flex max-w-7xl mx-auto  flex-col h-full ">
+            )}
+            <div className="flex max-w-7xl mx-auto text-white  flex-col h-full ">
                 {/* Left Side Image */}
                 <div className=" flex flex-col justify-center items-center p-4">
                     <div ref={imageRef} className="">
@@ -197,53 +197,50 @@ const CarFillPage = () => {
                             {/* Year Selector */}
                             <h1 className="text-2xl  font-bold mb-4">Select Vehicle</h1>
 
-                            <div className='grid grid-cols-3  gap-3'>
-
-                                <label className="block">
-                                    Year
+                            <div className='grid sm:grid-cols-3 grid-cols-1  gap-3'>
+                                <label className="flex flex-col gap-2 text-black">
+                                    <span className='text-white'> Year</span>
                                     <YearSelector onSelect={(year) => {
                                         setSelectedYear(year);
                                         setSelectedMake(''); // Reset make on year change
                                     }} />
                                 </label>
-
-
                                 {/* Make Selector */}
-                                <label className="block">
-                                    Make
+                                <label className="flex flex-col gap-2 text-black">
+                                    <span className='text-white'> Make</span>
                                     <MakeSelector selectedYear={selectedYear} onSelect={setSelectedMake} />
                                 </label>
-
                                 {/* Model Selector */}
-                                <label className="block">
-                                    Model
+                                <label className="flex flex-col gap-2 text-black">
+                                    <span className='text-white'> Model</span>
                                     <ModelSelector selectedYear={selectedYear} selectedMake={selectedMake} onSelect={setSelectedModel} />
                                 </label>
                             </div>
                         </div>
-                        <div className="mx-auto max-w-4xl px-4 py-10 text-center">
-                            <h4 className="text-2xl font-bold mb-4">Select Wrap Brand</h4>
-                            <div className="flex justify-center gap-6 mb-8">
-                                {brands.map((brand) => (
-                                    <img
-                                        key={brand.name}
-                                        src={brand.logo}
-                                        alt={brand.name}
-                                        className={`h-16 cursor-pointer border-2 rounded-lg p-1 transition ${selectedBrand?.name === brand.name ? 'border-blue-500' : 'border-transparent'
-                                            }`}
-                                        onClick={() => handleBrandClick(brand)}
-                                    />
-                                ))}
+                        <div className="mx-auto max-w-4xl  px-4 py-10 text-center">
+                            <div className='bg-[#2B2C2C]  p-5 rounded-xl'>
+                                <h4 className="text-xl text-left mb-4">Select Wrap Brand</h4>
+                                <div className="grid  md:grid-cols-5 sm:grid-cols-2 gap-6 mb-8">
+                                    {brands.map((brand) => (
+                                        <img
+                                            key={brand.name}
+                                            src={brand.logo}
+                                            alt={brand.name}
+                                            className={`h-16 mx-auto cursor-pointer border-2 rounded-lg p-1 transition ${selectedBrand?.name === brand.name ? 'border-blue-500' : 'border-transparent'
+                                                }`}
+                                            onClick={() => handleBrandClick(brand)}
+                                        />
+                                    ))}
+                                </div>
                             </div>
-
                             {selectedBrand && (
                                 <div>
-                                    <h5 className="text-xl font-semibold mb-4">Select Category</h5>
-                                    <div className="flex flex-wrap justify-center gap-4 mb-6">
+
+                                    <div className="flex border border-[#8A8A8A] p-2 rounded w-fit mx-auto flex-wrap justify-center gap-4 my-6">
                                         {Object.keys(selectedBrand.colors).map((cat) => (
                                             <button
                                                 key={cat}
-                                                className={`px-4 py-2 rounded-full border ${selectedCategory === cat ? 'bg-blue-500 text-white' : 'border-gray-300'
+                                                className={`px-4 py-2 rounded ${selectedCategory === cat ? 'bg-black text-white' : 'bg-[#ffffff0d]'
                                                     }`}
                                                 onClick={() => handleCategoryClick(cat)}
                                             >
@@ -254,12 +251,12 @@ const CarFillPage = () => {
 
                                     {selectedCategory && (
                                         <div className="border-t pt-6">
-                                            <h6 className="text-lg font-medium mb-3">{selectedCategory} Colors</h6>
-                                            <div className="grid grid-cols-1 gap-3">
+                                            {/* <h6 className="text-lg font-medium mb-3">{selectedCategory} Colors</h6> */}
+                                            <div className="grid grid-cols-1">
                                                 {selectedBrand.colors[selectedCategory].map((item, index) => (
                                                     <div
                                                         key={index}
-                                                        className="flex items-center justify-between p-4 border rounded-lg shadow-sm cursor-pointer hover:shadow-md transition"
+                                                        className="flex items-center justify-between border border-[#353535] bg-black shadow-sm cursor-pointer hover:shadow-md transition"
                                                         onClick={async () => {
                                                             try {
                                                                 setSelectedFinish(selectedCategory);
@@ -283,12 +280,14 @@ const CarFillPage = () => {
                                                             }
                                                         }}
                                                     >
-                                                        <div
-                                                            className="w-10 h-10 rounded-full border"
-                                                            style={{ backgroundColor: item.colorCode }}
-                                                        ></div>
-                                                        <p className="text-md font-medium">{item.name}</p>
-                                                        <span className="text-sm text-gray-500">{selectedCategory}</span>
+                                                        <div className='p-4'>
+                                                            <div
+                                                                className="w-10  h-10 rounded-2xl border border-gray-400"
+                                                                style={{ backgroundColor: item.colorCode }}
+                                                            ></div>
+                                                        </div>
+                                                        <p className="grow  p-4 border-x border-[#353535]  text-md font-medium">{item.name}</p>
+                                                        <span className="text-sm  p-4">{selectedCategory}</span>
                                                     </div>
                                                 ))}
                                             </div>
@@ -297,7 +296,6 @@ const CarFillPage = () => {
                                 </div>
                             )}
                         </div>
-
                     </div>
                 </div>
             </div>

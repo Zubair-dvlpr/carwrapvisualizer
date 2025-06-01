@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../../../context/AuthContext';
 
-const YearSelector = ({ onSelect, value }) => {
+const YearSelector = ({ onSelect, value, bgColor }) => {
+    const { domain } = useContext(AuthContext);
     const [years, setYears] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost/carApi/getYears.php')
+        fetch(`${domain}getYears.php`)
             .then(res => res.json())
             .then(result => {
                 if (result.status === 'success') {
@@ -22,7 +24,7 @@ const YearSelector = ({ onSelect, value }) => {
             });
     }, []);
 
-    if (loading) return <select className='w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3'>
+    if (loading) return <select className={`w-full ${bgColor ? ' bg-[#F6F9FF]' : 'bg-[#2B2C2C] text-white'}  focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3`}>
         <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
             Loading years...
         </option>
@@ -30,7 +32,7 @@ const YearSelector = ({ onSelect, value }) => {
     if (error) return <p>{error}</p>;
 
     return (
-        <select value={value}  onChange={(e) => onSelect(e.target.value)} className="w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3">
+        <select value={value}  onChange={(e) => onSelect(e.target.value)} className={`w-full  bg-[#F6F9FF]  focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3`}>
             <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]' value="">Select Year</option>
             {years.map((year) => (
                 <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]' key={year} value={year}>{year}</option>

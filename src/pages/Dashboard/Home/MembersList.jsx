@@ -20,7 +20,7 @@ const members = [
 
 const MembersList = () => {
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-md w-full max-w-md mx-auto">
+    <div className="bg-white rounded-2xl p-6 shadow-md w-full mx-auto">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-gray-800">Team Members</h2>

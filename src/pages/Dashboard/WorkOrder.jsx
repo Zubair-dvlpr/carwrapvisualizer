@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FiEdit, FiCalendar, FiCreditCard, FiUpload, FiFile, FiX } from "react-icons/fi";
 import { RiEditLine } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import YearSelector from "../CarFillPage/Components/YearSelector";
 import MakeSelector from "../CarFillPage/Components/MakeSelector";
 import ModelSelector from "../CarFillPage/Components/ModelSelector";
+import { AuthContext } from "../../context/AuthContext";
 
 const brandOptions = [
     "3M", "Avery Dennison", "Oracal (Orafol)", "KPMF (Kay Premium Marking Films)", "Hexis",
@@ -23,6 +24,7 @@ const wrapColors = {
     // Add other brand color options here
 };
 export default function WorkOrder() {
+    const { domain } = useContext(AuthContext);
     const location = useLocation();
     const booking = location.state?.booking;
     const [selectedFile, setSelectedFile] = useState(null);
@@ -133,7 +135,7 @@ export default function WorkOrder() {
         if (selectedFile) payload.append('file', selectedFile);
 
         try {
-            const res = await fetch('http://localhost/carApi/booking/save_work_order.php', {
+            const res = await fetch(`${domain}/booking/save_work_order.php`, {
                 method: 'POST',
                 body: payload
             });

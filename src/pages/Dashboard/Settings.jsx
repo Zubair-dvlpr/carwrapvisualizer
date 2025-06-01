@@ -96,7 +96,7 @@ const Settings = () => {
   };
   
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-6 bg-[#090A1E] text-white rounded-lg shadow-lg">
+    <div className="max-w-4xl mx-auto mt-10 p-6   rounded-lg shadow-lg">
       <h2 className="text-3xl font-bold mb-6">Account Settings</h2>
 
       <form onSubmit={handleUpdate} className="space-y-6">
@@ -108,7 +108,7 @@ const Settings = () => {
               name="fname"
               value={formData.fname}
               onChange={handleChange}
-              className="w-full p-4 mt-2 border bg-[#ffffff1a] rounded-md text-white"
+              className="w-full  border border-gray-200 p-4 mt-2  bg-[#ffffff1a] rounded-md text-white"
               placeholder="Enter First Name"
               required
             />
@@ -120,7 +120,7 @@ const Settings = () => {
               name="sname"
               value={formData.sname}
               onChange={handleChange}
-              className="w-full p-4 mt-2 border bg-[#ffffff1a] rounded-md text-white"
+              className="w-full p-4 mt-2  border border-gray-200 bg-[#ffffff1a] rounded-md text-white"
               placeholder="Enter Last Name"
               required
             />
@@ -134,7 +134,7 @@ const Settings = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-4 mt-2 border bg-[#ffffff1a] rounded-md text-white"
+            className="w-full p-4 mt-2  border border-gray-200 bg-[#ffffff1a] rounded-md text-white"
             placeholder="Enter Email"
             required
           />
@@ -147,7 +147,7 @@ const Settings = () => {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full p-4 mt-2 border bg-[#ffffff1a] rounded-md text-white"
+            className="w-full p-4 mt-2  border border-gray-200 bg-[#ffffff1a] rounded-md text-white"
             placeholder="Enter New Password"
           />
         </div>
@@ -156,7 +156,7 @@ const Settings = () => {
 
         <button
           type="submit"
-          className="w-full py-3 bg-gradient-to-r from-[#1AE1AB] to-[#712FFF] text-white text-lg font-semibold rounded-full"
+          className="w-full py-3 bg-[#ED217B] text-white text-lg font-semibold rounded-full"
         >
           Update Profile
         </button>
@@ -166,7 +166,7 @@ const Settings = () => {
       <div className="mt-6 text-center">
         <button
           onClick={logout}
-          className="w-full py-3 bg-red-600 text-white text-lg font-semibold rounded-full hover:bg-red-700"
+          className="w-full py-3 bg-red-500 text-white text-lg font-semibold rounded-full hover:bg-red-600"
         >
           Logout
         </button>

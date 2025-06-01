@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const SucessfullUrl = () => {
+  const { domain } = useContext(AuthContext);
   const [params] = useSearchParams();
   const sessionId = params.get('session_id');
   const userId = params.get('user_id');
@@ -10,7 +12,7 @@ const SucessfullUrl = () => {
   useEffect(() => {
     const updateCredits = async () => {
       try {
-        const res = await fetch('http://localhost/carApi/update-credits-session.php', {
+        const res = await fetch(`${domain}/update-credits-session.php`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ session_id: sessionId, user_id: userId }),

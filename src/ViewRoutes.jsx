@@ -62,7 +62,7 @@ const ViewRoutes = () => {
       <Route path="/WorkOrder" element={<PrivateRoute><DashboardLayout><WorkOrder /></DashboardLayout></PrivateRoute>} />
       <Route path="/BookingAppointment" element={<PrivateRoute><DashboardLayout><BookingAppointment /></DashboardLayout></PrivateRoute>} />
       <Route path="/VideoDelivery" element={<PrivateRoute><DashboardLayout><VideoDelivery /></DashboardLayout></PrivateRoute>} />
-      <Route path="/SupportHelp" element={<PrivateRoute><DashboardLayout><SupportHelp /></DashboardLayout></PrivateRoute>} />
+      <Route path="/Help" element={<PrivateRoute><DashboardLayout><SupportHelp /></DashboardLayout></PrivateRoute>} />
       <Route path="/settings" element={<PrivateRoute><DashboardLayout><Settings /></DashboardLayout></PrivateRoute>} />
       <Route path="/notifications" element={<PrivateRoute><DashboardLayout><Notifications /></DashboardLayout></PrivateRoute>} />
       <Route path="/pricingPlan" element={<PrivateRoute><DashboardLayout><PricingPlan /></DashboardLayout></PrivateRoute>} />

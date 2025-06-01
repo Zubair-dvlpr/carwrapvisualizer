@@ -48,7 +48,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <div
       ref={sidebarRef}
-      className={`fixed top-0 left-0 h-screen w-64  text-white flex flex-col transform ${
+      className={`fixed top-0 left-0 h-screen w-64 bg-[#12161F]  text-white flex flex-col transform ${
         isOpen ? 'translate-x-0 z-20' : '-translate-x-full'
       } transition-transform duration-300 ease-in-out md:translate-x-0 md:static`}
     >

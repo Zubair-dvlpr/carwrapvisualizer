@@ -4,12 +4,12 @@ import colorfulcarImg from '../../../assets/images/colorful-car-illustration.png
 import creditslabel from '../../../assets/icons/creditslabel.svg'
 import { AuthContext } from '../../../context/AuthContext';
 const CreditsAndPlan = () => {
-    const { user } = useContext(AuthContext);
+    const { user, domain } = useContext(AuthContext);
     const [activePlan, setActivePlan] = useState();
     useEffect(() => {
         const fetchSubscription = async () => {
             try {
-                const res = await fetch('http://localhost/carApi/billing/get-user-subscription.php', {
+                const res = await fetch(`${domain}/billing/get-user-subscription.php`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ user_id: user.user.id }),
@@ -29,7 +29,7 @@ const CreditsAndPlan = () => {
     return (
         <div className='grid mt-5 sm:grid-cols-11 grid-cols-1 gap-5'>
             {/* {console.log(activePlan)} */}
-            <div className='col-span-3 bg-[#12161F] rounded-xl p-5 text-white'>
+            <div className='md:col-span-3 col-span-full bg-[#12161F] rounded-xl p-5 text-white'>
                 <img src={creditslabel} alt="" />
                 <p className='my-3'>Top Up Account </p>
                 <div className='text-[40px] font-semibold font-Lato'>
@@ -45,7 +45,7 @@ const CreditsAndPlan = () => {
                 </div>
                 <p className='text-[#8F8F8F] text-[12px] font-medium'>Credits Used</p>
             </div>
-            <div className='col-span-8 '>
+            <div className='md:col-span-8  col-span-full'>
                 <div className='border-[#E1E1E1] rounded-[10px] border bg-[#F5F5F7] flex items-center justify-between'>
                     <div className='pl-4'>
                         <div>

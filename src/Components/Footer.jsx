@@ -4,7 +4,7 @@ import logo from "../assets/images/logo.png"
 import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
-    <footer className="text-[#33375C] py-6">
+    <footer className="text-white py-6">
       <div className="max-w-7xl mx-auto px-4">
         {/* Top Section */}
         <div className="flex flex-col md:flex-row justify-between items-center  pb-4">
@@ -33,7 +33,7 @@ const Footer = () => {
           </div>
 
           {/* Copyright */}
-          <div className="text-gray-800">
+          <div className="text-[#959BA9]">
             &copy; {new Date().getFullYear()} Car Wrap Visualizer™ All rights reserved
           </div>
         </div>

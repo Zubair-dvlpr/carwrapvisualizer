@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../../../context/AuthContext';
 
 const ModelSelector = ({ selectedYear, selectedMake, onSelect, value }) => {
+    const { domain } = useContext(AuthContext);
     const [models, setModels] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -9,7 +11,7 @@ const ModelSelector = ({ selectedYear, selectedMake, onSelect, value }) => {
         if (!selectedYear || !selectedMake) return;
 
         setLoading(true);
-        fetch(`http://localhost/carApi/getModels.php?year=${selectedYear}&make=${encodeURIComponent(selectedMake)}`)
+        fetch(`${domain}/getModels.php?year=${selectedYear}&make=${encodeURIComponent(selectedMake)}`)
             .then(res => res.json())
             .then(result => {
                 if (result.status === 'success') {

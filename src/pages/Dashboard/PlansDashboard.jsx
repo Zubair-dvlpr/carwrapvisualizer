@@ -14,13 +14,13 @@ const plans = [
 ];
 
 const SubscriptionPlans = () => {
-    const { user } = useContext(AuthContext);
+    const { user, domain } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
 
     const handleSubscribe = async (plan) => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost/carApi/create-checkout-session.php', {
+            const response = await fetch(`${domain}/create-checkout-session.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FiEdit, FiCalendar, FiCreditCard, FiUpload, FiFile, FiX } from "react-icons/fi";
 import { RiEditLine } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
@@ -6,9 +6,11 @@ import YearSelector from "../CarFillPage/Components/YearSelector";
 import MakeSelector from "../CarFillPage/Components/MakeSelector";
 import ModelSelector from "../CarFillPage/Components/ModelSelector";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 const BookingAppointment = () => {
-     const navigate = useNavigate();
+    const { domain } = useContext(AuthContext);
+    const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedYear, setSelectedYear] = useState('');
     const [selectedMake, setSelectedMake] = useState('');
@@ -87,7 +89,7 @@ const BookingAppointment = () => {
         }
 
         try {
-            const response = await fetch('http://localhost/carApi/booking/submit.php', {
+            const response = await fetch(`${domain}/booking/submit.php`, {
                 method: 'POST',
                 body: formPayload,
             });
@@ -533,9 +535,19 @@ const BookingAppointment = () => {
                 </div>
 
 
-                <button type="submit" className="bg-[#EB227C] text-white px-16 py-4 cursor-pointer rounded-full ">
-                    Book Now
-                </button>
+                <div className="flex md:flex-row flex-col gap-3">
+                    <button type="submit" className="bg-[#EB227C] text-white px-16 py-4 cursor-pointer rounded-full ">
+                        Book Now
+                    </button>
+
+                    <button type="submit" className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
+                        Send Quote
+                    </button>
+
+                    <button type="submit" className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
+                        Generate Visualizer
+                    </button>
+                </div>
             </form>
         </div>
     )

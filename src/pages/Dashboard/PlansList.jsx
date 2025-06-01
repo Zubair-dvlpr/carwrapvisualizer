@@ -2,8 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
 import ultimateplanbg from '../../assets/images/ultimateplanbg.png'
-const PlansList = () => {
-    const { user } = useContext(AuthContext);
+const PlansList = ({location}) => {
+    const { user, domain} = useContext(AuthContext);
     const [plans, setPlans] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -55,7 +55,7 @@ const PlansList = () => {
     useEffect(() => {
         const fetchPlans = async () => {
             try {
-                const response = await fetch('http://localhost/carApi/plans.php');
+                const response = await fetch(`${domain}/plans.php`);
                 const data = await response.json();
 
                 if (data.success) {
@@ -80,7 +80,7 @@ const PlansList = () => {
         }
         setProcessingPlanId(plan.id);
         try {
-            const response = await fetch('http://localhost/carApi/create-checkout-session.php', {
+            const response = await fetch(`${domain}/create-checkout-session.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -115,12 +115,12 @@ const PlansList = () => {
                 return (
                     <div
                         key={plan.id}
-                        className={`plan-card  p-4 rounded-lg flex flex-col justify-between
+                        className={`plan-card p-4 rounded-lg flex flex-col justify-between
                             ${plan.id === user.user.currentPlan ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-2xl transition-shadow duration-300'}
                         `}
                         style={{
-                            backgroundColor: '#fff',
-                            color: '#000',
+                            backgroundColor: location === "home" ? 'transparent' : '#fff',
+                            color: location === "home" ? '#fff' : '#000',
                             ...(isSecondPlan && plan.complete_item?.product?.images?.length
                                 ? {
                                     backgroundImage: `url(${ultimateplanbg})`,
@@ -145,7 +145,7 @@ const PlansList = () => {
                             <ul className="my-6 space-y-2">
                                 {(planFeatures[plan.id] || []).map((feature, i) => (
                                     <li key={i} className="flex items-start">
-                                        <IoIosCheckmarkCircle className={` ${isSecondPlan ? "text-white" : "text-black"}  mr-2 mt-1.5 text-base flex-shrink-0`} />
+                                        <IoIosCheckmarkCircle className={` ${isSecondPlan ? "text-white" : location === "home" ? '#fff' : 'text-black'}  mr-2 mt-1.5 text-base flex-shrink-0`} />
                                         <span>{feature}</span>
                                     </li>
                                 ))}

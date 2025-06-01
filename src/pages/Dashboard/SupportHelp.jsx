@@ -89,14 +89,14 @@ const SupportHelp = () => {
         setActiveIndex(activeIndex === index ? null : index);
     };
     return (
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl text-black mx-auto">
             {/* Title */}
             <h1 className="dashboard-title mb-6">Support & Help</h1>
 
             {/* Support Boxes */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                 {/* Contact Support */}
-                <div className="bg-[#090A1E] shadow-lg rounded-lg px-6 py-10 flex flex-col items-center text-center">
+                <div className="shadow-lg rounded-lg px-6 py-10 flex flex-col items-center text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
                         <g clip-path="url(#clip0_79_1545)">
                             <path d="M41.2969 41.4221C40.3264 41.4221 39.5391 42.209 39.5391 43.1799V46.9455C39.5391 47.916 40.3264 48.7033 41.2969 48.7033C42.2678 48.7033 43.0547 47.916 43.0547 46.9455V43.1799C43.0547 42.209 42.2678 41.4221 41.2969 41.4221Z" fill="url(#paint0_linear_79_1545)" />
@@ -135,7 +135,7 @@ const SupportHelp = () => {
                 </div>
 
                 {/* Email Support */}
-                <div className="bg-[#090A1E] shadow-lg rounded-lg p-6 flex flex-col items-center text-center">
+                <div className=" shadow-lg rounded-lg p-6 flex flex-col items-center text-center">
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
                         <path d="M20.8076 16.8078L22.9286 18.9288C26.8352 15.0234 33.1658 15.0234 37.0706 18.9288L39.1934 16.8078C34.115 11.7306 25.886 11.7294 20.8076 16.8078Z" fill="url(#paint0_linear_79_1555)" />
@@ -167,15 +167,15 @@ const SupportHelp = () => {
                         onClick={() => toggleFAQ(index)}
                     >
                         <div className="flex justify-between items-center">
-                            <h3 className="text-lg font-semibold text-white">{faq.question}</h3>
+                            <h3 className="text-lg font-semibold">{faq.question}</h3>
                             {activeIndex === index ? (
                                 <FaMinus className="text-[#1AE1AB] text-xl" />
                             ) : (
-                                <FaPlus className="text-white text-xl" />
+                                <FaPlus className=" text-xl" />
                             )}
                         </div>
                         {activeIndex === index && (
-                            <p className="mt-2 text-white">{faq.answer}</p>
+                            <p className="mt-2 ">{faq.answer}</p>
                         )}
                     </div>
                 ))}

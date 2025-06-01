@@ -5,7 +5,8 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './CustomCalendar.css'; // For custom styles
 import { AuthContext } from '../../../context/AuthContext';
 
-const CustomCalendar = () => {
+const CustomCalendar = ({full}) => {
+  console.log(full)
   const [value, setValue] = useState(new Date());
   const { setSelectedDate, bookingsByDate } = useContext(AuthContext);
   const handleChange = (date) => {
@@ -14,7 +15,7 @@ const CustomCalendar = () => {
   };
 
   return (
-    <div className="p-6 max-w-md bg-white rounded-2xl shadow">
+    <div className={`p-6 ${full ? 'w-full' : 'md:max-w-md max-w-full'}  bg-white rounded-2xl shadow`}>
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <span className="text-sm font-Lato">Today</span>

@@ -15,7 +15,7 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0 ">
-            <Link>
+            <Link to='/'>
               <img src={logo} alt="" className='w-36' />
             </Link>
           </div>
@@ -23,7 +23,7 @@ const Header = () => {
           {/* Desktop Menu */}
           <nav className="hidden md:flex gap-2">
             <Link to="/" className="text-gray-700 text-sm py-3 px-4 hover:bg-[#ED217B] duration-500 hover:text-white transition font-medium">Home</Link>
-            <Link to="/visualizer" className="text-gray-700  text-sm  py-3 px-4 hover:bg-[#ED217B] duration-500 hover:text-white transition font-medium">wrap visualizer	</Link>
+            <Link to="/visualizer" className="text-gray-700  text-sm  py-3 px-4 hover:bg-[#ED217B] duration-500 hover:text-white capitalize transition font-medium">wrap visualizer	</Link>
             <Link to="#" className="text-gray-700  text-sm  py-3 px-4 hover:bg-[#ED217B] duration-500 hover:text-white transition font-medium">Contact</Link>
           </nav>
 
