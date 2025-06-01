@@ -116,7 +116,7 @@ const AuthProvider = ({ children }) => {
   //     throw new Error(error.message || "Error connecting to the server.");
   //   }
   // };
-
+  // new login function
   const login = async ({ email, password }) => {
     return new Promise((resolve, reject) => {
       setTimeout(async () => {
