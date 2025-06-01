@@ -14,26 +14,27 @@ import Help from '../assets/icons/Help.svg';
 import Settings from '../assets/icons/setting.svg';
 import Customers from '../assets/icons/Customers.svg';
 import logoutIocn from '../assets/icons/logout.svg';
-import logo from '../assets/images/logo.png'
+import logo from '../assets/images/logo.png';
+import { logoutFn } from '../utils/utils';
 const menuItems = [
   { name: 'Dashboard', path: '/dashboard', icon: dashboardIcon },
   { name: 'Profile', path: '/profile', icon: Profile },
-  { name: 'Studio', path: '/tool' , icon: Studio },
-  { name: 'Appointments', path: '/appointment' , icon: Appointments },
-  { name: 'Team', path: '/Team' , icon: Team },
-  { name: 'Subscription', path: '/Subscription' , icon: Subscription },
-  { name: 'Invoices', path: '/Invoices' , icon: Invoices },
-  { name: 'Help', path: '/Help' , icon: Help },
-  { name: 'Settings', path: '/Settings' , icon: Settings },
-  { name: 'Customers', path: '/customers' , icon: Customers }
+  { name: 'Studio', path: '/tool', icon: Studio },
+  { name: 'Appointments', path: '/appointment', icon: Appointments },
+  { name: 'Team', path: '/Team', icon: Team },
+  { name: 'Subscription', path: '/Subscription', icon: Subscription },
+  { name: 'Invoices', path: '/Invoices', icon: Invoices },
+  { name: 'Help', path: '/Help', icon: Help },
+  { name: 'Settings', path: '/Settings', icon: Settings },
+  { name: 'Customers', path: '/customers', icon: Customers }
 ];
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const sidebarRef = useRef(null);
-  const { logout } = useContext(AuthContext);
+  // const { logout } = useContext(AuthContext);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = event => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
         toggleSidebar(false);
       }
@@ -53,17 +54,21 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       } transition-transform duration-300 ease-in-out md:translate-x-0 md:static`}
     >
       {/* Header */}
-      <div className={`p-4 flex ${isOpen ? 'justify-between' : 'justify-center'} h-[92px] items-center`}>
+      <div
+        className={`p-4 flex ${
+          isOpen ? 'justify-between' : 'justify-center'
+        } h-[92px] items-center`}
+      >
         {/* <h2 className="text-white font-Inter text-4xl uppercase font-extrabold">LOGO</h2> */}
-        <img src={logo} alt="" className='max-w-42' />
-        <button className="md:hidden text-white text-2xl" onClick={() => toggleSidebar(false)}>
+        <img src={logo} alt='' className='max-w-42' />
+        <button className='md:hidden text-white text-2xl' onClick={() => toggleSidebar(false)}>
           <FaTimes />
         </button>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 overflow-y-scroll hide-scrollbar space-y-1">
-        {menuItems.map((item) => (
+      <nav className='flex-1 p-4 overflow-y-scroll hide-scrollbar space-y-1'>
+        {menuItems.map(item => (
           <NavLink
             key={item.path}
             to={item.path}
@@ -73,17 +78,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               }`
             }
           >
-            <img src={item.icon} alt="" className="mr-2" />
+            <img src={item.icon} alt='' className='mr-2' />
             {item.name}
           </NavLink>
         ))}
 
         {/* Logout */}
         <button
-          onClick={logout}
-          className="flex cursor-pointer items-center w-full p-4 rounded-full transition-all hover:bg-[#ED217B] "
+          onClick={logoutFn}
+          className='flex cursor-pointer items-center w-full p-4 rounded-full transition-all hover:bg-[#ED217B] '
         >
-          <img src={logoutIocn} alt=""  className="mr-2" /> Logout
+          <img src={logoutIocn} alt='' className='mr-2' /> Logout
         </button>
       </nav>
     </div>
