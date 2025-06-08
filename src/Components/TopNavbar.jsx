@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { Menu } from '@headlessui/react';
 import { RiSettings2Line } from 'react-icons/ri';
 import { IoNotificationsOutline } from 'react-icons/io5';
-import Avatar from '../assets/images/Avatar.png';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import CreditIcon from '../assets/icons/CreditIcon';

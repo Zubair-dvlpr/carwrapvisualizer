@@ -7,7 +7,6 @@ import Studio from '../assets/icons/studio.svg';
 import Appointments from '../assets/icons/Appointments.svg';
 import Team from '../assets/icons/Team.svg';
 import Subscription from '../assets/icons/Subscription.svg';
-import Payment from '../assets/icons/Payment_method.svg';
 import Invoices from '../assets/icons/Invoices.svg';
 import Help from '../assets/icons/Help.svg';
 import Settings from '../assets/icons/setting.svg';
