@@ -1,18 +1,18 @@
 import DashboardLayout from '../layout/DashboardLayout';
 import DefaultLayout from '../Layout/DefaultLayout';
 import CarFillPage from '../pages/CarFillPage/Index';
+import ConfirmBooking from '../pages/confirmBooking/confirmBooking';
 import Appointment from '../pages/Dashboard/Appointment';
 import BillingSubscription from '../pages/Dashboard/BillingSubscription';
 import BookingAppointment from '../pages/Dashboard/BookingAppointment';
 import Customers from '../pages/Dashboard/Customers';
-import MyProjects from '../pages/Dashboard/MyProjects';
 import Notifications from '../pages/Dashboard/Notifications';
 import Overview from '../pages/Dashboard/Overview';
 import PricingPlan from '../pages/Dashboard/PricingPlan';
 import Profile from '../pages/Dashboard/Profile';
 import Settings from '../pages/Dashboard/Settings';
 import SupportHelp from '../pages/Dashboard/SupportHelp';
-import VideoDelivery from '../pages/Dashboard/VideoDelivery';
+// import VideoDelivery from '../pages/Dashboard/VideoDelivery';
 import WorkOrder from '../pages/Dashboard/WorkOrder';
 import ErrorPage from '../pages/Error';
 import Home from '../pages/Home';
@@ -57,16 +57,6 @@ export const privateRoutes = [
     element: (
       <DashboardLayout>
         <CarFillPage />
-      </DashboardLayout>
-    ),
-    child: []
-  },
-  {
-    path: '/myprojects',
-    moduleName: 'My Projects',
-    element: (
-      <DashboardLayout>
-        <MyProjects />
       </DashboardLayout>
     ),
     child: []
@@ -117,16 +107,6 @@ export const privateRoutes = [
     element: (
       <DashboardLayout>
         <BookingAppointment />
-      </DashboardLayout>
-    ),
-    child: []
-  },
-  {
-    path: '/VideoDelivery',
-    moduleName: 'Video Delivery',
-    element: (
-      <DashboardLayout>
-        <VideoDelivery />
       </DashboardLayout>
     ),
     child: []
@@ -195,6 +175,11 @@ export const commonRoutes = [
         <Home />
       </DefaultLayout>
     )
+  },
+  {
+    path: '/confirm-booking',
+    moduleName: 'Confirm Booking',
+    element: <ConfirmBooking />
   },
   {
     path: '/visualizer',

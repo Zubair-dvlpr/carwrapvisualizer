@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { loginUserAPIFn } from '../../redux/features/auth/authFns.js';
 const Login = () => {
   const dispatch = useDispatch();
-  const { login, animation, setAnimation } = useContext(AuthContext);
+  const { animation, setAnimation } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

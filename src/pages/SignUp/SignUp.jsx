@@ -5,7 +5,7 @@ import logo from "../../assets/images/logo.png";
 import loginbg from "../../assets/images/loginbg.webp";
 import loaderGif from "../../assets/loading.gif";
 const SignUp = () => {
-  const { signup, animation, setAnimation } = useContext(AuthContext);
+  const { animation, setAnimation } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     fname: "",
     sname: "",

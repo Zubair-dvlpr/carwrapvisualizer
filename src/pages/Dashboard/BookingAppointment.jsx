@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FiEdit, FiCalendar, FiCreditCard, FiUpload, FiFile, FiX } from "react-icons/fi";
 import { RiEditLine } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
@@ -7,8 +7,12 @@ import MakeSelector from "../CarFillPage/Components/MakeSelector";
 import ModelSelector from "../CarFillPage/Components/ModelSelector";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { useDispatch } from "react-redux";
+import { bookingAppointmentAPIFn } from "../../redux/features/booking/bookingFus";
 
 const BookingAppointment = () => {
+    const dispatch = useDispatch();
+
     const { domain } = useContext(AuthContext);
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState(null);
@@ -62,52 +66,52 @@ const BookingAppointment = () => {
 
     const removeFile = () => setSelectedFile(null);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e, isQuoted) => {
         e.preventDefault();
-
-        const formPayload = new FormData(e.target); // Use a new variable to avoid conflict
-
-        // Add dropdown state values
-        formPayload.append('vip', formState.vipStatus);
-        formPayload.append('repeatCustomer', formState.repeatCustomer);
-        formPayload.append('dealership', formState.dealershipType);
-        formPayload.append('year', selectedYear);
-        formPayload.append('make', selectedMake);
-        formPayload.append('model', selectedModel);
-        formPayload.append('brand', selectedBrand);
-        formPayload.append('wrapColor', selectedColor);
-
-        // File
-        if (selectedFile) {
-            formPayload.append('file', selectedFile);
+        if (isQuoted) {
+            e.stopPropagation()
         }
-
-        // Validation
-        if (!formState.vipStatus || !formState.repeatCustomer || !formState.dealershipType) {
-            alert("Please select VIP, Repeat Customer, and Dealership Type");
-            return;
-        }
+        const payload = {
+            firstName: formState.firstName,
+            lastName: formState.lastName,
+            email: formState.email,
+            phone: formState.phone,
+            bookingDate: formState.bookingDate,
+            completionDate: formState.completionDate,
+            year: selectedYear,
+            make: selectedMake,
+            model: selectedModel,
+            brand: selectedBrand,
+            wrapColor: selectedColor,
+            price: Number(formState.price),
+            ppfCost: Number(formState.ppfCost),
+            decalsCost: Number(formState.decalsCost),
+            windowTintingCost: Number(formState.windowTintingCost),
+            frontPercentage: Number(formState.frontPercentage),
+            rearPercentage: Number(formState.rearPercentage),
+            additionalTotal: Number(formState.additionalTotal),
+            customerTotal: Number(formState.customerTotal),
+            notes: formState.notes,
+            vip: formState.vipStatus,
+            repeatCustomer: formState.repeatCustomer,
+            dealership: formState.dealershipType,
+            isQuoted: isQuoted,
+        };
 
         try {
-            const response = await fetch(`${domain}/booking/submit.php`, {
-                method: 'POST',
-                body: formPayload,
-            });
-
-            const result = await response.json();
-            if (result.success) {
-                alert('Booking submitted successfully!');
-                navigate("/appointment");
+            const response = await dispatch(bookingAppointmentAPIFn(payload)).unwrap();
+            // This depends on your backend, adjust as needed:
+            if (response?.success || response?.data) {
+                // alert('Booking submitted successfully!');
+                navigate('/appointment');
             } else {
-                alert('Error: ' + result.message);
+                alert('Booking submission failed.');
             }
         } catch (error) {
-            console.error('Submission error:', error);
-            alert('Something went wrong.');
+            console.error('Booking submission error:', error);
+            alert('Something went wrong. Please try again.');
         }
     };
-
-
 
 
     return (
@@ -139,10 +143,10 @@ const BookingAppointment = () => {
                             className="w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-2"
                         >
                             <option value="">Select VIP Status</option>
-                            <option value="vip_dealer">VIP Dealer</option>
-                            <option value="vip_customer">VIP Customer</option>
-                            <option value="vip_partner">Business Partner</option>
-                            <option value="vip_other">Other</option>
+                            <option value="VIP Dealer">VIP Dealer</option>
+                            <option value="VIP Customer">VIP Customer</option>
+                            <option value="Business Partner">Business Partner</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
 
@@ -159,9 +163,9 @@ const BookingAppointment = () => {
                             className="w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-2"
                         >
                             <option value="">Select Option</option>
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                            <option value="unsure">Not Sure</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                            <option value="Not Sure">Not Sure</option>
                         </select>
                     </div>
 
@@ -178,11 +182,11 @@ const BookingAppointment = () => {
                             className="w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-2"
                         >
                             <option value="">Select Dealership</option>
-                            <option value="authorized">Authorized Dealer</option>
-                            <option value="independent">Independent Dealer</option>
-                            <option value="fleet">Fleet Account</option>
-                            <option value="private">Private Seller</option>
-                            <option value="none">Not Applicable</option>
+                            <option value="Authorized Dealer">Authorized Dealer</option>
+                            <option value="Independent Dealer">Independent Dealer</option>
+                            <option value="Fleet Account">Fleet Account</option>
+                            <option value="Private Seller">Private Seller</option>
+                            <option value="Not Applicable">Not Applicable</option>
                         </select>
                     </div>
                 </div>
@@ -192,7 +196,7 @@ const BookingAppointment = () => {
 
 
             {/* Form */}
-            <form id="bookingForm" className="space-y-8" onSubmit={handleSubmit} encType="multipart/form-data">
+            <form id="bookingForm" className="space-y-8">
                 {/* Row 1 */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
@@ -535,20 +539,21 @@ const BookingAppointment = () => {
                 </div>
 
 
-                <div className="flex md:flex-row flex-col gap-3">
-                    <button type="submit" className="bg-[#EB227C] text-white px-16 py-4 cursor-pointer rounded-full ">
-                        Book Now
-                    </button>
 
-                    <button type="submit" className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
-                        Send Quote
-                    </button>
-
-                    <button type="submit" className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
-                        Generate Visualizer
-                    </button>
-                </div>
             </form>
+            <div className="flex md:flex-row flex-col gap-3">
+                <button onClick={(e) => handleSubmit(e, isQuoted = false)} className="bg-[#EB227C] text-white px-16 py-4 cursor-pointer rounded-full ">
+                    Book Now
+                </button>
+
+                <button onClick={(e) => handleSubmit(e, isQuoted = true)} className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
+                    Send Quote
+                </button>
+
+                <button className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
+                    Generate Visualizer
+                </button>
+            </div>
         </div>
     )
 }

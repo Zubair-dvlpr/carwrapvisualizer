@@ -12,19 +12,6 @@ const Router = () => {
         element={useIsAuthenticatedUser() ? <Navigate to='/dashboard' /> : <Navigate to='/' />}
       />
       <Route element={<PrivateRoutes />}>
-        {/* {privateRoutes?.map((route, index) =>
-          route.child ? (
-            route?.child?.map((childRoute, index) => (
-              <>
-                <Route path={route.path} element={route.element} key={index} />
-                <Route path={childRoute.path} element={childRoute.element} key={index} />
-              </>
-            ))
-          ) : (
-            <Route path={route.path} element={route.element} key={index} />
-          )
-        )}
-      </Route> */}
         {privateRoutes?.map((route, index) => (
           <Route path={route.path} element={route.element} key={index} />
         ))}

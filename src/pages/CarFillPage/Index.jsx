@@ -12,9 +12,11 @@ import inozetek from '../../assets/images/inozetek.png'
 import { AuthContext } from '../../context/AuthContext';
 // import loaderGif from "../../assets/loading.gif";
 import loaderGif from "../../assets/loading.gif";
+import { useDispatch } from 'react-redux';
+import { generateCarImageAPIFn } from '../../redux/features/Studio/studioFus';
 const CarFillPage = () => {
     const { user, domain } = useContext(AuthContext);
-
+    const dispatch = useDispatch();
     const wrapFilmColors = {
         'Gloss': [
             { name: "Gloss Black (G12)", colorCode: "#000000" },
@@ -120,27 +122,30 @@ const CarFillPage = () => {
     const [generatedImage, setGeneratedImage] = useState('');
     const imageRef = useRef(null);
     const generateImage = async (year, make, model, finish, color) => {
-        setAnimation(true);
-        const response = await fetch(`${domain}/generateCarImage.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                user_id: user?.user.id,  // ensure this is current logged-in user ID from context or state
-                year,
-                make,
-                model,
-                finish,
-                color,
-                description: '' // Optional: you can pass description if needed
-            })
-        });
-        const data = await response.json();
-        if (data.status === 'success') {
+        try {
+            setAnimation(true);
+            const response = await dispatch(
+                generateCarImageAPIFn({
+                    year,
+                    make,
+                    model,
+                    finish,
+                    color,
+                    description: ''
+                })
+            );
+
+            if (response?.meta?.requestStatus === 'fulfilled') {
+                setAnimation(false);
+                return 'data:image/png;base64,' + response.payload.imageBase64;
+            } else {
+                setAnimation(false);
+                throw new Error(response.payload || 'Image generation failed');
+            }
+        } catch (error) {
             setAnimation(false);
-            return 'data:image/png;base64,' + data.imageBase64;
-        } else {
-            setAnimation(false);
-            throw new Error(data.message || 'Error generating image');
+            console.error(error);
+            throw error;
         }
     };
 
