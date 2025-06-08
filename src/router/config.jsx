@@ -1,4 +1,4 @@
-import DashboardLayout from '../layout/DashboardLayout';
+import DashboardLayout from '../Layout/DashboardLayout';
 import DefaultLayout from '../Layout/DefaultLayout';
 import CarFillPage from '../pages/CarFillPage/Index';
 import ConfirmBooking from '../pages/ConfirmBooking/confirmBooking';
