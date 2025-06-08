@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaSignOutAlt, FaTimes } from 'react-icons/fa';
-import { AuthContext } from '../context/AuthContext';
+import { FaTimes } from 'react-icons/fa';
 import dashboardIcon from '../assets/icons/dashboard.svg';
 import Profile from '../assets/icons/profile.svg';
 import Studio from '../assets/icons/studio.svg';
