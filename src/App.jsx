@@ -1,16 +1,20 @@
-import './App.css'
+import { BrowserRouter } from 'react-router-dom';
+import './App.css';
 import AuthProvider from './context/AuthContext'; // Ensure Correct Path
-import ViewRoutes from './ViewRoutes'
+
+import Router from './router';
 
 function App() {
   return (
     <>
-      <AuthProvider>
-        <ViewRoutes />
-      </AuthProvider>
-
+      <BrowserRouter>
+        <AuthProvider>
+          {/* <ViewRoutes /> */}
+          <Router />
+        </AuthProvider>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

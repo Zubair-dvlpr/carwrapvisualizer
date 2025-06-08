@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../../context/AuthContext';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { getMakesAPIFn } from '../../../redux/features/Studio/studioFus';
 
 const MakeSelector = ({ selectedYear, onSelect, value, bgColor }) => {
-    const { domain } = useContext(AuthContext);
+    const dispatch = useDispatch();
     const [makes, setMakes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -10,38 +11,53 @@ const MakeSelector = ({ selectedYear, onSelect, value, bgColor }) => {
     useEffect(() => {
         if (!selectedYear) return;
 
-        setLoading(true);
-        fetch(`${domain}/getMakes.php?year=${selectedYear}`)
-            .then(res => res.json())
-            .then(result => {
-                if (result.status === 'success') {
-                    setMakes(result.data);
-                } else {
-                    setError('Failed to load makes');
-                }
-                setLoading(false);
-            })
-            .catch(() => {
-                setError('API Error');
-                setLoading(false);
-            });
-    }, [selectedYear]);
+        const fetchMakes = async () => {
+            setLoading(true);
+            setError('');
+            const response = await dispatch(getMakesAPIFn(selectedYear));
+            if (response?.meta?.requestStatus === 'fulfilled') {
+                const data = response.payload?.data || response.payload;
+                // console.log(data.makes)
+                setMakes(data.makes);
+            } else {
+                setError(response.payload || 'Failed to fetch makes');
+                setMakes([]);
+            }
+            setLoading(false);
+        };
 
-    if (!selectedYear) return <select className={`w-full bg-[#F6F9FF]  focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3`}>
-        <option className=''>
-            Select Year First
-        </option>
-    </select>;
-    if (loading) return <select className={`w-full bg-[#F6F9FF]  focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3`}>
-         <option className=''>Loading makes...</option>
-         </select>;
-    if (error) return <p>{error}</p>;
+        fetchMakes();
+    }, [selectedYear, dispatch]);
+
+    if (!selectedYear) {
+        return (
+            <select className="w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3">
+                <option>Select Year First</option>
+            </select>
+        );
+    }
+
+    if (loading) {
+        return (
+            <select className="w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3">
+                <option>Loading makes...</option>
+            </select>
+        );
+    }
+
+    if (error) return <p className="text-red-600">{error}</p>;
 
     return (
-        <select value={value} onChange={(e) => onSelect(e.target.value)} className={`w-full bg-[#F6F9FF]  focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3`}>
-            <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]' value="">Select Make</option>
-            {makes.map((make) => (
-                <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]' key={make.id} value={make.name}>{make.name}</option>
+        <select
+            value={value}
+            onChange={(e) => onSelect(e.target.value)}
+            className="w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3"
+        >
+            <option value="">Select Make</option>
+            {makes.map((make, index) => (
+                <option key={make?.id || index} value={make?.name || make}>
+                    {make?.name || make}
+                </option>
             ))}
         </select>
     );
