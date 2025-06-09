@@ -20,4 +20,6 @@ export const endPoints = {
   addNewUser: `${baseURL}/${v}/auth/add-user`,
   usersList: `${baseURL}/${v}/auth/users-list`,
   updateBooking: `${baseURL}/${v}/auth/users-list`,
+  getPublicBooking: `${baseURL}/${v}/public/get-booking`,
+  updateBookingStatus: `${baseURL}/${v}/public/update-booking-status`
 };

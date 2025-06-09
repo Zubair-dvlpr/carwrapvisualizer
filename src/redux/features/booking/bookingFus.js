@@ -2,6 +2,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { endPoints } from '../../constant';
 import axiosInstance from '../../http';
+import axios from 'axios';
 
 // Login User API Fn
 export const bookingAppointmentAPIFn = createAsyncThunk(
@@ -31,7 +32,6 @@ export const todayAppointmentAPIFn = createAsyncThunk(
     }
   }
 );
-
 
 export const tomorrowAppointmentAPIFn = createAsyncThunk(
   'booking/tomorrowAppointment',
@@ -80,6 +80,32 @@ export const updateBookingAPIFn = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const { data } = await axiosInstance.post(endPoints.updateBooking, {
+        ...values
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.error?.message);
+    }
+  }
+);
+
+export const getPublicBookingAPIFn = createAsyncThunk(
+  'booking/getPublicBooking',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(`${endPoints.getPublicBooking}/${values?._id}`);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.error?.message);
+    }
+  }
+);
+
+export const updateBookingStatusAPIFn = createAsyncThunk(
+  'booking/updateBookingStatus',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.patch(`${endPoints.updateBookingStatus}`, {
         ...values
       });
       return data;
