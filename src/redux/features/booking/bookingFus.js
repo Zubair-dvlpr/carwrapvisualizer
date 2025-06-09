@@ -75,7 +75,6 @@ export const inProgressAPIFn = createAsyncThunk(
   }
 );
 
-
 export const completedAppointmentAPIFn = createAsyncThunk(
   'booking/completedAppointment',
   async (values, { rejectWithValue }) => {
@@ -135,6 +134,20 @@ export const updateBookingStatusAPIFn = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const { data } = await axios.patch(`${endPoints.updateBookingStatus}`, {
+        ...values
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.error?.message);
+    }
+  }
+);
+
+export const updateBookingDetailsAPIFn = createAsyncThunk(
+  'booking/updateBookingDetails',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.put(`${endPoints.updateBookingDetails}/${values?._id}`, {
         ...values
       });
       return data;

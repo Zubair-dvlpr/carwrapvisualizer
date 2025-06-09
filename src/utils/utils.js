@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { setAuthToken } from '../redux/http';
-import { store } from '../redux/store';
+import { persistor, store } from '../redux/store';
 import { logout } from '../redux/features/auth/authSlice';
 
 // Authentication Fn

@@ -92,7 +92,7 @@ export const privateRoutes = [
     child: []
   },
   {
-    path: '/qworkOrder',
+    path: '/work-order',
     moduleName: 'Work Order',
     element: (
       <DashboardLayout>
@@ -179,7 +179,12 @@ export const commonRoutes = [
   {
     path: '/confirm-booking',
     moduleName: 'Confirm Booking',
-    element:<DefaultLayout>  <ConfirmBooking /> </DefaultLayout>
+    element: (
+      <DefaultLayout>
+        {' '}
+        <ConfirmBooking />{' '}
+      </DefaultLayout>
+    )
   },
   {
     path: '/visualizer',
