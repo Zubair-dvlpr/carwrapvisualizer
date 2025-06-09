@@ -7,9 +7,19 @@ const BookedAppointments = ({ title, data = [] }) => {
   const hasData = Array.isArray(data) && data.length > 0;
 
   const handleBookingClick = (booking) => {
-    console.log(booking);
-    navigate('/WorkOrder', { state: { booking } });
+    try {
+      if (!booking || typeof booking !== 'object') {
+        console.error("❌ Invalid booking data:", booking);
+        return;
+      }
+
+      console.log("📦 Navigating with booking:", booking);
+      navigate('/WorkOrder', { state: { booking } });
+    } catch (error) {
+      console.error("⚠️ Error navigating to WorkOrder:", error);
+    }
   };
+
 
   return (
     <div className="p-6 border border-[#E1E1E1] rounded-[20px] bg-white w-full">

@@ -23,10 +23,11 @@ const menuItems = [
   { name: 'Appointments', path: '/appointment', icon: Appointments },
   { name: 'Team', path: '/Team', icon: Team },
   { name: 'Subscription', path: '/Subscription', icon: Subscription },
+  { name: 'Customers', path: '/customers', icon: Customers },
+  { name: 'Leads', path: '/leads', icon: Customers },
   { name: 'Invoices', path: '/Invoices', icon: Invoices },
   { name: 'Help', path: '/Help', icon: Help },
   { name: 'Settings', path: '/Settings', icon: Settings },
-  { name: 'Customers', path: '/customers', icon: Customers }
 ];
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {

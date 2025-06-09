@@ -6,9 +6,9 @@ import Appointment from '../pages/Dashboard/Appointment';
 import BillingSubscription from '../pages/Dashboard/BillingSubscription';
 import BookingAppointment from '../pages/Dashboard/BookingAppointment';
 import Customers from '../pages/Dashboard/Customers';
+import Leads from '../pages/Dashboard/leads';
 import Notifications from '../pages/Dashboard/Notifications';
 import Overview from '../pages/Dashboard/Overview';
-import PricingPlan from '../pages/Dashboard/PricingPlan';
 import Profile from '../pages/Dashboard/Profile';
 import Settings from '../pages/Dashboard/Settings';
 import SupportHelp from '../pages/Dashboard/SupportHelp';
@@ -62,7 +62,7 @@ export const privateRoutes = [
     child: []
   },
   {
-    path: '/Subscription',
+    path: '/subscription',
     moduleName: 'Billing & Subscription',
     element: (
       <DashboardLayout>
@@ -92,7 +92,7 @@ export const privateRoutes = [
     child: []
   },
   {
-    path: '/WorkOrder',
+    path: '/qworkOrder',
     moduleName: 'Work Order',
     element: (
       <DashboardLayout>
@@ -102,7 +102,7 @@ export const privateRoutes = [
     child: []
   },
   {
-    path: '/BookingAppointment',
+    path: '/bookingAppointment',
     moduleName: 'Booking Appointment',
     element: (
       <DashboardLayout>
@@ -112,7 +112,7 @@ export const privateRoutes = [
     child: []
   },
   {
-    path: '/Help',
+    path: '/help',
     moduleName: 'Support & Help',
     element: (
       <DashboardLayout>
@@ -132,21 +132,21 @@ export const privateRoutes = [
     child: []
   },
   {
-    path: '/notifications',
-    moduleName: 'Notifications',
+    path: '/leads',
+    moduleName: 'Leads',
     element: (
       <DashboardLayout>
-        <Notifications />
+        <Leads />
       </DashboardLayout>
     ),
     child: []
   },
   {
-    path: '/pricingPlan',
-    moduleName: 'Pricing Plan',
+    path: '/notifications',
+    moduleName: 'Notifications',
     element: (
       <DashboardLayout>
-        <PricingPlan />
+        <Notifications />
       </DashboardLayout>
     ),
     child: []
@@ -160,7 +160,7 @@ export const publicRoutes = [
     element: <Login />
   },
   {
-    path: '/SignUp',
+    path: '/signUp',
     moduleName: 'Sign Up',
     element: <SignUp />
   }
@@ -191,7 +191,7 @@ export const commonRoutes = [
     )
   },
   {
-    path: '/SucessfullUrl',
+    path: '/sucessfullUrl',
     moduleName: 'Success Page',
     element: <SucessfullUrl />
   },

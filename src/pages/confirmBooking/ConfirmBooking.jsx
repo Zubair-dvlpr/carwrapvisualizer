@@ -18,41 +18,50 @@ const ConfirmBooking = () => {
   const [bookingData, setBookingData] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const upateBookingStatus = async status => {
-    setLoading(true);
-    const data = await dispatch(
-      updateBookingStatusAPIFn({
-        bookingId: token,
-        status: status
-      })
-    );
-    if (data?.meta?.requestStatus === 'fulfilled') {
-      setLoading(false);
-      console.log('confirm booking data', data);
-    }
-    if (data?.meta?.requestStatus === 'rejected') {
-      console.log('failer', data);
+  const updateBookingStatus = async (status) => {
+    try {
+      setLoading(true);
+      const data = await dispatch(
+        updateBookingStatusAPIFn({
+          bookingId: token,
+          status: status,
+        })
+      );
+
+      if (data?.meta?.requestStatus === 'fulfilled') {
+        console.log('✔️ Booking confirmed:', data);
+      } else {
+        console.error('❌ Booking status update failed:', data);
+      }
+    } catch (error) {
+      console.error('⚠️ Unexpected error in updateBookingStatus:', error);
+    } finally {
       setLoading(false);
     }
   };
 
   const fetchBookingDetails = async () => {
-    setLoading(true);
-    const data = await dispatch(
-      getPublicBookingAPIFn({
-        _id: token
-      })
-    );
-    if (data?.meta?.requestStatus === 'fulfilled') {
-      setBookingData(data?.payload?.data);
+    try {
+      setLoading(true);
+      const data = await dispatch(
+        getPublicBookingAPIFn({
+          _id: token,
+        })
+      );
+
+      if (data?.meta?.requestStatus === 'fulfilled') {
+        setBookingData(data?.payload?.data);
+        console.log('📦 Booking details fetched:', data);
+      } else {
+        console.error('❌ Failed to fetch booking details:', data);
+      }
+    } catch (error) {
+      console.error('⚠️ Unexpected error in fetchBookingDetails:', error);
+    } finally {
       setLoading(false);
-      console.log('fetchBookingDetails', data);
-    }
-    if (data?.meta?.requestStatus === 'rejected') {
-      setLoading(false);
-      console.log('failer', data);
     }
   };
+
 
   useEffect(() => {
     if (token) {

@@ -17,58 +17,55 @@ const Appointment = () => {
     const [tomorrowBookings, setTomorrowBookings] = useState([]);
     const [canceledBookings, setCanceledBookings] = useState([]);
     const todayAppointmentfn = async () => {
-        const data = await dispatch(
-            todayAppointmentAPIFn({
-                isToday: true
-            })
-        );
-        if (data?.meta?.requestStatus === 'fulfilled') {
-            // setPlans(data)
-            setTodayBookings(data.payload.data); // Correct
-            // console.log("today Appointment", todayBookings)
+        try {
+            const data = await dispatch(todayAppointmentAPIFn({ isToday: true }));
+            if (data?.meta?.requestStatus === 'fulfilled') {
+                setTodayBookings(data.payload.data);
+                console.log("✅ Today's Appointments:", data.payload.data);
+            } else {
+                console.error("❌ Failed to fetch today's appointments:", data);
+                // alert('Failed to fetch today’s appointments.');
+            }
+        } catch (error) {
+            console.error("🔥 Error in todayAppointmentfn:", error);
         }
-        if (data?.meta?.requestStatus === 'rejected') {
-            console.log("failer", data)
-        }
-    }
+    };
 
     const tomorrowAppointmentfn = async () => {
-        const data = await dispatch(
-            tomorrowAppointmentAPIFn({
-                isTomorrow: true
-            })
-        );
-        if (data?.meta?.requestStatus === 'fulfilled') {
-            // setPlans(data)
-            setTomorrowBookings(data.payload.data); // Correct
-            console.log("tomorrow Appointment", data)
+        try {
+            const data = await dispatch(tomorrowAppointmentAPIFn({ isTomorrow: true }));
+            if (data?.meta?.requestStatus === 'fulfilled') {
+                setTomorrowBookings(data.payload.data);
+                console.log("✅ Tomorrow's Appointments:", data.payload.data);
+            } else {
+                console.error("❌ Failed to fetch tomorrow's appointments:", data);
+                // alert('Failed to fetch tomorrow’s appointments.');
+            }
+        } catch (error) {
+            console.error("🔥 Error in tomorrowAppointmentfn:", error);
         }
-        if (data?.meta?.requestStatus === 'rejected') {
-            console.log("failer", data)
-        }
-    }
+    };
 
     const canceledAppointmentfn = async () => {
-        const data = await dispatch(
-            canceledAppointmentAPIFn({
-                status: "cancelled"
-            })
-        );
-        if (data?.meta?.requestStatus === 'fulfilled') {
-            // setPlans(data)
-            setCanceledBookings(data.payload.data); // Correct
-            console.log("canceled Appointment ", data)
+        try {
+            const data = await dispatch(canceledAppointmentAPIFn({ status: "cancelled" }));
+            if (data?.meta?.requestStatus === 'fulfilled') {
+                setCanceledBookings(data.payload.data);
+                console.log("✅ Canceled Appointments:", data.payload.data);
+            } else {
+                console.error("❌ Failed to fetch canceled appointments:", data);
+                // alert('Failed to fetch canceled appointments.');
+            }
+        } catch (error) {
+            console.error("🔥 Error in canceledAppointmentfn:", error);
         }
-        if (data?.meta?.requestStatus === 'rejected') {
-            console.log("failer", data)
-        }
-    }
+    };
 
     useEffect(() => {
         todayAppointmentfn();
         tomorrowAppointmentfn();
         canceledAppointmentfn();
-    }, [])
+    }, []);
 
     // console.log(cancelledBookings);
     return (

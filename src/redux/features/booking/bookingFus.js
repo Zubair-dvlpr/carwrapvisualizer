@@ -75,6 +75,35 @@ export const inProgressAPIFn = createAsyncThunk(
   }
 );
 
+
+export const completedAppointmentAPIFn = createAsyncThunk(
+  'booking/completedAppointment',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.post(endPoints.appointmentDetail, {
+        ...values
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.error?.message);
+    }
+  }
+);
+
+export const quoteSentAppointmentAPIFn = createAsyncThunk(
+  'booking/quoteSentAppointment',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.post(endPoints.appointmentDetail, {
+        ...values
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.error?.message);
+    }
+  }
+);
+
 export const updateBookingAPIFn = createAsyncThunk(
   'booking/updateBooking',
   async (values, { rejectWithValue }) => {

@@ -85,8 +85,6 @@ const Overview = () => {
       verifySession()
     }
     todayAppointmentfn();
-    tomorrowAppointmentfn();
-    canceledAppointmentfn();
   }, [])
 
   

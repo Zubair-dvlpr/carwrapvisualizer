@@ -5,13 +5,18 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './CustomCalendar.css'; // For custom styles
 import { AuthContext } from '../../../context/AuthContext';
 
-const CustomCalendar = ({full}) => {
+const CustomCalendar = ({ full }) => {
   console.log(full)
   const [value, setValue] = useState(new Date());
   const { setSelectedDate, bookingsByDate } = useContext(AuthContext);
   const handleChange = (date) => {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      console.error("❌ Invalid date selected:", date);
+      return;
+    }
+
     setValue(date);
-     setSelectedDate(date); // send to context
+    setSelectedDate(date); // Send to context
   };
 
   return (

@@ -1,47 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { completedAppointmentAPIFn } from '../../redux/features/booking/bookingFus';
+import { completedAppointmentAPIFn, quoteSentAppointmentAPIFn } from '../../redux/features/booking/bookingFus';
 
-const Customers = () => {
+const Leads = () => {
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
   const [customers, setCustomers] = useState([]);
 
-
-
-  const fetchCompletedAppointment = async () => {
+  const fetchQuoteSentAppointment = async () => {
     try {
       const data = await dispatch(
-        completedAppointmentAPIFn({ status: "completed" })
+        quoteSentAppointmentAPIFn({
+          status: "quote_sent"
+        })
       );
 
-      if (data?.meta?.requestStatus === "fulfilled") {
+      if (data?.meta?.requestStatus === 'fulfilled') {
         const appointments = data.payload?.data || [];
         const formatted = appointments.map(item => ({
           date: new Date(item.createdAt).toLocaleDateString(),
           customer: `${item.firstName} ${item.lastName}`,
           vehicle: `${item.make} ${item.model}`,
-          color: item.wrapColor || "-",
+          color: item.wrapColor || '-',
           phone: item.phone,
           email: item.email,
           serviceDate: new Date(item.completionDate).toLocaleDateString(),
-          warranty: "-", // Update if warranty logic exists
-          type: item.isQuoted ? "Quoted" : "Booked",
-          invoice: item._id?.slice(-6).toUpperCase(), // Last 6 of ID as invoice #
+          warranty: '-', // Adjust if you have warranty info
+          type: item.isQuoted ? 'Quoted' : 'Booked',
+          invoice: item._id?.slice(-6).toUpperCase(), // use last 6 of ID as a mock invoice #
         }));
         setCustomers(formatted);
       } else {
-        console.error("Failed to fetch appointments", data);
+        console.error(`Failed to fetch ${status} appointments`, data);
       }
     } catch (error) {
-      console.error("Error fetching completed appointments:", error);
+      console.error(`Error fetching ${status} appointments:`, error);
+    }
+
+    if (data?.meta?.requestStatus === 'rejected') {
+      console.error('Failed to fetch appointments', data);
     }
   };
 
+
   useEffect(() => {
-    fetchCompletedAppointment();
+    fetchQuoteSentAppointment();
   }, [])
-  
   return (
     <div className="">
       {/* Top Section: Heading + Search */}
@@ -105,4 +109,4 @@ const Customers = () => {
   );
 };
 
-export default Customers;
+export default Leads;

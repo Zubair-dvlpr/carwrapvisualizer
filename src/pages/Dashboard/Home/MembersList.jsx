@@ -27,14 +27,33 @@ const MembersList = () => {
 
   const addNewUser = async (e) => {
     e.preventDefault();
-    const data = await dispatch(addNewUserAPIFn(formData));
-    if (data?.meta?.requestStatus === 'fulfilled') {
-      alert('User added successfully!');
-      setShowModal(false);
-      setFormData({ firstName: '', lastName: '', email: '', password: '' });
-      dispatch(getAllUsersAPIFn()); // Refresh user list
+
+    // Simple form validation
+    const { firstName, lastName, email, password } = formData;
+    if (!firstName || !lastName || !email || !password) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    try {
+      const data = await dispatch(addNewUserAPIFn(formData));
+
+      if (data?.meta?.requestStatus === 'fulfilled') {
+        alert('✅ User added successfully!');
+        setShowModal(false);
+        setFormData({ firstName: '', lastName: '', email: '', password: '' });
+        dispatch(getAllUsersAPIFn()); // Refresh user list
+      } else {
+        const errorMessage = data?.payload?.message || 'Something went wrong while adding the user.';
+        alert(`❌ Failed to add user: ${errorMessage}`);
+        console.error("Add user error:", data);
+      }
+    } catch (error) {
+      alert('❌ An unexpected error occurred.');
+      console.error("Unexpected error while adding user:", error);
     }
   };
+
 
   return (
     <div className="bg-white rounded-2xl p-6 shadow-md w-full mx-auto relative">
@@ -51,13 +70,13 @@ const MembersList = () => {
 
       {/* Members */}
       <div className="space-y-4">
-        
+
         {loading ? (
           <p>Loading...</p>
         ) : (
           users.map((member, index) => (
             <div key={index} className="flex items-center gap-4">
-              
+
               <img
                 src={member?.avatar || `https://ui-avatars.com/api/?name=${member.firstName}+${member.lastName}`}
                 alt={member?.firstName}

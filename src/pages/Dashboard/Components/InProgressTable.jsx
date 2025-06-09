@@ -13,29 +13,43 @@ const InProgressTable = () => {
     const [filterDate, setFilterDate] = useState('');
 
     const inProgressAppointmentfn = async () => {
-        const data = await dispatch(
-            inProgressAPIFn({
-                // isTomorrow: true,
-                status: "inprogress"
-            })
-        );
+        try {
+            const data = await dispatch(
+                inProgressAPIFn({
+                    status: 'inprogress',
+                })
+            );
 
-        if (data?.meta?.requestStatus === 'fulfilled') {
-            const formattedData = data.payload.data.map(booking => ({
-                date: new Date(booking.bookingDate).toISOString().split('T')[0],
-                customer: `${booking.firstName} ${booking.lastName}`,
-                vehicle: `${booking.make} ${booking.model}`,
-                deliveryDate: new Date(booking.completionDate).toISOString().split('T')[0],
-                time: new Date(booking.completionDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                cost: `$${booking.price + booking.ppfCost + booking.decalsCost + booking.windowTintingCost}`
-            }));
-            setWrapsData(formattedData);
-        }
+            if (data?.meta?.requestStatus === 'fulfilled') {
+                const formattedData = (data?.payload?.data || []).map((booking) => {
+                    const totalCost =
+                        Number(booking?.price || 0) +
+                        Number(booking?.ppfCost || 0) +
+                        Number(booking?.decalsCost || 0) +
+                        Number(booking?.windowTintingCost || 0);
 
-        if (data?.meta?.requestStatus === 'rejected') {
-            console.error("Failed to fetch data", data);
+                    return {
+                        date: new Date(booking.bookingDate).toISOString().split('T')[0],
+                        customer: `${booking.firstName} ${booking.lastName}`,
+                        vehicle: `${booking.make} ${booking.model}`,
+                        deliveryDate: new Date(booking.completionDate).toISOString().split('T')[0],
+                        time: new Date(booking.completionDate).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        }),
+                        cost: `$${totalCost.toFixed(2)}`
+                    };
+                });
+
+                setWrapsData(formattedData);
+            } else {
+                console.error('❌ API request failed:', data);
+            }
+        } catch (error) {
+            console.error('⚠️ Unexpected error in inProgressAppointmentfn:', error);
         }
     };
+
 
     useEffect(() => {
         inProgressAppointmentfn();
