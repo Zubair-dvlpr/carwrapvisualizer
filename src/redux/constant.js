@@ -16,5 +16,8 @@ export const endPoints = {
   getModels: `${baseURL}/${v}/user/tool/get-models`,
   generateCarImage: `${baseURL}/${v}/user/tool/generate-car-image`,
   bookingAppointment: `${baseURL}/${v}/user/booking`,
-
+  appointmentDetail: `${baseURL}/${v}/user/booking/all`,
+  addNewUser: `${baseURL}/${v}/auth/add-user`,
+  usersList: `${baseURL}/${v}/auth/users-list`,
+  updateBooking: `${baseURL}/${v}/auth/users-list`,
 };

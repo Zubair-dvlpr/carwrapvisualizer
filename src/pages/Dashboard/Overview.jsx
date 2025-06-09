@@ -9,10 +9,11 @@ import { useEffect, useState } from 'react';
 import { stripeVerifySessionAPIFn } from '../../redux/features/stripe/stripeFns';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { canceledAppointmentAPIFn, todayAppointmentAPIFn, tomorrowAppointmentAPIFn } from '../../redux/features/booking/bookingFus';
 
 
 const Overview = () => {
-   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [todayBookings, setTodayBookings] = useState([]);
   const [params, setParams] = useSearchParams();
   const sessionId = params.get('session_id');
@@ -20,7 +21,7 @@ const Overview = () => {
   const verifySession = async () => {
     const data = await dispatch(
       stripeVerifySessionAPIFn({
-        sessionId : sessionId
+        sessionId: sessionId
       })
     );
     if (data?.meta?.requestStatus === 'fulfilled') {
@@ -32,12 +33,63 @@ const Overview = () => {
     }
   }
 
+
+  const todayAppointmentfn = async () => {
+    const data = await dispatch(
+      todayAppointmentAPIFn({
+        isToday: true
+      })
+    );
+    if (data?.meta?.requestStatus === 'fulfilled') {
+      // setPlans(data)
+      setTodayBookings(data.payload.data); // Correct
+      // console.log("today Appointment", todayBookings)
+    }
+    if (data?.meta?.requestStatus === 'rejected') {
+      console.log("failer", data)
+    }
+  }
+
+  const tomorrowAppointmentfn = async () => {
+    const data = await dispatch(
+      tomorrowAppointmentAPIFn({
+        isTomorrow: true
+      })
+    );
+    if (data?.meta?.requestStatus === 'fulfilled') {
+      // setPlans(data)
+      console.log("tomorrow Appointment", data)
+    }
+    if (data?.meta?.requestStatus === 'rejected') {
+      console.log("failer", data)
+    }
+  }
+
+  const canceledAppointmentfn = async () => {
+    const data = await dispatch(
+      canceledAppointmentAPIFn({
+        status: "cancelled"
+      })
+    );
+    if (data?.meta?.requestStatus === 'fulfilled') {
+      // setPlans(data)
+      console.log("canceled Appointment ", data)
+    }
+    if (data?.meta?.requestStatus === 'rejected') {
+      console.log("failer", data)
+    }
+  }
+
   useEffect(() => {
     if (sessionId) {
       verifySession()
     }
-
+    todayAppointmentfn();
+    tomorrowAppointmentfn();
+    canceledAppointmentfn();
   }, [])
+
+  
 
 
   return (
@@ -50,7 +102,7 @@ const Overview = () => {
         <NewBooking />
       </div>
       <div className='md:col-span-4 col-span-full flex flex-col gap-4 p-4 bg-[#F5F5F7] rounded-4xl'>
-        <BookedAppointments todayBookings={todayBookings} title="Booked Appointments" />
+        <BookedAppointments data={todayBookings} title="Booked Appointments" />
         <CustomCalendar full={true} />
         <MembersList />
       </div>

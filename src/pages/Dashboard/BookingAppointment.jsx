@@ -12,6 +12,7 @@ import { bookingAppointmentAPIFn } from "../../redux/features/booking/bookingFus
 
 const BookingAppointment = () => {
     const dispatch = useDispatch();
+    const [showPopup, setShowPopup] = useState(false);
 
     const { domain } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -67,6 +68,7 @@ const BookingAppointment = () => {
     const removeFile = () => setSelectedFile(null);
 
     const handleSubmit = async (e, isQuoted) => {
+        console.log("booking ");
         e.preventDefault();
         if (isQuoted) {
             e.stopPropagation()
@@ -102,8 +104,13 @@ const BookingAppointment = () => {
             const response = await dispatch(bookingAppointmentAPIFn(payload)).unwrap();
             // This depends on your backend, adjust as needed:
             if (response?.success || response?.data) {
-                // alert('Booking submitted successfully!');
-                navigate('/appointment');
+                if (isQuoted) {
+                    setShowPopup(true); // Show popup now, navigate later
+                } else {
+                    alert("Booking updated successfully!");
+                    navigate('/appointment');
+                }
+                // navigate('/appointment');
             } else {
                 alert('Booking submission failed.');
             }
@@ -542,13 +549,34 @@ const BookingAppointment = () => {
 
             </form>
             <div className="flex md:flex-row flex-col gap-3">
-                <button onClick={(e) => handleSubmit(e, isQuoted = false)} className="bg-[#EB227C] text-white px-16 py-4 cursor-pointer rounded-full ">
+                <button type="button" onClick={(e) => handleSubmit(e, false)} className="bg-[#EB227C] text-white px-16 py-4 cursor-pointer rounded-full ">
                     Book Now
                 </button>
 
-                <button onClick={(e) => handleSubmit(e, isQuoted = true)} className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
+                <button type="button" onClick={(e) => handleSubmit(e, true)} className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
                     Send Quote
                 </button>
+
+                {showPopup && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+                        <div className="bg-white rounded-xl p-6 relative w-[90%] max-w-md shadow-lg">
+                            <button
+                                onClick={() => {
+                                    setShowPopup(false);
+                                    navigate('/appointment'); // Navigate when popup is closed
+                                }}
+                                className="absolute top-3 right-3 text-gray-600 hover:text-black"
+                            >
+                                <RxCross1 size={20} />
+                            </button>
+                            <h2 className="text-xl font-semibold text-center mb-2">Quote Sent!</h2>
+                            <p className="text-center text-gray-700">
+                                We've notified the customer by phone and email regarding the quote. You can view all sent quotes under the Leads tab.
+                            </p>
+                        </div>
+                    </div>
+                )}
+
 
                 <button className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
                     Generate Visualizer

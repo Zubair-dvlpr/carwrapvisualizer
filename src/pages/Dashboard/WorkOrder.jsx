@@ -58,15 +58,18 @@ export default function WorkOrder() {
 
     useEffect(() => {
         if (booking) {
+            const formatDate = (isoString) => {
+                return isoString ? new Date(isoString).toISOString().split('T')[0] : '';
+            };
             console.log("Received booking:", booking);
             setFormData(prev => ({
                 ...prev,
-                firstName: booking.first_name,
-                lastName: booking.last_name,
+                firstName: booking.firstName,
+                lastName: booking.lastName,
                 email: booking.email,
                 phone: booking.phone,
-                bookingDate: booking.booking_date,
-                completionDate: booking.completion_date,
+                bookingDate: formatDate(booking.bookingDate),
+                completionDate: formatDate(booking.completionDate),
                 year: booking.year,
                 make: booking.make,
                 model: booking.model,

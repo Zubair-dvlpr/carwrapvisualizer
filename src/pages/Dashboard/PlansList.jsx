@@ -75,12 +75,6 @@ const PlansList = ({ location }) => {
     const fetchActiveSubscription = async () => {
         const data = await dispatch(
             stripeActiveSubscriptionsAPIFn()
-            // {
-            //     "message": "Subscription Fetched Successfully",
-            //     "status": "success",
-            //     "statusCode": 200,
-            //     "data": null
-            // }
         );
         if (data?.meta?.requestStatus === 'fulfilled') {
             // setPlans(data)

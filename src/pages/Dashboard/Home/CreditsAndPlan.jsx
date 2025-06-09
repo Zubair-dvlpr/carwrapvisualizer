@@ -4,27 +4,27 @@ import colorfulcarImg from '../../../assets/images/colorful-car-illustration.png
 import creditslabel from '../../../assets/icons/creditslabel.svg'
 import { AuthContext } from '../../../context/AuthContext';
 const CreditsAndPlan = () => {
-    const { user, domain } = useContext(AuthContext);
+    // const { user, domain } = useContext(AuthContext);
     const [activePlan, setActivePlan] = useState();
-    useEffect(() => {
-        const fetchSubscription = async () => {
-            try {
-                const res = await fetch(`${domain}/billing/get-user-subscription.php`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: user.user.id }),
-                });
+    // useEffect(() => {
+    //     const fetchSubscription = async () => {
+    //         try {
+    //             const res = await fetch(`${domain}/billing/get-user-subscription.php`, {
+    //                 method: 'POST',
+    //                 headers: { 'Content-Type': 'application/json' },
+    //                 body: JSON.stringify({ user_id: user.user.id }),
+    //             });
 
-                const data = await res.json();
-                setActivePlan(data.plan)
-                // console.log(data.plan); // total, remaining credits, plan name, expiry
-            } catch (error) {
-                console.error('Failed to fetch subscription info:', error);
-            }
-        };
+    //             const data = await res.json();
+    //             setActivePlan(data.plan)
+    //             // console.log(data.plan); // total, remaining credits, plan name, expiry
+    //         } catch (error) {
+    //             console.error('Failed to fetch subscription info:', error);
+    //         }
+    //     };
 
-        fetchSubscription();
-    }, []);
+    //     fetchSubscription();
+    // }, []);
 
     return (
         <div className='grid mt-5 sm:grid-cols-11 grid-cols-1 gap-5'>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import NewBooking from './Home/NewBooking'
 import BookedAppointments from './Home/BookedAppointments'
 import CustomCalendar from './Home/CustomCalendar'
@@ -6,9 +6,70 @@ import MembersList from './Home/MembersList'
 import { Link, useNavigate } from 'react-router-dom'
 import InProgressTable from './Components/InProgressTable'
 import { AuthContext } from '../../context/AuthContext'
+import { useDispatch } from 'react-redux'
+import { canceledAppointmentAPIFn, todayAppointmentAPIFn, tomorrowAppointmentAPIFn } from '../../redux/features/booking/bookingFus'
 
 const Appointment = () => {
-    const { todayBookings, tomorrowBookings, cancelledBookings } = useContext(AuthContext);
+    // const { } = useContext(AuthContext);
+
+    const dispatch = useDispatch();
+    const [todayBookings, setTodayBookings] = useState([]);
+    const [tomorrowBookings, setTomorrowBookings] = useState([]);
+    const [canceledBookings, setCanceledBookings] = useState([]);
+    const todayAppointmentfn = async () => {
+        const data = await dispatch(
+            todayAppointmentAPIFn({
+                isToday: true
+            })
+        );
+        if (data?.meta?.requestStatus === 'fulfilled') {
+            // setPlans(data)
+            setTodayBookings(data.payload.data); // Correct
+            // console.log("today Appointment", todayBookings)
+        }
+        if (data?.meta?.requestStatus === 'rejected') {
+            console.log("failer", data)
+        }
+    }
+
+    const tomorrowAppointmentfn = async () => {
+        const data = await dispatch(
+            tomorrowAppointmentAPIFn({
+                isTomorrow: true
+            })
+        );
+        if (data?.meta?.requestStatus === 'fulfilled') {
+            // setPlans(data)
+            setTomorrowBookings(data.payload.data); // Correct
+            console.log("tomorrow Appointment", data)
+        }
+        if (data?.meta?.requestStatus === 'rejected') {
+            console.log("failer", data)
+        }
+    }
+
+    const canceledAppointmentfn = async () => {
+        const data = await dispatch(
+            canceledAppointmentAPIFn({
+                status: "cancelled"
+            })
+        );
+        if (data?.meta?.requestStatus === 'fulfilled') {
+            // setPlans(data)
+            setCanceledBookings(data.payload.data); // Correct
+            console.log("canceled Appointment ", data)
+        }
+        if (data?.meta?.requestStatus === 'rejected') {
+            console.log("failer", data)
+        }
+    }
+
+    useEffect(() => {
+        todayAppointmentfn();
+        tomorrowAppointmentfn();
+        canceledAppointmentfn();
+    }, [])
+
     // console.log(cancelledBookings);
     return (
         <div className="grid md:grid-cols-10 grid-cols-1 gap-10">
@@ -30,7 +91,7 @@ const Appointment = () => {
             <div className='md:col-span-4 col-span-full p-4 flex flex-col gap-4 bg-[#F5F5F7] rounded-4xl'>
                 <BookedAppointments data={todayBookings} title="Booked Appointments" />
                 <BookedAppointments data={tomorrowBookings} title="Tomorrow Appointments" />
-                <BookedAppointments data={cancelledBookings} title="Canceled Appointments" />
+                <BookedAppointments data={canceledBookings} title="Canceled Appointments" />
             </div>
         </div>
     )

@@ -7,6 +7,7 @@ const BookedAppointments = ({ title, data = [] }) => {
   const hasData = Array.isArray(data) && data.length > 0;
 
   const handleBookingClick = (booking) => {
+    console.log(booking);
     navigate('/WorkOrder', { state: { booking } });
   };
 
@@ -26,31 +27,32 @@ const BookedAppointments = ({ title, data = [] }) => {
       <div className="text-sm text-gray-600">
         {hasData ? (
 
-            <div className="space-y-4">
-              {data.map((booking, index) => (
-                <div key={index} onClick={() => handleBookingClick(booking)} className="p-3 bg-[#F9FAFB] rounded-lg border border-gray-200">
-                  <div className="font-semibold text-black">
-                    Name : {booking.first_name} {booking.last_name}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {booking.year} {booking.make} {booking.model}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    <strong>Brand:</strong> {booking.brand}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    <strong>Wrap:</strong> {booking.wrap_color}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    <strong>Booking Date:</strong> {booking.booking_date}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    <strong>Completion Date</strong> {booking.completion_date}
-                  </div>
+          <div className="space-y-4">
+            {data.map((booking, index) => (
+              <div key={index} onClick={() => handleBookingClick(booking)} className="p-3 bg-[#F9FAFB] rounded-lg border border-gray-200">
+                <div className="font-semibold text-black">
+                  Name : {booking.firstName} {booking.lastName}
                 </div>
-              ))}
-            </div>
-         
+                <div className="text-xs text-gray-500">
+                  {booking.year} {booking.make} {booking.model}
+                </div>
+                <div className="text-xs text-gray-500">
+                  <strong>Brand:</strong> {booking.brand}
+                </div>
+                <div className="text-xs text-gray-500">
+                  <strong>Wrap:</strong> {booking.wrapColor}
+                </div>
+                <div className="text-xs text-gray-500">
+                  <strong>Booking Date:</strong> {booking.bookingDate}
+                </div>
+                <div className="text-xs text-gray-500">
+                  <strong>Completion Date:</strong> {booking.completionDate}
+                </div>
+
+              </div>
+            ))}
+          </div>
+
         ) : (
           <div className="flex items-center space-x-2 mt-2">
             <span className="h-2 w-2 rounded-full bg-[#9CD323] inline-block"></span>

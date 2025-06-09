@@ -48,12 +48,13 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden px-4 pb-4 space-y-2 bg-white shadow-md">
-          <a href="#" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white font-medium">Home</a>
-          <a href="#" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white font-medium">About</a>
-          <a href="#" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white  font-medium">Contact</a>
-          <a href="#" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white  font-medium">INTEGRATE NOW</a>
-        </div>
+        <div className="md:hidden px-4 pb-4 space-y-4 bg-white shadow-md">
+          <Link to="/" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white capitalize font-medium">Home</Link>
+          <Link to="/visualizer" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white capitalize font-medium">wrap visualizer</Link>
+          <Link to="#" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white capitalize font-medium">Contact</Link>
+          <Link to="/login" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white capitalize font-medium">login</Link>
+          <Link to="/signup" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white capitalize font-medium">signup</Link>
+        </div>  
       )}
     </header>
   );

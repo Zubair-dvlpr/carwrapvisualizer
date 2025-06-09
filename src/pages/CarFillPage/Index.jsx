@@ -136,8 +136,11 @@ const CarFillPage = () => {
             );
 
             if (response?.meta?.requestStatus === 'fulfilled') {
-                setAnimation(false);
-                return 'data:image/png;base64,' + response.payload.imageBase64;
+                // Extract image URL from the new response structure
+                const imageUrl = response.payload?.data?.image?.[0]?.url;
+                if (!imageUrl) throw new Error('Image URL not found in response');
+
+                return imageUrl;  // Return the URL directly
             } else {
                 setAnimation(false);
                 throw new Error(response.payload || 'Image generation failed');

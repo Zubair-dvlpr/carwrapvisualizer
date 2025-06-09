@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import MyWrap from './Home/MyWraps';
 import CreditsAndPlan from './Home/CreditsAndPlan';
@@ -8,9 +8,33 @@ import CustomCalendar from './Home/CustomCalendar';
 import MembersList from './Home/MembersList';
 import PersonalInformationForm from './Components/PersonalInformationForm';
 import { AuthContext } from '../../context/AuthContext';
+import { canceledAppointmentAPIFn, todayAppointmentAPIFn, tomorrowAppointmentAPIFn } from '../../redux/features/booking/bookingFus';
+import { useDispatch } from 'react-redux';
 
 const Profile = () => {
-  const { todayBookings } = useContext(AuthContext);
+  // const { todayBookings } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const [todayBookings, setTodayBookings] = useState([]);
+  const todayAppointmentfn = async () => {
+    const data = await dispatch(
+      todayAppointmentAPIFn({
+        isToday: true
+      })
+    );
+    if (data?.meta?.requestStatus === 'fulfilled') {
+      // setPlans(data)
+      setTodayBookings(data.payload.data); // Correct
+      // console.log("today Appointment", todayBookings)
+    }
+    if (data?.meta?.requestStatus === 'rejected') {
+      console.log("failer", data)
+    }
+  }
+
+  useEffect(() => {
+    todayAppointmentfn();
+  }, [])
+
   return (
     <div className=" grid md:grid-cols-10 grid-cols-1 gap-10">
       <div className='md:col-span-6 col-span-full'>

@@ -1,50 +1,142 @@
-import React from 'react';
-
-const members = [
-  {
-    name: 'Sarah Khan',
-    role: 'Owner',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-  },
-  {
-    name: 'Ali Raza',
-    role: 'Editor',
-    avatar: 'https://i.pravatar.cc/150?img=2',
-  },
-  {
-    name: 'Ayesha Malik',
-    role: 'Contributor',
-    avatar: 'https://i.pravatar.cc/150?img=3',
-  },
-];
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewUserAPIFn, getAllUsersAPIFn } from '../../../redux/features/newUser/newUser';
 
 const MembersList = () => {
+  const dispatch = useDispatch();
+  const { users, loading } = useSelector((state) => state.newUser);
+
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
+
+  useEffect(() => {
+    dispatch(getAllUsersAPIFn());
+  }, [dispatch]);
+
+  const handleInputChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const addNewUser = async (e) => {
+    e.preventDefault();
+    const data = await dispatch(addNewUserAPIFn(formData));
+    if (data?.meta?.requestStatus === 'fulfilled') {
+      alert('User added successfully!');
+      setShowModal(false);
+      setFormData({ firstName: '', lastName: '', email: '', password: '' });
+      dispatch(getAllUsersAPIFn()); // Refresh user list
+    }
+  };
+
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-md w-full mx-auto">
+    <div className="bg-white rounded-2xl p-6 shadow-md w-full mx-auto relative">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-gray-800">Team Members</h2>
-        <span className="text-sm text-[#858585] cursor-pointer hover:underline">
-          See All
+        <span
+          onClick={() => setShowModal(true)}
+          className="text-sm text-[#858585] cursor-pointer hover:underline"
+        >
+          Add Member
         </span>
       </div>
 
       {/* Members */}
       <div className="space-y-4">
-        {members.map((member, index) => (
-          <div key={index} className="flex items-center gap-4">
-            <img
-              src={member.avatar}
-              alt={member.name}
-              className="w-12 h-12 rounded-full object-cover"
-            />
-            <div>
-              <p className="text-gray-900 font-medium">{member.name}</p>
-              <p className="text-sm text-gray-500">{member.role}</p>
+        
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          users.map((member, index) => (
+            <div key={index} className="flex items-center gap-4">
+              
+              <img
+                src={member?.avatar || `https://ui-avatars.com/api/?name=${member.firstName}+${member.lastName}`}
+                alt={member?.firstName}
+                className="w-12 h-12 rounded-full object-cover"
+              />
+              <div>
+                <p className="text-gray-900 font-medium">
+                  {member?.firstName} {member?.lastName}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {member?.role?.[0]?.role || 'Member'}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
+
+      {/* Modal (same as before) */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg relative">
+            <h3 className="text-lg font-semibold mb-4">Add New User</h3>
+            <form onSubmit={addNewUser} className="space-y-3">
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                required
+              />
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                required
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                required
+              />
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                >
+                  Add User
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
