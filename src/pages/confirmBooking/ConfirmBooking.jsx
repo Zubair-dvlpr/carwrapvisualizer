@@ -28,7 +28,7 @@ const ConfirmBooking = () => {
     );
     if (data?.meta?.requestStatus === 'fulfilled') {
       setLoading(false);
-      console.log('sucess active plan', data);
+      console.log('confirm booking data', data);
     }
     if (data?.meta?.requestStatus === 'rejected') {
       console.log('failer', data);
@@ -46,7 +46,7 @@ const ConfirmBooking = () => {
     if (data?.meta?.requestStatus === 'fulfilled') {
       setBookingData(data?.payload?.data);
       setLoading(false);
-      console.log('sucess active plan', data);
+      console.log('fetchBookingDetails', data);
     }
     if (data?.meta?.requestStatus === 'rejected') {
       setLoading(false);
@@ -65,8 +65,8 @@ const ConfirmBooking = () => {
   }
 
   return (
-    <div className='p-6'>
-      <table className='w-full text-left text-white border border-white'>
+    <div className='max-w-7xl mx-auto py-7'>
+      <table className='w-full max-w-3xl mx-auto text-left text-white border border-white'>
         <thead>
           <tr className='bg-gray-800'>
             <th className='p-3 border border-white'>Field</th>
@@ -74,40 +74,40 @@ const ConfirmBooking = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className='p-3 border border-white'>First Name</td>
-            <td className='p-3 border border-white'>{bookingData?.firstName}</td>
-          </tr>
-          <tr>
-            <td className='p-3 border border-white'>Last Name</td>
-            <td className='p-3 border border-white'>{bookingData?.lastName}</td>
-          </tr>
-          <tr>
-            <td className='p-3 border border-white'>Email</td>
-            <td className='p-3 border border-white'>{bookingData?.email}</td>
-          </tr>
-          <tr>
-            <td className='p-3 border border-white'>Credits</td>
-            <td className='p-3 border border-white'>{bookingData?.credits}</td>
-          </tr>
-          <tr>
-            <td className='p-3 border border-white'>Login Count</td>
-            <td className='p-3 border border-white'>{bookingData?.loginCount}</td>
-          </tr>
-          <tr>
-            <td className='p-3 border border-white'>Last Login</td>
-            <td className='p-3 border border-white'>
-              {new Date(bookingData?.lastLogin).toLocaleString()}
-            </td>
-          </tr>
+          <tr><td className='p-3 border border-white'>First Name</td><td className='p-3 border border-white'>{bookingData?.firstName}</td></tr>
+          <tr><td className='p-3 border border-white'>Last Name</td><td className='p-3 border border-white'>{bookingData?.lastName}</td></tr>
+          <tr><td className='p-3 border border-white'>Email</td><td className='p-3 border border-white'>{bookingData?.email}</td></tr>
+          <tr><td className='p-3 border border-white'>Phone</td><td className='p-3 border border-white'>{bookingData?.phone}</td></tr>
+          <tr><td className='p-3 border border-white'>Booking Date</td><td className='p-3 border border-white'>{new Date(bookingData?.bookingDate).toLocaleDateString()}</td></tr>
+          <tr><td className='p-3 border border-white'>Completion Date</td><td className='p-3 border border-white'>{new Date(bookingData?.completionDate).toLocaleDateString()}</td></tr>
+          <tr><td className='p-3 border border-white'>Year</td><td className='p-3 border border-white'>{bookingData?.year}</td></tr>
+          <tr><td className='p-3 border border-white'>Make</td><td className='p-3 border border-white'>{bookingData?.make}</td></tr>
+          <tr><td className='p-3 border border-white'>Model</td><td className='p-3 border border-white'>{bookingData?.model}</td></tr>
+          <tr><td className='p-3 border border-white'>Brand</td><td className='p-3 border border-white'>{bookingData?.brand}</td></tr>
+          <tr><td className='p-3 border border-white'>Wrap Color</td><td className='p-3 border border-white'>{bookingData?.wrapColor}</td></tr>
+          <tr><td className='p-3 border border-white'>Price</td><td className='p-3 border border-white'>${bookingData?.price}</td></tr>
+          <tr><td className='p-3 border border-white'>PPF Cost</td><td className='p-3 border border-white'>${bookingData?.ppfCost}</td></tr>
+          <tr><td className='p-3 border border-white'>Decals Cost</td><td className='p-3 border border-white'>${bookingData?.decalsCost}</td></tr>
+          <tr><td className='p-3 border border-white'>Window Tinting Cost</td><td className='p-3 border border-white'>${bookingData?.windowTintingCost}</td></tr>
+          <tr><td className='p-3 border border-white'>Front Tint %</td><td className='p-3 border border-white'>{bookingData?.frontPercentage}%</td></tr>
+          <tr><td className='p-3 border border-white'>Rear Tint %</td><td className='p-3 border border-white'>{bookingData?.rearPercentage}%</td></tr>
+          <tr><td className='p-3 border border-white'>Additional Total</td><td className='p-3 border border-white'>${bookingData?.additionalTotal}</td></tr>
+          <tr><td className='p-3 border border-white'>Customer Total</td><td className='p-3 border border-white'>${bookingData?.customerTotal}</td></tr>
+          <tr><td className='p-3 border border-white'>Notes</td><td className='p-3 border border-white'>{bookingData?.notes}</td></tr>
+          <tr><td className='p-3 border border-white'>VIP</td><td className='p-3 border border-white'>{bookingData?.vip}</td></tr>
+          <tr><td className='p-3 border border-white'>Repeat Customer</td><td className='p-3 border border-white'>{bookingData?.repeatCustomer}</td></tr>
+          <tr><td className='p-3 border border-white'>Dealership</td><td className='p-3 border border-white'>{bookingData?.dealership}</td></tr>
+          <tr><td className='p-3 border border-white'>Is Quoted</td><td className='p-3 border border-white'>{bookingData?.isQuoted ? 'Yes' : 'No'}</td></tr>
+          <tr><td className='p-3 border border-white'>Created At</td><td className='p-3 border border-white'>{new Date(bookingData?.createdAt).toLocaleString()}</td></tr>
+          <tr><td className='p-3 border border-white'>Updated At</td><td className='p-3 border border-white'>{new Date(bookingData?.updatedAt).toLocaleString()}</td></tr>
         </tbody>
       </table>
 
-      <div className='mt-6 flex gap-4'>
-        {bookingData?.status === 'pending' ? (
-          <p className='text-white text-lg'>Booking Already Acepted</p>
+      <div className='mt-6 max-w-3xl mx-auto flex justify-center  gap-8'>
+        {bookingData?.status === 'accepted' || bookingData?.status === 'cancelled' ? (
+          <p className='text-white text-lg'>Booking Already {bookingData?.status}</p>
         ) : (
-          <React.Fragment>
+          <>
             <button
               onClick={() => upateBookingStatus('accepted')}
               className='bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 cursor-pointer'
@@ -120,7 +120,7 @@ const ConfirmBooking = () => {
             >
               Reject
             </button>
-          </React.Fragment>
+          </>
         )}
       </div>
     </div>

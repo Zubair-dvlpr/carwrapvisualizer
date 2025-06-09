@@ -179,7 +179,7 @@ export const commonRoutes = [
   {
     path: '/confirm-booking',
     moduleName: 'Confirm Booking',
-    element: <ConfirmBooking />
+    element:<DefaultLayout>  <ConfirmBooking /> </DefaultLayout>
   },
   {
     path: '/visualizer',
