@@ -155,15 +155,26 @@ export default function WorkOrder() {
   const removeFile = () => setSelectedFile(null);
 
   const formatCheckInTime = (timeStr, referenceDateStr = new Date().toISOString()) => {
-    if (!timeStr) return '';
-    const [hours, minutes] = timeStr.split(':');
-    const referenceDate = new Date(referenceDateStr);
-    referenceDate.setHours(Number(hours));
-    referenceDate.setMinutes(Number(minutes));
-    referenceDate.setSeconds(0);
-    referenceDate.setMilliseconds(0);
-    return referenceDate.toISOString(); // Full ISO string required by MongoDB
+    if (!timeStr || !/^\d{1,2}:\d{2}$/.test(timeStr)) return '';
+
+    const [hoursStr, minutesStr] = timeStr.split(':');
+    const hours = parseInt(hoursStr, 10);
+    const minutes = parseInt(minutesStr, 10);
+
+    // Validate hours and minutes
+    if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+      return '';
+    }
+
+    let referenceDate = new Date(referenceDateStr);
+    if (isNaN(referenceDate.getTime())) {
+      referenceDate = new Date(); // fallback if invalid
+    }
+
+    referenceDate.setHours(hours, minutes, 0, 0);
+    return referenceDate.toISOString();
   };
+
 
   const payload = {
     _id: booking?._id,
