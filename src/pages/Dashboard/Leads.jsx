@@ -52,7 +52,7 @@ const Leads = () => {
       <h2 className='font-Lato text-2xl font-semibold leading-9'>Car Wrap Visualizer™</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
         <div>
-          <h2 className="font-Lato text-2xl font-semibold leading-9">Customers</h2>
+          <h2 className="font-Lato text-3xl s font-bold leading-9">Leads</h2>
           <p className="text-gray-600 mt-1">Client will receive a text message and email confirming the appointment </p>
         </div>
         <input
@@ -69,16 +69,16 @@ const Leads = () => {
         <table className="min-w-full table-auto rounded-lg overflow-hidden">
           <thead style={{ backgroundColor: '#EB227C' }} className="text-white">
             <tr>
-              <th className="px-4 py-2 text-left">Date</th>
-              <th className="px-4 py-2 text-left">Customer</th>
-              <th className="px-4 py-2 text-left">Vehicle</th>
-              <th className="px-4 py-2 text-left">Wrap Color</th>
-              <th className="px-4 py-2 text-left">Phone</th>
-              <th className="px-4 py-2 text-left">Email</th>
-              <th className="px-4 py-2 text-left">Service Date</th>
-              <th className="px-4 py-2 text-left">Warranty</th>
-              <th className="px-4 py-2 text-left">Type</th>
-              <th className="px-4 py-2 text-left">Invoice</th>
+              <th className="px-4 py-3 text-left">Date</th>
+              <th className="px-4 py-3 text-left">Customer</th>
+              <th className="px-4 py-3 text-left">Vehicle</th>
+              <th className="px-4 py-3 text-left  min-w-[150px]">Wrap Color</th>
+              <th className="px-4 py-3 text-left">Phone</th>
+              <th className="px-4 py-3 text-left">Email</th>
+              <th className="px-4 py-3 text-left  min-w-[150px]">Service Date</th>
+              <th className="px-4 py-3 text-left">Warranty</th>
+              <th className="px-4 py-3 text-left">Type</th>
+              <th className="px-4 py-3 text-left">Invoice</th>
             </tr>
           </thead>
           <tbody className="text-sm  text-gray-700">

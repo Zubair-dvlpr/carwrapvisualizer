@@ -18,26 +18,24 @@ const Login = () => {
     e.preventDefault();
     setError('');
     setAnimation(true);
+
     try {
-      // await login({ email, password });
       const data = await dispatch(
         loginUserAPIFn({
           email,
           password
         })
       );
+
       if (data?.meta?.requestStatus === 'fulfilled') {
-        navigate('/dashboard'); // Redirect to Dashboard
-        setAnimation(false); // Stop loading
-      }
-      if (data?.meta?.requestStatus === 'rejected') {
-        setError(err);
-        setAnimation(false); // Stop loading
+        navigate('/dashboard');
+      } else if (data?.meta?.requestStatus === 'rejected') {
+        setError(data?.payload || 'Login failed'); // <- Show server error message
       }
     } catch (err) {
-      setError(err);
+      setError('Something went wrong. Please try again.');
     } finally {
-      setAnimation(false); // Stop loading
+      setAnimation(false);
     }
   };
 
@@ -57,10 +55,10 @@ const Login = () => {
             <Link to='/'>
               <img src={logo} alt='Logo' className='w-44 mx-auto mb-8' />
             </Link>
-            <h2 className='text-[32px] font-semibold capitalize mb-4 Aspekta-650'>
-              Ready to use Car Wrap Visualizer
+            <h2 className='text-[32px] font-semibold capitalize mb-4'>
+              Welcome to Car Wrap Visualizer™
             </h2>
-            <p className='text-base mb-4'>Enter your email to create an account</p>
+            <p className='text-lg mb-4'>Log In to access your dashboard and start visualizing wraps instantly.</p>
           </div>
           <form onSubmit={handleLogin} className=' space-y-4'>
             <label className='text-xl font-semibold' htmlFor='email'>
@@ -92,7 +90,7 @@ const Login = () => {
               type='submit'
               className='w-full cursor-pointer font-[Apercu] mt-6 bg-gradient-to-r from-[#1AE1AB] to-[#712FFF] text-white py-4 rounded-full hover:bg-blue-600'
             >
-              START YOUR FIRST PROJECT
+              Enter Studio
             </button>
           </form>
           {/* Already have an account? */}

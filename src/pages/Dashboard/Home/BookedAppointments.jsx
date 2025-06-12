@@ -2,7 +2,7 @@ import React from 'react';
 import { FaBell } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-const BookedAppointments = ({ title, data = [] }) => {
+const BookedAppointments = ({ title, data = [],  loading = false  }) => {
   const navigate = useNavigate();
   const hasData = Array.isArray(data) && data.length > 0;
 
@@ -29,13 +29,17 @@ const BookedAppointments = ({ title, data = [] }) => {
 
       {/* View All Row */}
       <div className='text-sm text-gray-600'>
-        {hasData ? (
+        {loading ? (
+          <div className='flex justify-center py-8'>
+            <div className="w-6 h-6 border-4 border-pink-500 border-dotted rounded-full animate-spin"></div>
+          </div>
+        ) : hasData ? (
           <div className='space-y-4'>
             {data.map((booking, index) => (
               <div
                 key={index}
                 onClick={() => handleBookingClick(booking)}
-                className='p-3 bg-[#F9FAFB] rounded-lg border border-gray-200'
+                className='p-3 cursor-pointer bg-[#F9FAFB] rounded-lg border border-gray-200'
               >
                 <div className='font-semibold text-black'>
                   Name : {booking.firstName} {booking.lastName}
@@ -64,6 +68,7 @@ const BookedAppointments = ({ title, data = [] }) => {
             <span>No Booked Appointments</span>
           </div>
         )}
+
       </div>
     </div>
   );

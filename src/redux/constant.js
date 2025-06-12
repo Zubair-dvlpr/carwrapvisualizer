@@ -1,5 +1,5 @@
 // StaggingBaseURLS
-export const baseURL = 'http://localhost:8000';
+export const baseURL = 'https://api.carwrapvisualizer.com';
 
 const v = 'api/v1';
 
@@ -9,6 +9,7 @@ export const endPoints = {
   login: `${baseURL}/${v}/auth/login`,
   signup: `${baseURL}/${v}/auth/sign-up`,
   userInfo: `${baseURL}/${v}/auth/user-info`,
+  userUpdate: `${baseURL}/${v}/auth/update-user`,
   fetchPlans: `${baseURL}/${v}/user/stripe/get-plans`,
   activeSubscription: `${baseURL}/${v}/user/stripe/subscriptions`,
   checkoutSession: `${baseURL}/${v}/user/stripe/checkout-session`,

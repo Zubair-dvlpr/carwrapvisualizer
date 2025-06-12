@@ -26,15 +26,15 @@ const MyWrap = () => {
     return (
         <div className="flex mt-4 flex-col p-4 border border-[#E1E1E1] rounded-[10px] bg-[#F5F5F7] gap-8">
             {/* Left Side */}
-            <div className='grid grid-cols-5'>
-                <div className="col-span-1">
+            <div className='grid grid-cols-5 md:gap-0 gap-3'>
+                <div className="md:col-span-1 md:text-left text-center col-span-full">
                     <h2 className="text-black font-Lato text-xl font-semibold leading-8">My Wraps</h2>
                     <span className="text-gray-500 text-sm">
                         Generate New Wrap
                     </span>
                 </div>
 
-                <div className="flex col-span-3  justify-center mb-4">
+                <div className="flex md:col-span-3 col-span-full  justify-center mb-4">
                     {tabData.map((tab, index) => (
                         <button
                             key={index}

@@ -10,7 +10,7 @@ const Worldmap = () => {
                     </div>
                 </div>
 
-                <div className='flex flex-col justify-center col-span-2'>
+                <div className='flex flex-col justify-center px-3 md:px-0 col-span-2'>
                     <div className='flex flex-col gap-10' >
                         <div>
                             <h3 className='text-4xl font-Lato font-bold text-white'>4.5k+</h3>

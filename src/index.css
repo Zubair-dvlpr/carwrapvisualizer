@@ -291,3 +291,28 @@ input[type="range"]::-moz-range-thumb {
     cursor: pointer;
     pointer-events: auto;
 }
+
+
+
+
+
+.custom-shape-divider-bottom-1749603305 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1749603305 svg {
+    position: relative;
+    display: block;
+    width: calc(284% + 1.3px);
+    height: 249px;
+}
+
+.custom-shape-divider-bottom-1749603305 .shape-fill {
+    fill: #12161F;
+}

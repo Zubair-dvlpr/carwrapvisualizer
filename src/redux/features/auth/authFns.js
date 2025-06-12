@@ -46,3 +46,17 @@ export const userInfoAPIFn = createAsyncThunk(
     }
   }
 );
+
+export const userUpdateAPIFn = createAsyncThunk(
+  'auth/userUpdateAPIFn',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.post(endPoints.userUpdate, {
+        ...values
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.error?.message);
+    }
+  }
+);

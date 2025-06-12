@@ -14,7 +14,8 @@ import { AuthContext } from '../../context/AuthContext';
 import loaderGif from '../../assets/loading.gif';
 import { useDispatch } from 'react-redux';
 import { generateCarImageAPIFn } from '../../redux/features/Studio/studioFus';
-const CarFillPage = () => {
+const CarFillPage = ({bg}) => {
+  console.log(bg)
   const { user, domain } = useContext(AuthContext);
   const dispatch = useDispatch();
   const wrapFilmColors = {
@@ -99,16 +100,16 @@ const CarFillPage = () => {
       logo: avery, // Replace with your path
       colors: wrapFilmColors
     },
-    {
-      name: 'vvivid',
-      logo: vvivid, // Replace with your path
-      colors: wrapFilmColors
-    },
-    {
-      name: 'inozetek',
-      logo: inozetek, // Replace with your path
-      colors: wrapFilmColors
-    }
+    // {
+    //   name: 'vvivid',
+    //   logo: vvivid, // Replace with your path
+    //   colors: wrapFilmColors
+    // },
+    // {
+    //   name: 'inozetek',
+    //   logo: inozetek, // Replace with your path
+    //   colors: wrapFilmColors
+    // }
   ];
   const { animation, setAnimation } = useContext(AuthContext);
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -187,21 +188,21 @@ const CarFillPage = () => {
           <img src={loaderGif} alt='Loading...' className='w-36' />
         </div>
       )}
-      <div className='flex max-w-7xl mx-auto text-white  flex-col h-full '>
+      <div className={`flex max-w-7xl mx-auto  ${bg ? 'text-white ' : 'text-black'}  flex-col h-full `}>
         {/* Left Side Image */}
-        <div className=' flex flex-col justify-center items-center p-4'>
+        <div className=' flex flex-col justify-center items-center'>
           <div ref={imageRef} className=''>
             {generatedImage ? (
               <img src={generatedImage} alt='Generated Car' className='w-full' />
             ) : (
               <div className='w-full bg-cover bg-center'>
-                <img src={colorfullcar} alt='Car' className='mx-auto max-w-4xl' />
+                <img src={colorfullcar} alt='Car' className='mx-auto max-w-4xl w-full' />
               </div>
             )}
           </div>
         </div>
         {/* Right Side Options */}
-        <div className='p-6'>
+        <div className='sm:p-6 p-3'>
           <div className='space-y-4'>
             <div className='mx-auto max-w-3xl'>
               {/* Year Selector */}
@@ -233,10 +234,10 @@ const CarFillPage = () => {
                 </label>
               </div>
             </div>
-            <div className='mx-auto max-w-4xl  px-4 py-10 text-center'>
+            <div className={`mx-auto max-w-4xl ${bg ? "text-white" : "text-black"} py-10 text-center`}>
               <div className='bg-[#2B2C2C]  p-5 rounded-xl'>
-                <h4 className='text-xl text-left mb-4'>Select Wrap Brand</h4>
-                <div className='grid  md:grid-cols-5 sm:grid-cols-2 gap-6 mb-8'>
+                <h4 className='text-xl text-white text-left mb-4'>Select Wrap Brand</h4>
+                <div className='grid md:grid-cols-5 grid-cols-2 gap-6 mb-8'>
                   {brands.map(brand => (
                     <img
                       key={brand.name}
@@ -275,7 +276,7 @@ const CarFillPage = () => {
                         {selectedBrand.colors[selectedCategory].map((item, index) => (
                           <div
                             key={index}
-                            className='flex items-center justify-between border border-[#353535] bg-black shadow-sm cursor-pointer hover:shadow-md transition'
+                            className='flex items-center justify-between border border-[#353535] text-white bg-black shadow-sm cursor-pointer hover:shadow-md transition'
                             onClick={async () => {
                               try {
                                 setSelectedFinish(selectedCategory);

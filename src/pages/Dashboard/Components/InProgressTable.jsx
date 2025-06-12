@@ -2,17 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import { inProgressAPIFn } from '../../../redux/features/booking/bookingFus';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const InProgressTable = () => {
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     // State to hold fetched bookings
     const [wrapsData, setWrapsData] = useState([]);
     const [filterCustomer, setFilterCustomer] = useState('');
     const [filterVehicle, setFilterVehicle] = useState('');
     const [filterDate, setFilterDate] = useState('');
+    const [loading, setLoading] = useState(true);
 
     const inProgressAppointmentfn = async () => {
+        setLoading(true); // Show spinner
         try {
             const data = await dispatch(
                 inProgressAPIFn({
@@ -37,7 +40,8 @@ const InProgressTable = () => {
                             hour: '2-digit',
                             minute: '2-digit',
                         }),
-                        cost: `$${totalCost.toFixed(2)}`
+                        cost: `$${totalCost.toFixed(2)}`,
+                        originalBooking: booking
                     };
                 });
 
@@ -47,6 +51,8 @@ const InProgressTable = () => {
             }
         } catch (error) {
             console.error('⚠️ Unexpected error in inProgressAppointmentfn:', error);
+        } finally {
+            setLoading(false); // Hide spinner
         }
     };
 
@@ -75,9 +81,8 @@ const InProgressTable = () => {
                     In Progress
                 </h2>
             </div>
-
             {/* Filters */}
-            <div className="mb-4 flex gap-4 flex-wrap">
+            <div className="mb-4 flex flex-col sm:flex-row gap-4 flex-wrap">
                 <select
                     value={filterCustomer}
                     onChange={e => setFilterCustomer(e.target.value)}
@@ -111,41 +116,55 @@ const InProgressTable = () => {
                     ))}
                 </select>
             </div>
-
-            <div className="overflow-x-auto rounded-lg shadow border border-[#E1E1E1]">
-                <table className="min-w-full table-auto rounded-lg overflow-hidden">
-                    <thead style={{ backgroundColor: '#EB227C' }} className="text-white">
-                        <tr>
-                            <th className="px-4 py-3 text-left">Date</th>
-                            <th className="px-4 py-3 text-left">Customer</th>
-                            <th className="px-4 py-3 text-left">Vehicle</th>
-                            <th className="px-4 py-3 text-left">Delivery Date</th>
-                            <th className="px-4 py-3 text-left">Time</th>
-                            <th className="px-4 py-3 text-left">Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody className="text-sm text-gray-700">
-                        {filteredData.length > 0 ? (
-                            filteredData.map((wrap, index) => (
-                                <tr key={index} className="border-b border-[#E1E1E1] hover:bg-gray-50">
-                                    <td className="px-4 py-3">{wrap.date}</td>
-                                    <td className="px-4 py-3">{wrap.customer}</td>
-                                    <td className="px-4 py-3">{wrap.vehicle}</td>
-                                    <td className="px-4 py-3">{wrap.deliveryDate}</td>
-                                    <td className="px-4 py-3">{wrap.time}</td>
-                                    <td className="px-4 py-3">{wrap.cost}</td>
-                                </tr>
-                            ))
-                        ) : (
+            {loading ? (
+                <div className="text-center py-8">
+                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#EB227C] border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+                    <div className="text-sm text-gray-500 mt-2">Loading In Progress Appointments</div>
+                </div>
+            ) : (
+                // 👇 Only show table after loading finishes
+                <div className="overflow-x-auto rounded-lg shadow border border-[#E1E1E1]">
+                    <table className="min-w-full table-auto rounded-lg overflow-hidden">
+                        <thead style={{ backgroundColor: '#EB227C' }} className="text-white">
                             <tr>
-                                <td colSpan={6} className="text-center py-4 text-gray-500">
-                                    No records found.
-                                </td>
+                                <th className="px-4 py-3 text-left">Date</th>
+                                <th className="px-4 py-3 text-left">Customer</th>
+                                <th className="px-4 py-3 text-left">Vehicle</th>
+                                <th className="px-4 py-3 text-left">Delivery Date</th>
+                                <th className="px-4 py-3 text-left">Time</th>
+                                <th className="px-4 py-3 text-left">Cost</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody className="text-sm text-gray-700">
+                            {filteredData.length > 0 ? (
+                                filteredData.map((wrap, index) => (
+                                    <tr
+                                        key={index}
+                                        className="border-b cursor-pointer border-[#E1E1E1] hover:bg-gray-50"
+                                        onClick={() =>
+                                            navigate('/work-order', { state: { booking: wrap.originalBooking } })
+                                        }
+                                    >
+                                        <td className="px-4 py-3">{wrap.date}</td>
+                                        <td className="px-4 py-3">{wrap.customer}</td>
+                                        <td className="px-4 py-3">{wrap.vehicle}</td>
+                                        <td className="px-4 py-3">{wrap.deliveryDate}</td>
+                                        <td className="px-4 py-3">{wrap.time}</td>
+                                        <td className="px-4 py-3">{wrap.cost}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={6} className="text-center py-4 text-gray-500">
+                                        No records found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
         </div>
     );
 };

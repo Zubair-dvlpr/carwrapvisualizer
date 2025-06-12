@@ -72,7 +72,10 @@ const MembersList = () => {
       <div className="space-y-4">
 
         {loading ? (
-          <p>Loading...</p>
+          <div className="text-center py-8">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#EB227C] border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+            <div className="text-sm text-gray-500 mt-2">Loading Members</div>
+          </div>
         ) : (
           users.map((member, index) => (
             <div key={index} className="flex items-center gap-4">
@@ -87,7 +90,7 @@ const MembersList = () => {
                   {member?.firstName} {member?.lastName}
                 </p>
                 <p className="text-sm text-gray-500">
-                  {member?.role?.[0]?.role || 'Member'}
+                  {member?.role?.[0]?.role === 'shop-man' ? 'Shop Manager' : 'Member'}
                 </p>
               </div>
             </div>

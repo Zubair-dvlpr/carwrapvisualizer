@@ -3,8 +3,18 @@ import { useIsAuthenticatedUser } from '../utils/utils';
 import PrivateRoutes from './PrivateRoutes';
 import PublicRoutes from './PublicRoutes';
 import { commonRoutes, privateRoutes, publicRoutes } from './config';
+import { useSelector } from 'react-redux';
 
 const Router = () => {
+  const user = useSelector(state => state?.currentUser?.currentUser);
+
+  const role = user?.data?.user?.role?.role;
+
+  const shopmanRoutes = [...privateRoutes].filter(item => item.path != "/subscription")
+
+
+  const dynamicRoutes = role === "shop-man" ?  shopmanRoutes : privateRoutes;
+  
   return (
     <Routes>
       <Route
@@ -12,7 +22,7 @@ const Router = () => {
         element={useIsAuthenticatedUser() ? <Navigate to='/dashboard' /> : <Navigate to='/' />}
       />
       <Route element={<PrivateRoutes />}>
-        {privateRoutes?.map((route, index) => (
+        {dynamicRoutes?.map((route, index) => (
           <Route path={route.path} element={route.element} key={index} />
         ))}
       </Route>

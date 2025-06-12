@@ -16,18 +16,26 @@ const Appointment = () => {
     const [todayBookings, setTodayBookings] = useState([]);
     const [tomorrowBookings, setTomorrowBookings] = useState([]);
     const [canceledBookings, setCanceledBookings] = useState([]);
+    const [loading, setLoading] = useState(true); // For spinner
     const todayAppointmentfn = async () => {
+        setLoading(true); // Start spinner
+
         try {
-            const data = await dispatch(todayAppointmentAPIFn({ isToday: true }));
+            const data = await dispatch(
+                todayAppointmentAPIFn({
+                    isToday: true,
+                })
+            );
+
             if (data?.meta?.requestStatus === 'fulfilled') {
-                setTodayBookings(data.payload.data);
-                console.log("✅ Today's Appointments:", data.payload.data);
+                setTodayBookings(data.payload.data); // Load bookings
             } else {
-                console.error("❌ Failed to fetch today's appointments:", data);
-                // alert('Failed to fetch today’s appointments.');
+                console.log('❌ Failed:', data);
             }
         } catch (error) {
-            console.error("🔥 Error in todayAppointmentfn:", error);
+            console.error('⚠️ Error fetching today’s appointments:', error);
+        } finally {
+            setLoading(false); // Stop spinner
         }
     };
 
@@ -86,9 +94,9 @@ const Appointment = () => {
                 <InProgressTable />
             </div>
             <div className='md:col-span-4 col-span-full p-4 flex flex-col gap-4 bg-[#F5F5F7] rounded-4xl'>
-                <BookedAppointments data={todayBookings} title="Booked Appointments" />
-                <BookedAppointments data={tomorrowBookings} title="Tomorrow Appointments" />
-                <BookedAppointments data={canceledBookings} title="Canceled Appointments" />
+                <BookedAppointments data={todayBookings} title="Booked Appointments"  loading={loading} />
+                <BookedAppointments data={tomorrowBookings} title="Tomorrow Appointments" loading={loading} />
+                <BookedAppointments data={canceledBookings} title="Canceled Appointments" loading={loading} />
             </div>
         </div>
     )

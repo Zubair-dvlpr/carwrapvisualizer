@@ -7,8 +7,10 @@ import YearSelector from '../CarFillPage/Components/YearSelector';
 import MakeSelector from '../CarFillPage/Components/MakeSelector';
 import ModelSelector from '../CarFillPage/Components/ModelSelector';
 import { AuthContext } from '../../context/AuthContext';
+import loaderGif from '../../assets/loading.gif';
 import { updateBookingDetailsAPIFn } from '../../redux/features/booking/bookingFus';
 import { useDispatch } from 'react-redux';
+
 
 const brandOptions = [
   '3M',
@@ -42,7 +44,7 @@ const wrapColors = {
   // Add other brand color options here
 };
 export default function WorkOrder() {
-  const { domain } = useContext(AuthContext);
+  const { animation, setAnimation } = useContext(AuthContext);
   const location = useLocation();
   const booking = location.state?.booking;
   const dispatch = useDispatch();
@@ -73,7 +75,14 @@ export default function WorkOrder() {
     price: '',
     vipbooking: '',
     repeat_customer: '',
-    dealership: ''
+    dealership: '',
+    additionalTotal: '',
+    customerTotal: '',
+    status: '', // 🔥 Add this
+    estimatedSQ: '',
+    estimatedRolls: '',
+    estimatedMaterialCost: '',
+    netMaterialRevenue: ''
   });
 
   useEffect(() => {
@@ -111,7 +120,14 @@ export default function WorkOrder() {
         windowTintingCost: booking.windowTintingCost || '',
         frontPercentage: booking.frontPercentage || '',
         rearPercentage: booking.rearPercentage || '',
-        notes: booking.notes || ''
+        notes: booking.notes || '',
+        estimatedSQ: booking.estimatedSQ || '',
+        estimatedRolls: booking.estimatedRolls || '',
+        estimatedMaterialCost: booking.estimatedMaterialCost || '',
+        netMaterialRevenue: booking.netMaterialRevenue || '',
+        customerQuote: booking.customer_quote || '',
+        checkInTime: booking.checkInTime || '',
+        status: booking.status || '',
       }));
 
       // Set year/make/model from booking
@@ -138,6 +154,17 @@ export default function WorkOrder() {
 
   const removeFile = () => setSelectedFile(null);
 
+  const formatCheckInTime = (timeStr, referenceDateStr = new Date().toISOString()) => {
+    if (!timeStr) return '';
+    const [hours, minutes] = timeStr.split(':');
+    const referenceDate = new Date(referenceDateStr);
+    referenceDate.setHours(Number(hours));
+    referenceDate.setMinutes(Number(minutes));
+    referenceDate.setSeconds(0);
+    referenceDate.setMilliseconds(0);
+    return referenceDate.toISOString(); // Full ISO string required by MongoDB
+  };
+
   const payload = {
     _id: booking?._id,
     firstName: formData.firstName,
@@ -160,547 +187,573 @@ export default function WorkOrder() {
     additionalTotal: Number(formData.additionalTotal),
     customerTotal: Number(formData.customerTotal),
     notes: formData.notes,
-    vip: formData.vipStatus,
+    vip: formData.vipbooking,
     repeatCustomer: formData.repeat_customer,
-    dealership: formData.dealership
+    dealership: formData.dealership,
+    // ✅ NEW FIELDS
+    estimatedSQ: Number(formData.estimatedSQ),
+    estimatedRolls: Number(formData.estimatedRolls),
+    estimatedMaterialCost: Number(formData.estimatedMaterialCost),
+    netMaterialRevenue: Number(formData.netMaterialRevenue),
+    customerQuote: Number(formData.customerQuote),
+    checkInTime: formatCheckInTime(formData.checkInTime, formData.bookingDate),
+    status: formData.status || booking?.status || 'pending', // default fallback
   };
 
   const updateBookingDetails = async e => {
     e.preventDefault();
-    const data = await dispatch(updateBookingDetailsAPIFn(payload));
-    if (data?.meta?.requestStatus === 'fulfilled') {
-      console.log('✅ Canceled Appointments:', data.payload.data);
-    }
-
-    if (data?.meta?.requestStatus === 'rejected') {
-      console.log('❌ Failed to fetch canceled appointments:', data);
+    setAnimation(true);
+    try {
+      const data = await dispatch(updateBookingDetailsAPIFn(payload));
+      if (data?.meta?.requestStatus === 'fulfilled') {
+        console.log('✅ Booking updated:', data.payload.data);
+      } else {
+        console.error('❌ Failed to update booking:', data?.payload?.message || data);
+      }
+    } catch (err) {
+      console.error('❌ Unexpected error:', err.message || err);
+    } finally {
+      setAnimation(false);
     }
   };
+
 
   const updateBookingStatus = async status => {
-    const data = await dispatch(updateBookingDetailsAPIFn({ _id: booking?._id, status }));
-    if (data?.meta?.requestStatus === 'fulfilled') {
-      console.log('✅ Canceled Appointments:', data.payload.data);
-    }
-
-    if (data?.meta?.requestStatus === 'rejected') {
-      console.log('❌ Failed to fetch canceled appointments:', data);
+    setAnimation(true);
+    try {
+      const data = await dispatch(updateBookingDetailsAPIFn({ _id: booking?._id, status }));
+      if (data?.meta?.requestStatus === 'fulfilled') {
+        console.log('✅ Booking status updated:', data.payload.data);
+      } else {
+        console.error('❌ Failed to update status:', data?.payload?.message || data);
+      }
+    } catch (err) {
+      console.error('❌ Unexpected error:', err.message || err);
+    } finally {
+      setAnimation(false);
     }
   };
 
+
   return (
-    <div className='max-w-7xl mx-auto space-y-8'>
-      {/* Top section with 2 columns */}
-      <div className='flex justify-between items-start'>
-        {/* Left column */}
-        <div className='flex-1 pr-6'>
-          <h2 className='text-2xl font-semibold mb-4'>Car Wrap Visualizer™</h2>
-          <div className='max-w-[170px]'>
-            <label htmlFor='typeOrCustomer' className='block mb-2 font-medium text-gray-700'>
-              Type or Customer
-            </label>
-            <select
-              id='typeOrCustomer'
-              value={formData.dealership}
-              onChange={handleChange}
-              className='w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-2'
-            >
-              <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
-                Dealer
-              </option>
-              <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
-                Customer
-              </option>
-              <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
-                Other
-              </option>
-            </select>
-          </div>
+    <>
+      {animation && (
+        <div className='absolute w-full  top-0 left-0 bg-[#000000d2] flex justify-center h-screen items-center'>
+          <img src={loaderGif} alt='Loading...' className='w-36' />
         </div>
-
-        {/* Right column */}
-        <div className='flex-1 pl-6 flex flex-col items-end'>
-          <div className='flex space-x-3 mb-4 text-gray-700'>
-            <button
-              type='button'
-              aria-label='Edit'
-              className='flex flex-col items-center space-x-1 '
-            >
-              <span className='text-[#111827] font-Lato text-xs leading-6'>Modify</span>
-              <span className='bg-[#d9d9d963] rounded-[99px] px-5  cursor-pointer py-3 mt-1.5'>
-                {' '}
-                <RiEditLine />{' '}
-              </span>
-            </button>
-            <button
-              type='button'
-              aria-label='Canal Appointment'
-              className='flex flex-col items-center space-x-1'
-            >
-              <span className='text-[#111827] font-Lato text-xs leading-6'>Cancel Appointment</span>
-              <span className='bg-[#d9d9d963]  cursor-pointer rounded-[99px] px-5 py-3 mt-1.5'>
-                {' '}
-                <RxCross1 />{' '}
-              </span>
-            </button>
-            <button
-              type='button'
-              aria-label='Credit Used'
-              className='flex flex-col items-center space-x-1 hover:text-blue-600'
-            >
-              <span className='text-[#111827] font-Lato text-xs leading-6'>Credit Used</span>
-              <span className='bg-[#d9d9d963] rounded-[99px] px-4 py-3 mt-1.5 text-[#111827] font-Lato text-xs '>
-                {' '}
-                8/10{' '}
-              </span>
-            </button>
-          </div>
-          <div className='flex space-x-4'>
-            <button
-              className='bg-[#EB227C] cursor-pointer text-white px-6 py-4 rounded-full hover:scale-95 transition'
-              onClick={() => updateBookingStatus('inprogress')}
-            >
-              Book IN
-            </button>
-            <button
-              className='bg-[#447B52]  cursor-pointer text-white px-6 py-4 rounded-full hover:scale-95 transition'
-              onClick={() => updateBookingStatus('completed')}
-            >
-              Vehicle Completed
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Heading and paragraph below */}
-      <div>
-        <h3 className='text-xl font-semibold mb-1'>Work Order</h3>
-        <p className='text-gray-600'>
-          Please complete the work order and to update status information.
-        </p>
-      </div>
-
-      {/* Form */}
-      <form className='space-y-8'>
-        {/* Row 1 */}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <div>
-            <label htmlFor='firstName' className='block labelStyle'>
-              First Name
-            </label>
-            <input
-              type='text'
-              id='firstName'
-              name='firstName'
-              value={formData.firstName}
-              onChange={handleChange}
-              placeholder='First Name'
-              className='inputStyle w-full'
-            />
-          </div>
-          <div>
-            <label htmlFor='lastName' className='block labelStyle'>
-              Last Name
-            </label>
-            <input
-              type='text'
-              id='lastName'
-              name='lastName'
-              value={formData.lastName}
-              onChange={handleChange}
-              placeholder='Last Name'
-              className='inputStyle  w-full'
-            />
-          </div>
-        </div>
-
-        {/* Row 2 */}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <div>
-            <label htmlFor='email' className='block labelStyle'>
-              Email
-            </label>
-            <input
-              type='email'
-              id='email'
-              name='email'
-              value={formData.email}
-              onChange={handleChange}
-              placeholder='Email'
-              className='inputStyle  w-full'
-            />
-          </div>
-          <div>
-            <label htmlFor='phone' className='block labelStyle'>
-              Phone Number
-            </label>
-            <input
-              type='tel'
-              id='phone'
-              name='phone'
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder='Phone Number'
-              className='inputStyle  w-full'
-            />
-          </div>
-        </div>
-
-        {/* Row 3 */}
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-          <div>
-            <label htmlFor='bookingDate' className='block labelStyle'>
-              Booking Date
-            </label>
-            <input
-              type='date'
-              id='bookingDate'
-              name='bookingDate'
-              value={formData.bookingDate}
-              onChange={handleChange}
-              className='inputStyle  w-full'
-            />
-          </div>
-          <div>
-            <label htmlFor='checkInTime' className='block labelStyle'>
-              Check In Time
-            </label>
-            <input
-              type='time'
-              id='checkInTime'
-              value={formData.checkInTime}
-              onChange={handleChange}
-              name='checkInTime'
-              className='inputStyle  w-full'
-            />
-          </div>
-          <div>
-            <label htmlFor='completionDate' className='block labelStyle'>
-              Completion Date
-            </label>
-            <input
-              type='date'
-              id='completionDate'
-              value={formData.completionDate}
-              onChange={handleChange}
-              name='completionDate'
-              className='inputStyle  w-full'
-            />
-          </div>
-        </div>
-
-        {/* Vehicle heading */}
-        <h3 className='text-xl font-Poppins font-semibold mt-12 mb-4'>Vehicle</h3>
-
-        {/* Row 4 */}
-        <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
-          <div>
-            <label htmlFor='completionDate' className='block labelStyle'>
-              Year
-            </label>
-            <YearSelector
-              value={selectedYear}
-              onSelect={year => {
-                setSelectedYear(year);
-                setSelectedMake('');
-                setSelectedModel('');
-              }}
-            />
-          </div>
-          <div>
-            <label htmlFor='completionDate' className='block labelStyle'>
-              Make
-            </label>
-            <MakeSelector
-              selectedYear={selectedYear}
-              value={selectedMake}
-              onSelect={make => {
-                setSelectedMake(make);
-                setSelectedModel('');
-              }}
-            />
-          </div>
-          <div>
-            <label htmlFor='completionDate' className='block labelStyle'>
-              Model
-            </label>
-            <ModelSelector
-              selectedYear={selectedYear}
-              selectedMake={selectedMake}
-              value={selectedModel}
-              onSelect={setSelectedModel}
-            />
-          </div>
-        </div>
-
-        {/* Vehicle heading */}
-        <h3 className='text-lg font-semibold mt-12 mb-4'>Material</h3>
-
-        {/* Row 4 */}
-        <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
-          {/* Brand Select */}
-          <div>
-            <label className='block mb-1 text-sm font-medium text-gray-700'>Brand</label>
-            <select
-              value={selectedBrand}
-              onChange={e => {
-                const brand = e.target.value;
-                setSelectedBrand(brand);
-                setFormData(prev => ({ ...prev, brand: brand, wrapColor: '' })); // reset wrap color
-                setSelectedColor('');
-              }}
-              className='w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3'
-            >
-              <option value=''>Select Brand</option>
-              {brandOptions.map((brand, idx) => (
-                <option key={idx} value={brand}>
-                  {brand}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Wrap Color Select */}
-          <div>
-            <label className='block mb-1 text-sm font-medium text-gray-700'>Wrap Color</label>
-            <select
-              value={selectedColor}
-              onChange={e => {
-                const color = e.target.value;
-                setSelectedColor(color);
-                setFormData(prev => ({ ...prev, wrapColor: color }));
-              }}
-              className={`w-full bg-[#F6F9FF] ${
-                !wrapColors[selectedBrand] ? 'opacity-55' : 'opacity-100'
-              } focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3`}
-              disabled={!wrapColors[selectedBrand]}
-            >
-              <option value=''>Select Color</option>
-              {(wrapColors[selectedBrand] || []).map((color, idx) => (
-                <option key={idx} value={color.name}>
-                  {color.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor='estimatedSQ' className='block labelStyle'>
-              Estimated SQ
-            </label>
-            <input
-              type='number'
-              id='estimatedSQ'
-              name='estimatedSQ'
-              value={formData.estimatedSQ}
-              onChange={handleChange}
-              placeholder='Estimated SQ'
-              className='inputStyle  w-full'
-            />
-          </div>
-          <div>
-            <label htmlFor='estimatedRolls' className='block labelStyle'>
-              Estimated Rolls
-            </label>
-            <input
-              type='number'
-              id='estimatedRolls'
-              value={formData.estimatedRolls}
-              onChange={handleChange}
-              name='estimatedRolls'
-              placeholder='Estimated Rolls'
-              className='inputStyle  w-full'
-            />
-          </div>
-        </div>
-
-        {/* Row 5 */}
-        <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
-          <div>
-            <label htmlFor='estimatedMaterialCost' className='block labelStyle'>
-              Estimated Material Cost
-            </label>
-            <input
-              type='number'
-              id='estimatedMaterialCost'
-              name='estimatedMaterialCost'
-              value={formData.estimatedMaterialCost}
-              onChange={handleChange}
-              placeholder='Estimated Material Cost'
-              className='inputStyle  w-full'
-            />
-          </div>
-          <div>
-            <label htmlFor='customerQuote' className='block labelStyle'>
-              Customer Quote
-            </label>
-            <input
-              type='number'
-              id='customerQuote'
-              name='customerQuote'
-              value={formData.customerQuote}
-              onChange={handleChange}
-              placeholder='Customer Quote'
-              className='inputStyle  w-full'
-            />
-          </div>
-          <div>
-            <label htmlFor='netMaterialRevenue' className='block labelStyle'>
-              Net Material Revenue
-            </label>
-            <input
-              type='number'
-              id='netMaterialRevenue'
-              value={formData.netMaterialRevenue}
-              onChange={handleChange}
-              name='netMaterialRevenue'
-              placeholder='Net Material Revenue'
-              className='inputStyle  w-full'
-            />
-          </div>
-        </div>
-
-        {/* Additional Services heading */}
-        <h3 className='text-lg font-semibold mt-12 mb-4'>Additional Services</h3>
-
-        {/* Row 6 */}
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-4 items-center'>
-          <div>
-            <label htmlFor='ppfCost' className='block labelStyle'>
-              Paint protection film (PPF) (Enter cost)
-            </label>
-            <input
-              type='number'
-              id='ppfCost'
-              value={formData.ppfCost}
-              onChange={handleChange}
-              name='ppfCost'
-              placeholder='Enter cost'
-              className='inputStyle  w-full'
-            />
-          </div>
-          <div>
-            <label htmlFor='decalsCost' className='block labelStyle'>
-              Decals/graphics installation (Enter cost)
-            </label>
-            <input
-              type='number'
-              id='decalsCost'
-              name='decalsCost'
-              value={formData.decalsCost}
-              onChange={handleChange}
-              placeholder='Enter cost'
-              className='inputStyle  w-full'
-            />
-          </div>
-
-          {/* Upload file */}
-          <div>
-            <label className='block labelStyle'>Upload File</label>
-            <div className='flex flex-col items-center border border-gray-300 rounded p-4 cursor-pointer hover:bg-gray-100 relative'>
-              <label
-                htmlFor='file-upload'
-                className='flex flex-col items-center justify-center cursor-pointer'
-              >
-                <div className='flex items-center space-x-2'>
-                  <FiUpload className='w-5 h-5 text-gray-700' />
-                  <span className='font-medium text-gray-700'>Upload file</span>
-                </div>
-                <input
-                  id='file-upload'
-                  type='file'
-                  onChange={handleFileChange}
-                  className='hidden'
-                />
+      )}
+      <div className='max-w-7xl mx-auto space-y-8'>
+        {/* Top section with 2 columns */}
+        <div className='flex flex-col sm:flex-row justify-between items-start'>
+          {/* Left column */}
+          <div className='sm:flex-1 w-full pr-6'>
+            <h2 className='text-2xl font-semibold mb-4'>Car Wrap Visualizer™</h2>
+            <div className='max-w-[170px]'>
+              <label htmlFor='typeOrCustomer' className='block mb-2 font-medium text-gray-700'>
+                Type or Customer
               </label>
-              {selectedFile && (
-                <div className='flex items-center justify-between w-full mt-2 border border-gray-200 rounded p-2 bg-gray-50'>
-                  <div className='flex items-center space-x-2'>
-                    <FiFile className='w-5 h-5 text-gray-500' />
-                    <span className='text-sm text-gray-700'>
-                      {selectedFile.name} ({(selectedFile.size / 1024).toFixed(2)} KB)
-                    </span>
-                  </div>
-                  <button type='button' onClick={removeFile}>
-                    <FiX className='w-4 h-4 text-gray-600 cursor-pointer' />
-                  </button>
-                </div>
-              )}
+              <select
+                id='typeOrCustomer'
+                value={formData.dealership}
+                onChange={handleChange}
+                className='w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-2'
+              >
+                <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
+                  Dealer
+                </option>
+                <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
+                  Customer
+                </option>
+                <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
+                  Other
+                </option>
+              </select>
+            </div>
+          </div>
+
+          {/* Right column */}
+          <div className='flex-1 w-full pl-6 flex flex-col sm:items-end items-stretch'>
+            <div className='flex space-x-3 mb-4 justify-between text-gray-700'>
+              <button
+                type='button'
+                aria-label='Edit'
+                className='flex flex-col items-center space-x-1 '
+              >
+                <span className='text-[#111827] font-Lato text-xs leading-6'>Modify</span>
+                <span className='bg-[#d9d9d963] rounded-[99px] px-5  cursor-pointer py-3 mt-1.5'>
+                  {' '}
+                  <RiEditLine />{' '}
+                </span>
+              </button>
+              <button
+                type='button'
+                aria-label='Canal Appointment'
+                className='flex flex-col items-center space-x-1'
+              >
+                <span className='text-[#111827] font-Lato text-xs leading-6'>Cancel Appointment</span>
+                <span className='bg-[#d9d9d963]  cursor-pointer rounded-[99px] px-5 py-3 mt-1.5'>
+                  {' '}
+                  <RxCross1 />{' '}
+                </span>
+              </button>
+              <button
+                type='button'
+                aria-label='Credit Used'
+                className='flex flex-col items-center space-x-1 hover:text-blue-600'
+              >
+                <span className='text-[#111827] font-Lato text-xs leading-6'>Credit Used</span>
+                <span className='bg-[#d9d9d963] rounded-[99px] px-4 py-3 mt-1.5 text-[#111827] font-Lato text-xs '>
+                  {' '}
+                  8/10{' '}
+                </span>
+              </button>
+            </div>
+            <div className='flex space-x-4 '>
+              <button
+                className='bg-[#EB227C] cursor-pointer  sm:flex-auto flex-1/3 text-white px-6 py-4 rounded-full hover:scale-95 transition'
+                onClick={() => updateBookingStatus('inprogress')}
+              >
+                Book IN
+              </button>
+              <button
+                className='bg-[#447B52]  cursor-pointer sm:flex-auto flex-2/3 text-white px-6 py-4 rounded-full hover:scale-95 transition'
+                onClick={() => updateBookingStatus('completed')}
+              >
+                Vehicle Completed
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Row 7 */}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <div>
-            <label htmlFor='windowTintingCost' className='block labelStyle'>
-              Window Tinting (Enter cost)
-            </label>
-            <input
-              type='number'
-              value={formData.windowTintingCost}
-              onChange={handleChange}
-              id='windowTintingCost'
-              name='windowTintingCost'
-              placeholder='Enter cost'
-              className='inputStyle  w-full'
-            />
-          </div>
-          <div>
-            <label htmlFor='frontPercentage' className='block labelStyle'>
-              Front Percentage
-            </label>
-            <input
-              type='number'
-              value={formData.frontPercentage}
-              onChange={handleChange}
-              id='frontPercentage'
-              name='frontPercentage'
-              placeholder='Front Percentage'
-              className='inputStyle  w-full'
-            />
-          </div>
+        {/* Heading and paragraph below */}
+        <div>
+          <h3 className='text-xl font-semibold mb-1'>Work Order</h3>
+          <p className='text-gray-600'>
+            Please complete the work order and to update status information.
+          </p>
         </div>
 
-        {/* Row 8 */}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <div>
-            <label htmlFor='rearPercentage' className='block labelStyle'>
-              Rear Percentage
-            </label>
-            <input
-              type='number'
-              id='rearPercentage'
-              value={formData.rearPercentage}
-              onChange={handleChange}
-              name='rearPercentage'
-              placeholder='Rear Percentage'
-              className='inputStyle  w-full'
-            />
+        {/* Form */}
+        <form className='space-y-8'>
+          {/* Row 1 */}
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div>
+              <label htmlFor='firstName' className='block labelStyle'>
+                First Name
+              </label>
+              <input
+                type='text'
+                id='firstName'
+                name='firstName'
+                value={formData.firstName}
+                onChange={handleChange}
+                placeholder='First Name'
+                className='inputStyle w-full'
+              />
+            </div>
+            <div>
+              <label htmlFor='lastName' className='block labelStyle'>
+                Last Name
+              </label>
+              <input
+                type='text'
+                id='lastName'
+                name='lastName'
+                value={formData.lastName}
+                onChange={handleChange}
+                placeholder='Last Name'
+                className='inputStyle  w-full'
+              />
+            </div>
           </div>
-          <div>
-            <label htmlFor='notes' className='block labelStyle'>
-              Notes / Special Instructions
-            </label>
-            <textarea
-              id='notes'
-              value={formData.notes}
-              onChange={handleChange}
-              name='notes'
-              placeholder='Notes / Special Instructions'
-              rows={3}
-              className='inputStyle  resize-none w-full'
-            />
-          </div>
-        </div>
 
-        <button
-          className='bg-[#EB227C] text-white px-16 py-4 cursor-pointer rounded-full '
-          onClick={updateBookingDetails}
-        >
-          Save
-        </button>
-      </form>
-    </div>
+          {/* Row 2 */}
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div>
+              <label htmlFor='email' className='block labelStyle'>
+                Email
+              </label>
+              <input
+                type='email'
+                id='email'
+                name='email'
+                value={formData.email}
+                onChange={handleChange}
+                placeholder='Email'
+                className='inputStyle  w-full'
+              />
+            </div>
+            <div>
+              <label htmlFor='phone' className='block labelStyle'>
+                Phone Number
+              </label>
+              <input
+                type='tel'
+                id='phone'
+                name='phone'
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder='Phone Number'
+                className='inputStyle  w-full'
+              />
+            </div>
+          </div>
+
+          {/* Row 3 */}
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+            <div>
+              <label htmlFor='bookingDate' className='block labelStyle'>
+                Booking Date
+              </label>
+              <input
+                type='date'
+                id='bookingDate'
+                name='bookingDate'
+                value={formData.bookingDate}
+                onChange={handleChange}
+                className='inputStyle  w-full'
+              />
+            </div>
+            <div>
+              <label htmlFor='checkInTime' className='block labelStyle'>
+                Check In Time
+              </label>
+              <input
+                type='time'
+                id='checkInTime'
+                value={formData.checkInTime}
+                onChange={handleChange}
+                name='checkInTime'
+                className='inputStyle  w-full'
+              />
+            </div>
+            <div>
+              <label htmlFor='completionDate' className='block labelStyle'>
+                Completion Date
+              </label>
+              <input
+                type='date'
+                id='completionDate'
+                value={formData.completionDate}
+                onChange={handleChange}
+                name='completionDate'
+                className='inputStyle  w-full'
+              />
+            </div>
+          </div>
+
+          {/* Vehicle heading */}
+          <h3 className='text-xl font-Poppins font-semibold mt-12 mb-4'>Vehicle</h3>
+
+          {/* Row 4 */}
+          <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
+            <div>
+              <label htmlFor='completionDate' className='block labelStyle'>
+                Year
+              </label>
+              <YearSelector
+                value={selectedYear}
+                onSelect={year => {
+                  setSelectedYear(year);
+                  setSelectedMake('');
+                  setSelectedModel('');
+                }}
+              />
+            </div>
+            <div>
+              <label htmlFor='completionDate' className='block labelStyle'>
+                Make
+              </label>
+              <MakeSelector
+                selectedYear={selectedYear}
+                value={selectedMake}
+                onSelect={make => {
+                  setSelectedMake(make);
+                  setSelectedModel('');
+                }}
+              />
+            </div>
+            <div>
+              <label htmlFor='completionDate' className='block labelStyle'>
+                Model
+              </label>
+              <ModelSelector
+                selectedYear={selectedYear}
+                selectedMake={selectedMake}
+                value={selectedModel}
+                onSelect={setSelectedModel}
+              />
+            </div>
+          </div>
+
+          {/* Vehicle heading */}
+          <h3 className='text-lg font-semibold mt-12 mb-4'>Material</h3>
+
+          {/* Row 4 */}
+          <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
+            {/* Brand Select */}
+            <div>
+              <label className='block mb-1 text-sm font-medium text-gray-700'>Brand</label>
+              <select
+                value={selectedBrand}
+                onChange={e => {
+                  const brand = e.target.value;
+                  setSelectedBrand(brand);
+                  setFormData(prev => ({ ...prev, brand: brand, wrapColor: '' })); // reset wrap color
+                  setSelectedColor('');
+                }}
+                className='w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3'
+              >
+                <option value=''>Select Brand</option>
+                {brandOptions.map((brand, idx) => (
+                  <option key={idx} value={brand}>
+                    {brand}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Wrap Color Select */}
+            <div>
+              <label className='block mb-1 text-sm font-medium text-gray-700'>Wrap Color</label>
+              <select
+                value={selectedColor}
+                onChange={e => {
+                  const color = e.target.value;
+                  setSelectedColor(color);
+                  setFormData(prev => ({ ...prev, wrapColor: color }));
+                }}
+                className={`w-full bg-[#F6F9FF] ${!wrapColors[selectedBrand] ? 'opacity-55' : 'opacity-100'
+                  } focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-3`}
+                disabled={!wrapColors[selectedBrand]}
+              >
+                <option value=''>Select Color</option>
+                {(wrapColors[selectedBrand] || []).map((color, idx) => (
+                  <option key={idx} value={color.name}>
+                    {color.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor='estimatedSQ' className='block labelStyle'>
+                Estimated SQ
+              </label>
+              <input
+                type='number'
+                id='estimatedSQ'
+                name='estimatedSQ'
+                value={formData.estimatedSQ}
+                onChange={handleChange}
+                placeholder='Estimated SQ'
+                className='inputStyle  w-full'
+              />
+            </div>
+            <div>
+              <label htmlFor='estimatedRolls' className='block labelStyle'>
+                Estimated Rolls
+              </label>
+              <input
+                type='number'
+                id='estimatedRolls'
+                value={formData.estimatedRolls}
+                onChange={handleChange}
+                name='estimatedRolls'
+                placeholder='Estimated Rolls'
+                className='inputStyle  w-full'
+              />
+            </div>
+          </div>
+
+          {/* Row 5 */}
+          <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
+            <div>
+              <label htmlFor='estimatedMaterialCost' className='block labelStyle'>
+                Estimated Material Cost
+              </label>
+              <input
+                type='number'
+                id='estimatedMaterialCost'
+                name='estimatedMaterialCost'
+                value={formData.estimatedMaterialCost}
+                onChange={handleChange}
+                placeholder='Estimated Material Cost'
+                className='inputStyle  w-full'
+              />
+            </div>
+            <div>
+              <label htmlFor='customerQuote' className='block labelStyle'>
+                Customer Quote
+              </label>
+              <input
+                type='number'
+                id='customerQuote'
+                name='customerQuote'
+                value={formData.customerQuote}
+                onChange={handleChange}
+                placeholder='Customer Quote'
+                className='inputStyle  w-full'
+              />
+            </div>
+            <div>
+              <label htmlFor='netMaterialRevenue' className='block labelStyle'>
+                Net Material Revenue
+              </label>
+              <input
+                type='number'
+                id='netMaterialRevenue'
+                value={formData.netMaterialRevenue}
+                onChange={handleChange}
+                name='netMaterialRevenue'
+                placeholder='Net Material Revenue'
+                className='inputStyle  w-full'
+              />
+            </div>
+          </div>
+
+          {/* Additional Services heading */}
+          <h3 className='text-lg font-semibold mt-12 mb-4'>Additional Services</h3>
+
+          {/* Row 6 */}
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 items-center'>
+            <div>
+              <label htmlFor='ppfCost' className='block labelStyle'>
+                Paint protection film (PPF) (Enter cost)
+              </label>
+              <input
+                type='number'
+                id='ppfCost'
+                value={formData.ppfCost}
+                onChange={handleChange}
+                name='ppfCost'
+                placeholder='Enter cost'
+                className='inputStyle  w-full'
+              />
+            </div>
+            <div>
+              <label htmlFor='decalsCost' className='block labelStyle'>
+                Decals/graphics installation (Enter cost)
+              </label>
+              <input
+                type='number'
+                id='decalsCost'
+                name='decalsCost'
+                value={formData.decalsCost}
+                onChange={handleChange}
+                placeholder='Enter cost'
+                className='inputStyle  w-full'
+              />
+            </div>
+
+            {/* Upload file */}
+            <div>
+              <label className='block labelStyle'>Upload File</label>
+              <div className='flex flex-col items-center border border-gray-300 rounded p-4 cursor-pointer hover:bg-gray-100 relative'>
+                <label
+                  htmlFor='file-upload'
+                  className='flex flex-col items-center justify-center cursor-pointer'
+                >
+                  <div className='flex items-center space-x-2'>
+                    <FiUpload className='w-5 h-5 text-gray-700' />
+                    <span className='font-medium text-gray-700'>Upload file</span>
+                  </div>
+                  <input
+                    id='file-upload'
+                    type='file'
+                    onChange={handleFileChange}
+                    className='hidden'
+                  />
+                </label>
+                {selectedFile && (
+                  <div className='flex items-center justify-between w-full mt-2 border border-gray-200 rounded p-2 bg-gray-50'>
+                    <div className='flex items-center space-x-2'>
+                      <FiFile className='w-5 h-5 text-gray-500' />
+                      <span className='text-sm text-gray-700'>
+                        {selectedFile.name} ({(selectedFile.size / 1024).toFixed(2)} KB)
+                      </span>
+                    </div>
+                    <button type='button' onClick={removeFile}>
+                      <FiX className='w-4 h-4 text-gray-600 cursor-pointer' />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Row 7 */}
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div>
+              <label htmlFor='windowTintingCost' className='block labelStyle'>
+                Window Tinting (Enter cost)
+              </label>
+              <input
+                type='number'
+                value={formData.windowTintingCost}
+                onChange={handleChange}
+                id='windowTintingCost'
+                name='windowTintingCost'
+                placeholder='Enter cost'
+                className='inputStyle  w-full'
+              />
+            </div>
+            <div>
+              <label htmlFor='frontPercentage' className='block labelStyle'>
+                Front Percentage
+              </label>
+              <input
+                type='number'
+                value={formData.frontPercentage}
+                onChange={handleChange}
+                id='frontPercentage'
+                name='frontPercentage'
+                placeholder='Front Percentage'
+                className='inputStyle  w-full'
+              />
+            </div>
+          </div>
+
+          {/* Row 8 */}
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div>
+              <label htmlFor='rearPercentage' className='block labelStyle'>
+                Rear Percentage
+              </label>
+              <input
+                type='number'
+                id='rearPercentage'
+                value={formData.rearPercentage}
+                onChange={handleChange}
+                name='rearPercentage'
+                placeholder='Rear Percentage'
+                className='inputStyle  w-full'
+              />
+            </div>
+            <div>
+              <label htmlFor='notes' className='block labelStyle'>
+                Notes / Special Instructions
+              </label>
+              <textarea
+                id='notes'
+                value={formData.notes}
+                onChange={handleChange}
+                name='notes'
+                placeholder='Notes / Special Instructions'
+                rows={3}
+                className='inputStyle  resize-none w-full'
+              />
+            </div>
+          </div>
+
+          <button
+            className='bg-[#EB227C] text-white px-16 py-4 cursor-pointer rounded-full '
+            onClick={updateBookingDetails}
+          >
+            Save
+          </button>
+        </form>
+      </div>
+    </>
   );
 }

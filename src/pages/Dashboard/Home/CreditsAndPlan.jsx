@@ -4,13 +4,23 @@ import colorfulcarImg from '../../../assets/images/colorful-car-illustration.png
 import creditslabel from '../../../assets/icons/creditslabel.svg';
 import { AuthContext } from '../../../context/AuthContext';
 import { completedAppointmentAPIFn } from '../../../redux/features/booking/bookingFus';
-const CreditsAndPlan = ({ userInfo, activePlan, plans }) => {
+
+const getCreditsLimit = (planName) => {
+  const limits = {
+    "Basic Plan": 250,
+    "Ultimate Plan": 1200,
+    "Pro Plan": 2500,
+  };
+  return limits[planName] || 5;
+};
+
+const CreditsAndPlan = ({ userInfo, activePlan, plans, isLoading }) => {
+
   const mergedPlan = {
     ...activePlan,
     ...plans?.find(plan => plan?.product_name === activePlan?.product_name)
   };
 
-  console.log('mergedPlan', mergedPlan);
 
   return (
     <div className='grid mt-5 sm:grid-cols-11 grid-cols-1 gap-5'>
@@ -20,7 +30,27 @@ const CreditsAndPlan = ({ userInfo, activePlan, plans }) => {
         <p className='my-3'>Top Up Account </p>
         <div className='text-[40px] font-semibold font-Lato'>
           <div className='text-[40px] font-semibold font-Lato'>
-            <span className='text-[12px] font-normal'>{userInfo?.credits}</span>
+
+            {isLoading ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-t-transparent border-[#EB227C] rounded-full animate-spin"></div>
+                <span className="text-sm text-gray-500">Loading...</span>
+              </div>
+            ) : (
+              <>
+                <h2>
+                  {userInfo?.credits ?? 0}
+                  /
+                  <span className="text-[12px] font-normal">
+                    {getCreditsLimit(mergedPlan?.name)}
+                  </span>
+                </h2>
+              </>
+            )}
+
+
+
+
           </div>
         </div>
         <p className='text-[#8F8F8F] text-[12px] font-medium'>Credits Used</p>
@@ -29,14 +59,15 @@ const CreditsAndPlan = ({ userInfo, activePlan, plans }) => {
         <div className='border-[#E1E1E1] rounded-[10px] border bg-[#F5F5F7] flex items-center justify-between'>
           <div className='pl-4'>
             <div>
-              {mergedPlan ? (
-                <>
-                  <h4 className='font-Lato text-2xl font-semibold leading-9 '>
-                    {mergedPlan?.name}
-                  </h4>
-                </>
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-t-transparent border-[#EB227C] rounded-full animate-spin"></div>
+                  <span className="text-sm text-gray-500">Loading...</span>
+                </div>
               ) : (
-                <SkeletonText width='w-24' height='h-10' />
+                <h4 className='font-Lato text-2xl font-semibold leading-9 '>
+                  {mergedPlan?.name || "Free Trial"}
+                </h4>
               )}
 
               {/* <p className='text-xs text-[#000] font-medium font-Lato'>Subscription Tier <span className='text-[#454545] font-light text-[10px] sm:ml-3 ml-1'>Trials Ends in 6 Days</span></p> */}
@@ -45,7 +76,7 @@ const CreditsAndPlan = ({ userInfo, activePlan, plans }) => {
                 Subscription Tier
                 {mergedPlan?.endDate && (
                   <span className='text-[#454545] font-light text-[10px] sm:ml-3 ml-1'>
-                    Trial Ends in {dayjs(activePlan?.endDate).add(1, 'month').diff(dayjs(), 'day')}{' '}
+                    Trial Ends in {dayjs(mergedPlan.endDate).diff(dayjs(), 'day')}
                     Days
                   </span>
                 )}
@@ -129,7 +160,7 @@ const CreditsAndPlan = ({ userInfo, activePlan, plans }) => {
             <div className=' grow flex flex-col items-center  '>
               <div className=''>
                 <h4 className='font-semibold font-Poppins leading-9 text-2xl'>0</h4>
-                <p className='text-[#8F8F8F] text-xs font-medium'>Total Wraps</p>
+                <p className='text-[#8F8F8F] text-xs font-medium'>Monthly Appointments</p>
               </div>
             </div>
           </div>

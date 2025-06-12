@@ -8,7 +8,7 @@ import howtoworkimg2 from "../../../assets/images/howtoworkimg2.png"
 import howtoworkimg3 from "../../../assets/images/howtoworkimg3.png"
 const HowItWorks = () => {
   return (
-    <section className=" text-white py-12 px-4 text-center bg-center  bg-no-repeat">
+    <section id='howitWorks' className=" text-white pt-24 pb-12 px-4 text-center bg-center  bg-no-repeat">
       {/* Top Heading and Text   style={{backgroundImage: `url('${howtoworkbg}')`}} */}
       <div className="max-w-3xl mx-auto">
         <h2 className="text-5xl font-Inter sm:text-4xl font-extrabold leading-20  mb-4">How it Works </h2>

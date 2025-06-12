@@ -46,7 +46,7 @@ export const privateRoutes = [
     moduleName: 'Tool',
     element: (
       <DashboardLayout>
-        <CarFillPage />
+        <CarFillPage bg={false} />
       </DashboardLayout>
     ),
     child: []
@@ -191,7 +191,7 @@ export const commonRoutes = [
     moduleName: 'Car Visualizer',
     element: (
       <DefaultLayout>
-        <CarFillPage />
+        <CarFillPage bg={true} />
       </DefaultLayout>
     )
   },

@@ -6,83 +6,64 @@ const SupportHelp = () => {
 
     const [activeIndex, setActiveIndex] = useState(null);
 
-     const faqs = [
-    {
-      question: "What is AI UGC?",
-      answer:
-        "AI UGC (Artificial Intelligence User-Generated Content) refers to content that is created or enhanced using AI technologies. It leverages machine learning algorithms to generate engaging, personalized content, making content creation faster and more efficient."
-    },
-    {
-      question: "Can I choose different voices & avatars?",
-      answer:
-        "Yes, you can choose from a variety of voices and avatars. Our platform offers multiple voice options along with customizable avatars, allowing you to tailor the presentation of your content to match your unique style and preferences."
-    },
-    {
-      question: "How do I get my videos?",
-      answer:
-        "Once your video has been processed, it will be available in your account dashboard. You can easily download, share, or embed your videos directly from there, ensuring seamless access to your content."
-    },
-    {
-      question: "What is UGC Machine?",
-      answer:
-        "UGC Machine is an innovative AI-powered platform that helps you create high-quality, ad-ready User-Generated Content (UGC)-style videos in minutes. Our advanced AI uses a diverse range of avatars and intelligent script generation (or your own script!) to produce engaging video content, saving you significant time and money."
-    },
-    {
-      question: "How does UGC Machine create UGC-style videos with AI?",
-      answer:
-        "It's simple! Provide product info or your own script, and our AI generates an engaging narrative. Then, choose from our diverse selection of AI avatars, and our system quickly produces your video, typically in a 9:16 format ideal for social platforms."
-    },
-    {
-      question: "Are the 'people' in the videos real? How is the quality?",
-      answer:
-        "Our videos feature highly realistic AI-generated avatars from our extensive library, designed to look and sound authentic. UGC Machine is engineered to produce high-quality, engaging content suitable for professional ad campaigns."
-    },
-    {
-      question: "Why choose UGC Machine over traditional UGC creators?",
-      answer:
-        "UGC Machine offers unparalleled speed (videos in minutes), cost-savings (up to 80% less than traditional UGC), and scalability (create hundreds of variations). It’s perfect for agile marketers needing high-volume, affordable ad creatives fast."
-    },
-    {
-      question: "How fast can I get my videos?",
-      answer:
-        "Incredibly fast! Once you've submitted your details and chosen an avatar, UGC Machine's efficient system typically has your videos ready for download within just a couple of minutes."
-    },
-    {
-      question: "What can I do with the videos? Can I edit them further?",
-      answer:
-        "Your videos are delivered in a 9:16 format, perfect for TikTok, Instagram Reels, etc. They are ad-ready as is, but you can easily use tools like CapCut for additional captions or edits if desired."
-    },
-    {
-      question: "Is UGC Machine easy to use? Do I need technical skills?",
-      answer:
-        "Absolutely! UGC Machine is designed for everyone. If you can fill out a form and click a few buttons, you can create compelling videos. No technical or video editing skills are required."
-    },
-    {
-      question: "How much does it cost? Is there a free trial?",
-      answer:
-        "We offer various plans starting from our Basic plan at $67.99/month. We aim for accessible pricing for scalable video creation."
-    },
-    {
-      question: "Can I use these videos for paid ads? Who owns them?",
-      answer:
-        "Yes, the videos are ideal for paid advertising campaigns. You own the completed video content you generate using our platform for your campaigns, according to our terms of service."
-    },
-    {
-      question: "How does UGC Machine benefit marketing agencies?",
-      answer:
-        "UGC Machine offers powerful advantages for marketing agencies. You can seamlessly integrate AI UGC creation into your services or refer clients and earn commissions, allowing you to deliver scalable, high-quality ad creatives efficiently and generate recurring revenue."
-    },
-    {
-      question: "How is UGC Machine different from other video tools or marketplaces?",
-      answer:
-        "UGC Machine is uniquely focused on AI-driven UGC-style ad creatives with a diverse avatar library and intelligent script generation. We offer superior scalability and speed at a fraction of the cost compared to general video tools or manual UGC marketplaces."
-    },
-    {
-      question: "This sounds great! How do I get started with UGC Machine?",
-      answer:
-        "It's easy! Visit our pricing page, choose the plan that best suits your needs, sign up, and you can start creating your first AI UGC video in minutes."
-    }
-  ];
+    const faqs = [
+        {
+            question: "What is Car Wrap Visualizer™ and how does it help my shop?",
+            answer:
+                "Car Wrap Visualizer™ is a sales and marketing tool that lets your customers preview their exact vehicle with real wrap colors and finishes. It helps you close more jobs by giving customers confidence in their wrap choices — right from your site or in-store."
+        },
+        {
+            question: "Can I add my shop’s branding to the visualizer?",
+            answer:
+                "Yes. Your business name, logo, and contact info are fully white-labeled and appear throughout the platform."
+        },
+        {
+            question: "Can I embed the visualizer on my website?",
+            answer:
+                "Yes. We provide a simple embed code or direct share link that works on any website. No developer needed."
+        },
+        {
+            question: "How do customers use it?",
+            answer:
+                "Customers select their year, make, and model, then explore different wrap colors and finishes. Each render uses 1 credit from your shop’s account."
+        },
+        {
+            question: "Can I upload my own custom wrap colors?",
+            answer:
+                "Yes. You can submit a support ticket with your custom color data (HEX codes, material type, finish, and photos). We’ll model it to reflect the real-life appearance and add it to your dashboard with a specialized shareable link for customers."
+        },
+        {
+            question: "What vehicles are supported?",
+            answer:
+                "We support 60,000+ vehicles from 1990 to 2026. New models are added regularly."
+        },
+        {
+            question: "Which wrap brands and finishes are included?",
+            answer:
+                "You can show colors from 3M, Avery, KPMF, Inozetek, TeckWrap, APA, and others. Finishes include matte, satin, gloss, chrome, carbon, and flip."
+        },
+        {
+            question: "Can I also show tint, PPF, or chrome delete previews?",
+            answer:
+                "Yes. These services can be enabled in your dashboard if your shop offers them."
+        },
+        {
+            question: "Is there a CRM or booking system included?",
+            answer:
+                "Yes. Our optional CRM includes:\n• Customer profiles and wrap history\n• Quote and invoice tools\n• Job assignments and reminders\n\nIt’s available as an add-on for just $49.99/month.\n\nYes. Optional Appointment booking\n\nIt’s available as an add-on for just $14.99/month or $9.99/month when bundled with our CRM option"
+        },
+        {
+            question: "How much does it cost?",
+            answer:
+                "We offer flexible subscription plans:\n• Basic Plan: $79/month\n• CRM Add-On: $49.99/month (optional)\n• Appointment Booking Add-On: $14.99/month (optional)\n\n👉 Subscribe here to get started."
+        },
+        {
+            question: "Can I use it in-store with customers?",
+            answer:
+                "Yes. It works great on tablets, desktops, or showroom kiosks — perfect for consultations and upselling."
+        }
+    ];
+
 
 
     const toggleFAQ = (index) => {
@@ -162,14 +143,14 @@ const SupportHelp = () => {
                 {faqs.map((faq, index) => (
                     <div
                         key={index}
-                        className={`border p-4 rounded-md cursor-pointer transition-all ${activeIndex === index ? "border-[#1AE1AB]" : "border-gray-500"
+                        className={`border p-4 rounded-md cursor-pointer transition-all ${activeIndex === index ? "border-[#EB227C]" : "border-gray-500"
                             }`}
                         onClick={() => toggleFAQ(index)}
                     >
                         <div className="flex justify-between items-center">
                             <h3 className="text-lg font-semibold">{faq.question}</h3>
                             {activeIndex === index ? (
-                                <FaMinus className="text-[#1AE1AB] text-xl" />
+                                <FaMinus className="text-[#EB227C] text-xl" />
                             ) : (
                                 <FaPlus className=" text-xl" />
                             )}
@@ -181,7 +162,7 @@ const SupportHelp = () => {
                 ))}
             </div>
 
-            
+
         </div>
     );
 };

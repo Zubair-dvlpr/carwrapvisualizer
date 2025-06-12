@@ -23,7 +23,7 @@ const benefits = [
 
 const OurBenefits = () => {
   return (
-    <section className="pt-20 px-4 bg-contain bg-no-repeat bg-[#000000] bg-top" style={{ backgroundImage: `url('${Benefitsbg}')` }}>
+    <section id='ourBenefits' className="pt-20 px-4 bg-contain bg-no-repeat bg-[#000000] bg-top" style={{ backgroundImage: `url('${Benefitsbg}')` }}>
       <div className="text-center mb-10">
         <h2 className="text-3xl sm:text-6xl font-bold text-white">Our Benefits</h2>
       </div>

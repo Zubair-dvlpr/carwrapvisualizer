@@ -65,12 +65,12 @@ const SignUp = () => {
         <div className='bg-[#ffffff1a] mx-3 border border-white text-white rounded-lg p-7 max-w-[650px] w-full'>
           <div className=''>
             <Link to='/'>
-              <img src={logo} alt='Logo' className='w-44 mx-auto mb-8' />
+              <img src={logo} alt='Logo' className='w-44 mx-auto mb-4' />
             </Link>
-            <h2 className='text-[32px] font-semibold capitalize mb-4 Aspekta-650'>
-              Ready to use Car Wrap Visualizer
+            <h2 className='text-[32px] font-semibold capitalize mb-2 '>
+              Get Started with Car Wrap Visualizer
             </h2>
-            <p className='text-base mb-2'>Enter your details to create an account</p>
+            <p className='text-lg mb-2'>Join now to unlock full access to wrap Visualizers, projects, and Studio tools</p>
           </div>
 
           <form onSubmit={handleSubmit} className='space-y-3'>
@@ -143,19 +143,10 @@ const SignUp = () => {
               type='submit'
               className='w-full cursor-pointer mt-2 bg-gradient-to-r from-[#1AE1AB] to-[#712FFF] text-white py-4 rounded-full hover:bg-blue-600'
             >
-              CREATE ACCOUNT
+              Create My Account
             </button>
           </form>
 
-          {/* <div className="mt-4 text-center">
-            <button
-              onClick={handleGoogleSignUp}
-              className="w-full flex justify-center items-center gap-2 py-4 bg-white text-black text-lg font-semibold rounded-full hover:bg-gray-300"
-            >
-              <img src="/google-icon.svg" alt="Google" className="w-6 h-6" />
-              Continue with Google
-            </button>
-          </div> */}
 
           <p className='text-center mt-4'>
             Already have an account?{' '}

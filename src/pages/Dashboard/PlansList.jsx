@@ -13,6 +13,7 @@ const PlansList = ({ location }) => {
   const [loadingSubscription, setLoadingSubscription] = useState(true);
   const [error, setError] = useState(null);
   const [processingPlanId, setProcessingPlanId] = useState(null);
+  const [activePlan, setActivePlan] = useState();
 
   // Dummy descriptions per plan id
   const planDescriptions = {
@@ -83,6 +84,7 @@ const PlansList = ({ location }) => {
       const data = await dispatch(stripeActiveSubscriptionsAPIFn());
       if (data?.meta?.requestStatus === "fulfilled") {
         console.log("Active subscription:", data);
+        setActivePlan(data.payload.data)
         // You can handle active subscription data here if needed
       } else {
         setError("Failed to load active subscription.");
@@ -148,7 +150,10 @@ const PlansList = ({ location }) => {
     "Automated Job Alerts: Send SMS updates to customers at every stage",
   ];
 
-  if (loadingPlans || loadingSubscription) return <p>Loading plans...</p>;
+  if (loadingPlans || loadingSubscription) return <div className="text-center py-8">
+                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#EB227C] border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+                    <div className="text-sm text-gray-500 mt-2">Loading Plans</div>
+                </div>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
@@ -168,11 +173,11 @@ const PlansList = ({ location }) => {
             const price = priceObj?.unit_amount;
             const currency = priceObj?.currency?.toUpperCase();
             const interval = priceObj?.recurring?.interval || "one-time";
-
+            
             return (
               <div
                 key={plan.id}
-                className={`plan-card p-4 rounded-lg flex flex-col justify-between hover:shadow-2xl transition-shadow duration-300`}
+                className={`plan-card p-4 rounded-lg ${plan?.default_price === activePlan?.priceId ? 'opacity-35' : 'opacity-100'} flex flex-col justify-between hover:shadow-2xl transition-shadow duration-300`}
                 style={{
                   backgroundColor: location === "home" ? "transparent" : "#fff",
                   color: location === "home" ? "#fff" : "#000",
@@ -186,6 +191,7 @@ const PlansList = ({ location }) => {
                     : {}),
                 }}
               >
+              
                 <div>
                   {/* Plan Name */}
                   <h3 className="text-xl font-bold mb-3">{plan.name}</h3>
@@ -226,8 +232,9 @@ const PlansList = ({ location }) => {
                   {/* Subscribe Button */}
                   <button
                     onClick={() => handleSubscribe(plan)}
+                    
                     disabled={processingPlanId === plan.id}
-                    className="w-full py-3 rounded font-semibold cursor-pointer bg-[#ED217B] hover:brightness-110 hover:scale-105 text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`w-full ${plan?.default_price === activePlan?.priceId ? 'cursor-no-drop pointer-events-none' : 'cursor-pointer pointer-events-auto'} py-3 rounded font-semibold  bg-[#ED217B] hover:brightness-110 hover:scale-105 text-white transition disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
                     {processingPlanId === plan.id ? "Processing..." : "Get this plan"}
                   </button>
