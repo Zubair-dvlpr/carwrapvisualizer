@@ -14,7 +14,7 @@ import { AuthContext } from '../../context/AuthContext';
 import loaderGif from '../../assets/loading.gif';
 import { useDispatch } from 'react-redux';
 import { generateCarImageAPIFn } from '../../redux/features/Studio/studioFus';
-const CarFillPage = ({bg}) => {
+const CarFillPage = ({ bg }) => {
   console.log(bg)
   const { user, domain } = useContext(AuthContext);
   const dispatch = useDispatch();
@@ -137,10 +137,16 @@ const CarFillPage = ({bg}) => {
 
       if (response?.meta?.requestStatus === 'fulfilled') {
         // Extract image URL from the new response structure
-        const imageUrl = response.payload?.data?.image?.[0]?.url;
-        if (!imageUrl) throw new Error('Image URL not found in response');
+        const base64Image = response.payload?.data?.image;
+        if (!base64Image) throw new Error('Image data not found in response');
+
+        const imageUrl = `data:image/png;base64,${base64Image}`;
         setAnimation(false);
-        return imageUrl; // Return the URL directly
+        return imageUrl;
+        // const imageUrl = response.payload?.data?.image;
+        // if (!imageUrl) throw new Error('Image URL not found in response');
+        // setAnimation(false);
+        // return imageUrl; // Return the URL directly
       } else {
         setAnimation(false);
         throw new Error(response.payload || 'Image generation failed');
@@ -243,11 +249,10 @@ const CarFillPage = ({bg}) => {
                       key={brand.name}
                       src={brand.logo}
                       alt={brand.name}
-                      className={`h-16 mx-auto cursor-pointer border-2 rounded-lg p-1 transition ${
-                        selectedBrand?.name === brand.name
-                          ? 'border-blue-500'
-                          : 'border-transparent'
-                      }`}
+                      className={`h-16 mx-auto cursor-pointer border-2 rounded-lg p-1 transition ${selectedBrand?.name === brand.name
+                        ? 'border-blue-500'
+                        : 'border-transparent'
+                        }`}
                       onClick={() => handleBrandClick(brand)}
                     />
                   ))}
@@ -259,9 +264,8 @@ const CarFillPage = ({bg}) => {
                     {Object.keys(selectedBrand.colors).map(cat => (
                       <button
                         key={cat}
-                        className={`px-4 py-2 rounded ${
-                          selectedCategory === cat ? 'bg-black text-white' : 'bg-[#ffffff0d]'
-                        }`}
+                        className={`px-4 py-2 rounded ${selectedCategory === cat ? 'bg-black text-white' : 'bg-[#ffffff0d]'
+                          }`}
                         onClick={() => handleCategoryClick(cat)}
                       >
                         {cat}
