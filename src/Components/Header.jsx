@@ -46,7 +46,7 @@ const Header = () => {
             <a href="#howitWorks" className="text-gray-700 text-sm py-3 px-4 hover:bg-[#ED217B] duration-500 hover:text-white cursor-pointer transition font-medium">How it Works</a>
             <a href="#ourBenefits" className="text-gray-700 text-sm py-3 px-4 hover:bg-[#ED217B] duration-500 hover:text-white cursor-pointer transition font-medium">Our Benefits</a>
             <a href="#faq" className="text-gray-700 text-sm py-3 px-4 hover:bg-[#ED217B] duration-500 hover:text-white cursor-pointer transition font-medium">FAQ</a>
-            <Link to="#" className="text-gray-700 text-sm py-3 px-4 hover:bg-[#ED217B] duration-500 hover:text-white transition font-medium">Contact</Link>
+            <Link to="/contact" className="text-gray-700 text-sm py-3 px-4 hover:bg-[#ED217B] duration-500 hover:text-white transition font-medium">Contact</Link>
           </nav>
 
           {/* Right Button */}
@@ -83,7 +83,7 @@ const Header = () => {
           <a href="#howitWorks" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white capitalize font-medium">How it Works</a>
           <a href="#ourBenefits" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white capitalize font-medium">Our Benefits</a>
           <a href="#faq" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white capitalize font-medium">FAQ</a>
-          <Link to="#" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white capitalize font-medium">Contact</Link>
+          <Link to="/contact" className="block text-gray-700 hover:bg-[#ED217B] hover:text-white capitalize font-medium">Contact</Link>
           {isLoggedIn ? (
             <Link to="/dashboard" className="block border border-[#ED217B] text-gray-700 font-medium">{userName}</Link>
           ) : (

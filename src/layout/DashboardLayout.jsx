@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../Components/Sidebar';
 import TopNavbar from '../Components/TopNavbar';
+import WelcomeModal from '../Components/WelcomeModal';
 
 
 const DashboardLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const showWelcome = localStorage.getItem('showWelcome');
+    if (showWelcome === 'true') {
+      setShowModal(true);
+      localStorage.removeItem('showWelcome'); // Remove after showing
+    }
+  }, []);
 
   const toggleSidebar = (open) => {
     setIsSidebarOpen(open);
@@ -12,6 +22,7 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className="flex h-screen relative bg-[#12161F]">
+      {showModal && <WelcomeModal onClose={() => setShowModal(false)} />}
       {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 

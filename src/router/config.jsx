@@ -2,6 +2,7 @@ import DashboardLayout from '../layout/DashboardLayout';
 import DefaultLayout from '../Layout/DefaultLayout';
 import CarFillPage from '../pages/CarFillPage/Index';
 import ConfirmBooking from '../pages/confirmBooking/confirmBooking';
+import Contact from '../pages/contact/Contact';
 import Appointment from '../pages/Dashboard/Appointment';
 import BillingSubscription from '../pages/Dashboard/BillingSubscription';
 import BookingAppointment from '../pages/Dashboard/BookingAppointment';
@@ -204,5 +205,14 @@ export const commonRoutes = [
     path: '*',
     moduleName: 'Error Page',
     element: <ErrorPage />
-  }
+  },
+  {
+    path: '/contact',
+    moduleName: 'Contact',
+    element: (
+      <DefaultLayout>
+        <Contact />
+      </DefaultLayout>
+    )
+  },
 ];

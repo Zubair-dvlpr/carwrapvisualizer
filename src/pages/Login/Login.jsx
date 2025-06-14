@@ -28,6 +28,13 @@ const Login = () => {
       );
 
       if (data?.meta?.requestStatus === 'fulfilled') {
+        // Check if 'welcomeShown' already exists
+        const alreadyWelcomed = localStorage.getItem('welcomeShown');
+
+        if (!alreadyWelcomed) {
+          localStorage.setItem('showWelcome', 'true');
+          localStorage.setItem('welcomeShown', 'true'); // So it doesn't show again
+        }
         navigate('/dashboard');
       } else if (data?.meta?.requestStatus === 'rejected') {
         setError(data?.payload || 'Login failed'); // <- Show server error message

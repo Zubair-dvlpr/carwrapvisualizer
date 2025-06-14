@@ -6,7 +6,7 @@ import './CustomCalendar.css'; // For custom styles
 import { AuthContext } from '../../../context/AuthContext';
 
 const CustomCalendar = ({ full }) => {
-  console.log(full)
+  // console.log(full)
   const [value, setValue] = useState(new Date());
   const { setSelectedDate, bookingsByDate } = useContext(AuthContext);
   const handleChange = (date) => {

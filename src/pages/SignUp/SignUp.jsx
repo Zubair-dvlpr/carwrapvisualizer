@@ -6,6 +6,7 @@ import loginbg from '../../assets/images/loginbg.webp';
 import loaderGif from '../../assets/loading.gif';
 import { useDispatch } from 'react-redux';
 import { signUpAPIFn } from '../../redux/features/auth/authFns.js';
+
 const SignUp = () => {
   const { animation, setAnimation } = useContext(AuthContext);
   const [formData, setFormData] = useState({
@@ -38,6 +39,7 @@ const SignUp = () => {
       })
     );
     if (data?.meta?.requestStatus === 'fulfilled') {
+       localStorage.setItem('showWelcome', 'true'); // Set flag
       navigate('/login'); // Redirect to Dashboard
       setAnimation(false); // Stop loading
     }
