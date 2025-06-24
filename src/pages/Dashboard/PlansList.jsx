@@ -291,7 +291,7 @@ const PlansList = ({ location }) => {
                 onClick={() => handleSubscribe(plan)}
                 disabled={processingPlanId === plan.id}
                 className="bg-[#ED217B] hover:bg-pink-700 cursor-pointer text-white font-semibold px-9 py-4 rounded-full transition">
-                Add-ons – {price !== undefined
+                {processingPlanId === plan.id ? "Processing..." : "Add-on"} – {price !== undefined
                   ? `$${(price / 100).toFixed(2)} ${currency} / ${interval}`
                   : "Contact us for pricing"}
               </button>

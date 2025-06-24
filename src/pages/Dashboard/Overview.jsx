@@ -3,7 +3,7 @@ import CreditsAndPlan from './Home/CreditsAndPlan';
 import BookedAppointments from './Home/BookedAppointments';
 import CustomCalendar from './Home/CustomCalendar';
 import MembersList from './Home/MembersList';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   stripeActiveSubscriptionsAPIFn,
   stripeFetchPlansAPIFn,
@@ -18,10 +18,12 @@ import {
 } from '../../redux/features/booking/bookingFus';
 import { userInfoAPIFn } from '../../redux/features/auth/authFns';
 import InProgressTable from './Components/InProgressTable';
+import { AuthContext } from '../../context/AuthContext';
 
 const Overview = () => {
   const dispatch = useDispatch();
   const [todayBookings, setTodayBookings] = useState([]);
+    const { setAddon } = useContext(AuthContext);
   const [params, setParams] = useSearchParams();
   const sessionId = params.get('session_id');
   const [loading, setLoading] = useState(true); // For spinner
@@ -81,6 +83,7 @@ const Overview = () => {
 
         if (userRes?.meta?.requestStatus === 'fulfilled') {
           setUserInfo(userRes?.payload?.data?.user);
+          setAddon(userRes?.payload?.data?.user.accountType)
         } else {
           console.error('User info fetch failed:', userRes);
         }

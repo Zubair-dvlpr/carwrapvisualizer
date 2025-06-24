@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loginUserAPIFn } from './authFns';
+import { loginUserAPIFn} from './authFns';
 import { PURGE } from 'redux-persist';
 // Initial State
 const initialState = {

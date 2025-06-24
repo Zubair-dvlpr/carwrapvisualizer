@@ -32,12 +32,12 @@ const menuItems = [
 ];
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-
+ const { addon } = useContext(AuthContext);
   const sidebarRef = useRef(null);
   // const { logout } = useContext(AuthContext);
   const user = useSelector(state => state?.currentUser?.currentUser);
-  const accountType = user?.data?.user?.accountType;
-
+  const accountType = addon;
+  console.log("context addon",addon);
   const role = user?.data?.user?.role?.role;
 
   const shopmanRoutes = [...menuItems].filter(item => item.path != "/Subscription")
@@ -65,9 +65,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     );
   }
 
-  console.log(
-    finalRoutes
-  )
 
   useEffect(() => {
     const handleClickOutside = event => {

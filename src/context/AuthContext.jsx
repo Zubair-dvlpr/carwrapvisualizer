@@ -11,6 +11,7 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [credits, setCredits] = useState();
   const [countLogin, setCountLogin] = useState();
+  const [addon, setAddon] = useState();
   const [user, setUser] = useState(() => {
     // Initialize from localStorage on first load
     const storedUser = localStorage.getItem('user');
@@ -133,7 +134,7 @@ const AuthProvider = ({ children }) => {
         credits,
         countLogin,
         setCountLogin,
-
+        addon, setAddon,
         loading,
         animation,
         setAnimation,
