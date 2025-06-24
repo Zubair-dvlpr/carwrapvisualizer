@@ -100,16 +100,7 @@ const CarFillPage = ({ bg }) => {
       logo: avery, // Replace with your path
       colors: wrapFilmColors
     },
-    // {
-    //   name: 'vvivid',
-    //   logo: vvivid, // Replace with your path
-    //   colors: wrapFilmColors
-    // },
-    // {
-    //   name: 'inozetek',
-    //   logo: inozetek, // Replace with your path
-    //   colors: wrapFilmColors
-    // }
+    
   ];
   const { animation, setAnimation } = useContext(AuthContext);
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -137,16 +128,13 @@ const CarFillPage = ({ bg }) => {
 
       if (response?.meta?.requestStatus === 'fulfilled') {
         // Extract image URL from the new response structure
-        const base64Image = response.payload?.data?.image;
+        const base64Image = response.payload?.data?.image?.inlineData?.data;
         if (!base64Image) throw new Error('Image data not found in response');
 
         const imageUrl = `data:image/png;base64,${base64Image}`;
         setAnimation(false);
         return imageUrl;
-        // const imageUrl = response.payload?.data?.image;
-        // if (!imageUrl) throw new Error('Image URL not found in response');
-        // setAnimation(false);
-        // return imageUrl; // Return the URL directly
+
       } else {
         setAnimation(false);
         throw new Error(response.payload || 'Image generation failed');
