@@ -38,7 +38,7 @@ const Overview = () => {
     );
     if (data?.meta?.requestStatus === 'fulfilled') {
       // setPlans(data)
-      console.log('sucess active plan', data);
+      // console.log('sucess active plan', data);
       setParams({});
     }
     if (data?.meta?.requestStatus === 'rejected') {
@@ -65,41 +65,6 @@ const Overview = () => {
       console.error('⚠️ Error fetching today’s appointments:', error);
     } finally {
       setLoading(false); // Stop spinner
-    }
-  };
-
-
-  const fetchUserInfo = async () => {
-    const data = await dispatch(userInfoAPIFn());
-
-    if (data?.meta?.requestStatus === 'fulfilled') {
-      setUserInfo(data?.payload?.data?.user);
-      console.log('canceled Appointment ', data);
-    }
-    if (data?.meta?.requestStatus === 'rejected') {
-      console.log('failer', data);
-    }
-  };
-
-  const fetchActiveSubscription = async () => {
-    const data = await dispatch(stripeActiveSubscriptionsAPIFn());
-    if (data?.meta?.requestStatus === 'fulfilled') {
-      console.log('Active subscription:', data);
-      setActivePlan(data?.payload?.data);
-      // You can handle active subscription data here if needed
-    }
-    if (data?.meta?.requestStatus === 'rejected') {
-      console.log('failer', data);
-    }
-  };
-
-  const fetchPlans = async () => {
-    const data = await dispatch(stripeFetchPlansAPIFn());
-    if (data?.meta?.requestStatus === 'fulfilled') {
-      setPlans(data.payload?.data?.plans || []);
-    }
-    if (data?.meta?.requestStatus === 'rejected') {
-      console.log('failer', data);
     }
   };
 
@@ -147,10 +112,6 @@ const Overview = () => {
     fetchAllData();
   }, []);
 
-
-
-
-
   return (
     <div className='grid md:grid-cols-10 grid-cols-1 gap-10'>
       <div className='md:col-span-6 col-span-full'>
@@ -171,7 +132,7 @@ const Overview = () => {
       <div className='md:col-span-4 col-span-full flex flex-col gap-4 p-4 bg-[#F5F5F7] rounded-4xl'>
         <BookedAppointments data={todayBookings} title='Booked Appointments' loading={loading} />
         <CustomCalendar full={true} />
-        <MembersList />
+       { !userInfo.parentId && <MembersList /> }
       </div>
     </div>
   );

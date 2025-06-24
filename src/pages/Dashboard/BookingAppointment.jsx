@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FiEdit, FiCalendar, FiCreditCard, FiUpload, FiFile, FiX } from "react-icons/fi";
-import { RiEditLine } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
 import YearSelector from "../CarFillPage/Components/YearSelector";
 import MakeSelector from "../CarFillPage/Components/MakeSelector";
@@ -15,7 +14,7 @@ const BookingAppointment = () => {
     const dispatch = useDispatch();
     const [showPopup, setShowPopup] = useState(false);
 
-    const { animation, setAnimation } = useContext(AuthContext);
+    const { animation, setAnimation, brandOptions, wrapColors  } = useContext(AuthContext);
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedYear, setSelectedYear] = useState('');
@@ -29,6 +28,7 @@ const BookingAppointment = () => {
         email: '',
         phone: '',
         bookingDate: '',
+        bookingTime: '',
         completionDate: '',
         vipStatus: '',
         repeatCustomer: '',
@@ -45,21 +45,7 @@ const BookingAppointment = () => {
     });
 
 
-    const brandOptions = [
-        "3M", "Avery Dennison", "Oracal (Orafol)", "KPMF (Kay Premium Marking Films)", "Hexis",
-        "Inozetek", "Arlon", "APA America (APA Spa)", "TeckWrap", "VViViD Vinyl",
-        "Rwraps (Rvinyl)", "SOTT", "CheetahWrap", "PremiumTech", "Metro Wrap (by Metro Restyling)",
-        "FEELISONG", "Icarus Wraps", "NDFOS", "TactiColor", "G-SWELL"
-    ];
-    const wrapColors = {
-        '3M': [
-            { name: "Gloss Black (G12)", colorCode: "#000000" },
-            { name: "Gloss White (G10)", colorCode: "#FFFFFF" },
-            { name: "Gloss Hot Rod Red (G13)", colorCode: "#C8102E" },
-            { name: "Gloss Burnt Orange (G14)", colorCode: "#BF5700" }
-        ],
-        // Add other brand color options here
-    };
+   
     const handleFileChange = (e) => {
         if (e.target.files.length) {
             setSelectedFile(e.target.files[0]);
@@ -69,7 +55,7 @@ const BookingAppointment = () => {
     const removeFile = () => setSelectedFile(null);
 
     const handleSubmit = async (e, isQuoted) => {
-        console.log("booking ");
+        // console.log("booking ");
         e.preventDefault();
         setAnimation(true);
         if (isQuoted) {
@@ -81,6 +67,7 @@ const BookingAppointment = () => {
             email: formState.email,
             phone: formState.phone,
             bookingDate: formState.bookingDate,
+            checkInTime: formState.bookingTime,
             completionDate: formState.completionDate,
             year: selectedYear,
             make: selectedMake,
@@ -109,10 +96,9 @@ const BookingAppointment = () => {
                 if (isQuoted) {
                     setShowPopup(true); // Show popup now, navigate later
                 } else {
-                    // alert("Booking updated successfully!");
+
                     navigate('/appointment');
                 }
-                // navigate('/appointment');
             } else {
                 alert('Booking submission failed.');
             }
@@ -131,7 +117,7 @@ const BookingAppointment = () => {
                 <div className='absolute w-full  top-0 left-0 bg-[#000000d2] flex justify-center h-screen items-center'>
                     <img src={loaderGif} alt='Loading...' className='w-36' />
                 </div>
-             )} 
+            )}
             <div className="max-w-7xl mx-auto space-y-8">
                 {/* Top section with 2 columns */}
                 <div className="grid md:grid-cols-2 grid-cols-1">
@@ -189,7 +175,7 @@ const BookingAppointment = () => {
                         {/* Dealership */}
                         <div>
                             <label htmlFor="Dealership" className="block mb-2 font-medium text-gray-700">
-                                Dealership Type
+                                Customer
                             </label>
                             <select
                                 id="Dealership"
@@ -262,8 +248,7 @@ const BookingAppointment = () => {
                     </div>
 
                     {/* Row 2 */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
                             <label htmlFor="phone" className="block labelStyle">
                                 Phone Number
@@ -289,6 +274,19 @@ const BookingAppointment = () => {
                                 value={formState.bookingDate}
                                 onChange={(e) => setFormState(prev => ({ ...prev, bookingDate: e.target.value }))}
                                 name="bookingDate"
+                                className="inputStyle  w-full"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="bookingTime" className="block labelStyle">
+                                Booking Time
+                            </label>
+                            <input
+                                type="time"
+                                id="bookingTime"
+                                value={formState.bookingTime}
+                                onChange={(e) => setFormState(prev => ({ ...prev, bookingTime: e.target.value }))}
+                                name="bookingTime"
                                 className="inputStyle  w-full"
                             />
                         </div>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { completedAppointmentAPIFn } from '../../redux/features/booking/bookingFus';
+import { useNavigate } from 'react-router-dom';
 
 const Customers = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [customers, setCustomers] = useState([]);
 
@@ -28,6 +30,7 @@ const Customers = () => {
           warranty: "-", // Update if warranty logic exists
           type: item.isQuoted ? "Quoted" : "Booked",
           invoice: item._id?.slice(-6).toUpperCase(), // Last 6 of ID as invoice #
+          originalBooking: item
         }));
         setCustomers(formatted);
       } else {
@@ -41,7 +44,7 @@ const Customers = () => {
   useEffect(() => {
     fetchCompletedAppointment();
   }, [])
-  
+
   return (
     <div className="">
       {/* Top Section: Heading + Search */}
@@ -85,7 +88,9 @@ const Customers = () => {
                 )
               )
               .map((c, index) => (
-                <tr key={index} className="border-b border-[#E1E1E1] hover:bg-gray-50">
+                <tr key={index}
+                  onClick={() => navigate('/work-order', { state: { booking: c.originalBooking } })}
+                  className="border-b border-[#E1E1E1] hover:bg-gray-50">
                   <td className="px-4 py-4">{c.date}</td>
                   <td className="px-4 py-4">{c.customer}</td>
                   <td className="px-4 py-4">{c.vehicle}</td>

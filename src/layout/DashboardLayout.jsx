@@ -1,28 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from '../Components/Sidebar';
 import TopNavbar from '../Components/TopNavbar';
 import WelcomeModal from '../Components/WelcomeModal';
+import { AuthContext } from '../context/AuthContext';
 
 
-const DashboardLayout = ({ children }) => {
+const DashboardLayout = ({ children, popup }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
+  const {countLogin, setCountLogin } = useContext(AuthContext);
   useEffect(() => {
     const showWelcome = localStorage.getItem('showWelcome');
     if (showWelcome === 'true') {
       setShowModal(true);
       localStorage.removeItem('showWelcome'); // Remove after showing
+      
     }
   }, []);
 
   const toggleSidebar = (open) => {
     setIsSidebarOpen(open);
   };
-
+  console.log(countLogin);
   return (
     <div className="flex h-screen relative bg-[#12161F]">
-      {showModal && <WelcomeModal onClose={() => setShowModal(false)} />}
+     {countLogin < 1 && <WelcomeModal onClose={() => {setCountLogin(1); setShowModal(false) } } />  } 
       {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 

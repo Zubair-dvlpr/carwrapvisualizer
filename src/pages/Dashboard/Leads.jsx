@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { completedAppointmentAPIFn, quoteSentAppointmentAPIFn } from '../../redux/features/booking/bookingFus';
+import { useNavigate } from 'react-router-dom';
 
 const Leads = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [customers, setCustomers] = useState([]);
 
@@ -28,18 +30,21 @@ const Leads = () => {
           warranty: '-', // Adjust if you have warranty info
           type: item.isQuoted ? 'Quoted' : 'Booked',
           invoice: item._id?.slice(-6).toUpperCase(), // use last 6 of ID as a mock invoice #
+          originalBooking: item
         }));
         setCustomers(formatted);
       } else {
         console.error(`Failed to fetch ${status} appointments`, data);
       }
+
+      if (data?.meta?.requestStatus === 'rejected') {
+        console.error('Failed to fetch appointments', data);
+      }
     } catch (error) {
       console.error(`Error fetching ${status} appointments:`, error);
     }
 
-    if (data?.meta?.requestStatus === 'rejected') {
-      console.error('Failed to fetch appointments', data);
-    }
+
   };
 
 
@@ -82,6 +87,7 @@ const Leads = () => {
             </tr>
           </thead>
           <tbody className="text-sm  text-gray-700">
+        
             {customers
               .filter((c) =>
                 Object.values(c).some((value) =>
@@ -89,7 +95,9 @@ const Leads = () => {
                 )
               )
               .map((c, index) => (
-                <tr key={index} className="border-b border-[#E1E1E1] hover:bg-gray-50">
+                <tr key={index}
+                  onClick={() => navigate('/work-order', { state: { booking: c.originalBooking } })}
+                  className="border-b cursor-pointer border-[#E1E1E1] hover:bg-gray-50">
                   <td className="px-4 py-4">{c.date}</td>
                   <td className="px-4 py-4">{c.customer}</td>
                   <td className="px-4 py-4">{c.vehicle}</td>

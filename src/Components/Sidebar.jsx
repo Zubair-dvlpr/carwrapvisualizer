@@ -36,12 +36,38 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const sidebarRef = useRef(null);
   // const { logout } = useContext(AuthContext);
   const user = useSelector(state => state?.currentUser?.currentUser);
+  const accountType = user?.data?.user?.accountType;
 
   const role = user?.data?.user?.role?.role;
 
   const shopmanRoutes = [...menuItems].filter(item => item.path != "/Subscription")
 
   const dynamicRoutes = role === "shop-man" ? shopmanRoutes : menuItems;
+
+  const excludedShopManPaths = ["/subscription"];
+  const excludedAccountPaths = ["/appointment", "/customers", "/leads"];
+
+  let finalRoutes = menuItems;
+
+  if (role === "shop-man" && accountType === "free") {
+    finalRoutes = menuItems.filter(
+      item =>
+        !excludedShopManPaths.includes(item.path.toLowerCase()) &&
+        !excludedAccountPaths.includes(item.path.toLowerCase())
+    );
+  } else if (role === "shop-man") {
+    finalRoutes = menuItems.filter(
+      item => !excludedShopManPaths.includes(item.path.toLowerCase())
+    );
+  } else if (accountType === "free") {
+    finalRoutes = menuItems.filter(
+      item => !excludedAccountPaths.includes(item.path.toLowerCase())
+    );
+  }
+
+  console.log(
+    finalRoutes
+  )
 
   useEffect(() => {
     const handleClickOutside = event => {
@@ -76,7 +102,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
       {/* Navigation */}
       <nav className='flex-1 p-4 overflow-y-scroll hide-scrollbar space-y-1'>
-        {dynamicRoutes.map(item => (
+        {finalRoutes.map(item => (
           <NavLink
             key={item.path}
             to={item.path}

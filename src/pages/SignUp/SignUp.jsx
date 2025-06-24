@@ -5,10 +5,10 @@ import logo from '../../assets/images/logo.png';
 import loginbg from '../../assets/images/loginbg.webp';
 import loaderGif from '../../assets/loading.gif';
 import { useDispatch } from 'react-redux';
-import { signUpAPIFn } from '../../redux/features/auth/authFns.js';
+import { loginUserAPIFn, signUpAPIFn } from '../../redux/features/auth/authFns.js';
 
 const SignUp = () => {
-  const { animation, setAnimation } = useContext(AuthContext);
+  const { animation, setAnimation, setCountLogin } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     fname: '',
     sname: '',
@@ -39,19 +39,44 @@ const SignUp = () => {
       })
     );
     if (data?.meta?.requestStatus === 'fulfilled') {
-       localStorage.setItem('showWelcome', 'true'); // Set flag
-      navigate('/login'); // Redirect to Dashboard
-      setAnimation(false); // Stop loading
+      localStorage.setItem('showWelcome', 'true'); // Set flag
+
+
+      try {
+        const data = await dispatch(
+          loginUserAPIFn({
+            email: formData.email,
+            password: formData.password
+          })
+        );
+
+        if (data?.meta?.requestStatus === 'fulfilled') {
+          // Check if 'welcomeShown' already exists
+          const alreadyWelcomed = localStorage.getItem('welcomeShown');
+          setCountLogin(data?.payload?.data?.user?.loginCount)
+          if (!alreadyWelcomed) {
+            localStorage.setItem('showWelcome', 'true');
+            localStorage.setItem('welcomeShown', 'true'); // So it doesn't show again
+          }
+          navigate('/dashboard');
+        } else if (data?.meta?.requestStatus === 'rejected') {
+          setError(data?.payload || 'Login failed'); // <- Show server error message
+        }
+      } catch (err) {
+        setError('Something went wrong. Please try again.');
+      } finally {
+        setAnimation(false);
+      }
+
     }
     if (data?.meta?.requestStatus === 'rejected') {
-      setError(err);
+      setError(data?.payload);
+      console.error(data?.payload)
       setAnimation(false); // Stop loading
     }
+
   };
 
-  const handleGoogleSignUp = () => {
-    alert('Google Sign Up Feature Coming Soon!');
-  };
 
   return (
     <>

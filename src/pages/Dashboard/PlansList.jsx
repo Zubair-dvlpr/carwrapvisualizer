@@ -9,6 +9,7 @@ const PlansList = ({ location }) => {
   const dispatch = useDispatch();
 
   const [plans, setPlans] = useState([]);
+  const [addon, setAddon] = useState([]);
   const [loadingPlans, setLoadingPlans] = useState(true);
   const [loadingSubscription, setLoadingSubscription] = useState(true);
   const [error, setError] = useState(null);
@@ -17,14 +18,14 @@ const PlansList = ({ location }) => {
 
   // Dummy descriptions per plan id
   const planDescriptions = {
-    price_1RQY8r05VZZMHB0BVeUPJ46Y: "For small shops just starting out or with light needs.",
-    price_1RQY8R05VZZMHB0BfxC6pdwl: "Start with a first step",
-    price_1RQY7k05VZZMHB0BVaVvwJBT: "Designed for high-volume shops, chains, or white-label partners.",
+    price_1RbMmgP4XyjYmRGvOnUmwVjl: "For small shops just starting out or with light needs.",
+    price_1RbMnLP4XyjYmRGv3I0cTBjT: "Built for shops growing rapidly and growing needs.",
+    price_1RbMngP4XyjYmRGvkXnwEeJ8: "Designed for high-volume shops, chains, or white-label partners.",
   };
 
   // Dummy features list per plan id
   const planFeatures = {
-    price_1RQY8r05VZZMHB0BVeUPJ46Y: [
+    price_1RbMmgP4XyjYmRGvOnUmwVjl: [
       "250 wrap generations/month",
       "All vehicles (1990–2026), all makes & models",
       "Finishes: Gloss, Satin, Matte, Carbon Fibre, Brushed Metal",
@@ -34,7 +35,7 @@ const PlansList = ({ location }) => {
       "Lead Generation: Invite unlimited customers Customers can preview up to 2 designs Customers can book appointments after selecting a color",
       "Add-On: Purchase additional images at a discounted rate (up to 250 extra images/month)",
     ],
-    price_1RQY8R05VZZMHB0BfxC6pdwl: [
+    price_1RbMnLP4XyjYmRGv3I0cTBjT: [
       "1000 wrap generations/month",
       "All features from Basic",
       "2 seats/user logins",
@@ -44,7 +45,7 @@ const PlansList = ({ location }) => {
       "Add-On: Purchase additional images at a discounted rate (up to 600 extra images/month)",
       "Tints",
     ],
-    price_1RQY7k05VZZMHB0BVaVvwJBT: [
+    price_1RbMngP4XyjYmRGvkXnwEeJ8: [
       "2,500 wrap generations/month",
       "All features from Pro",
       "5 seats/user logins",
@@ -64,7 +65,11 @@ const PlansList = ({ location }) => {
     try {
       const data = await dispatch(stripeFetchPlansAPIFn());
       if (data?.meta?.requestStatus === "fulfilled") {
-        setPlans(data.payload?.data?.plans || []);
+        const stripePlans = data.payload?.data?.plans
+        const addonPlan = stripePlans.filter(plan => plan.name == 'Shop Management Tool')
+        const otherPlans = stripePlans.filter(plan => plan.name !== 'Shop Management Tool');
+        setPlans(otherPlans || []);
+        setAddon(addonPlan || []);
       } else {
         setError("Failed to load plans.");
         console.error("Failed to fetch plans", data);
@@ -75,6 +80,9 @@ const PlansList = ({ location }) => {
     } finally {
       setLoadingPlans(false);
     }
+
+
+
   };
 
   const fetchActiveSubscription = async () => {
@@ -102,6 +110,7 @@ const PlansList = ({ location }) => {
     fetchPlans();
     fetchActiveSubscription();
   }, []);
+
 
   const handleSubscribe = async (plan) => {
     setProcessingPlanId(plan.id);
@@ -151,9 +160,9 @@ const PlansList = ({ location }) => {
   ];
 
   if (loadingPlans || loadingSubscription) return <div className="text-center py-8">
-                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#EB227C] border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
-                    <div className="text-sm text-gray-500 mt-2">Loading Plans</div>
-                </div>;
+    <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#EB227C] border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+    <div className="text-sm text-gray-500 mt-2">Loading Plans</div>
+  </div>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
@@ -173,25 +182,17 @@ const PlansList = ({ location }) => {
             const price = priceObj?.unit_amount;
             const currency = priceObj?.currency?.toUpperCase();
             const interval = priceObj?.recurring?.interval || "one-time";
-            
+
             return (
               <div
                 key={plan.id}
-                className={`plan-card p-4 rounded-lg ${plan?.default_price === activePlan?.priceId ? 'opacity-35' : 'opacity-100'} flex flex-col justify-between hover:shadow-2xl transition-shadow duration-300`}
-                style={{
-                  backgroundColor: location === "home" ? "transparent" : "#fff",
-                  color: location === "home" ? "#fff" : "#000",
-                  ...(isSecondPlan && plan.images?.length
-                    ? {
-                        backgroundImage: `url(${ultimateplanbg})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        color: "#fff",
-                      }
-                    : {}),
-                }}
+                className={`plan-card p-4 bg-cover bg-center rounded-lg ${plan?.default_price === activePlan?.priceId ? 'opacity-35' : 'opacity-100'} flex flex-col justify-between hover:shadow-2xl transition-shadow duration-300`}
+                style={plan.name === "Ultimate Plan"
+                  ? { backgroundImage: `url(${ultimateplanbg})`, color: "white" }
+                  : { backgroundColor: 'transparent' }
+                }
               >
-              
+
                 <div>
                   {/* Plan Name */}
                   <h3 className="text-xl font-bold mb-3">{plan.name}</h3>
@@ -207,13 +208,12 @@ const PlansList = ({ location }) => {
                     {features.map((feature, i) => (
                       <li key={i} className="flex items-start">
                         <IoIosCheckmarkCircle
-                          className={`mr-2 mt-1.5 text-base flex-shrink-0 ${
-                            isSecondPlan
-                              ? "text-white"
-                              : location === "home"
+                          className={`mr-2 mt-1.5 text-base flex-shrink-0 ${plan.name === "Ultimate Plan"
+                            ? "text-white"
+                            : location === "home"
                               ? "text-white"
                               : "text-black"
-                          }`}
+                            }`}
                         />
                         <span>{feature}</span>
                       </li>
@@ -232,7 +232,7 @@ const PlansList = ({ location }) => {
                   {/* Subscribe Button */}
                   <button
                     onClick={() => handleSubscribe(plan)}
-                    
+
                     disabled={processingPlanId === plan.id}
                     className={`w-full ${plan?.default_price === activePlan?.priceId ? 'cursor-no-drop pointer-events-none' : 'cursor-pointer pointer-events-auto'} py-3 rounded font-semibold  bg-[#ED217B] hover:brightness-110 hover:scale-105 text-white transition disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
@@ -245,33 +245,59 @@ const PlansList = ({ location }) => {
       </div>
 
       <section
-        className="flex flex-col md:flex-row mt-3 items-stretch text-white bg-center bg-no-repeat bg-cover rounded-2xl justify-center w-full mx-auto py-12 px-4 gap-4"
+        className=" mt-3  text-white bg-center bg-no-repeat bg-cover rounded-2xl  w-full mx-auto py-12 px-4 gap-4"
         style={{ backgroundImage: `url(${pricebelowSection})` }}
       >
-        {/* Wrapflow Features */}
-        <div className="w-full md:w-1/2">
-          <h3 className="text-2xl font-bold mb-4">Wrapflow</h3>
-          <ul className="space-y-3 text-base">
-            {Wrapflow.map((feature, i) => (
-              <li key={i} className="flex items-center">
-                <IoIosCheckmarkCircle className="text-white mr-3" />
-                {feature}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <div className='flex flex-col md:flex-row items-stretch justify-center'>
+          {/* Wrapflow Features */}
+          <div className="w-full md:w-1/2">
+            <h3 className="text-2xl font-bold mb-4">Wrapflow</h3>
+            <ul className="space-y-3 text-base">
+              {Wrapflow.map((feature, i) => (
+                <li key={i} className="flex items-center">
+                  <IoIosCheckmarkCircle className="text-white mr-3" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        {/* Ultimate Plans Features */}
-        <div className="w-full md:w-1/2">
-          <h3 className="text-2xl font-bold mb-4">Ultimate Plans</h3>
-          <ul className="space-y-3 text-base">
-            {Ultimateplans.map((feature, i) => (
-              <li key={i} className="flex items-center">
-                <IoIosCheckmarkCircle className="text-white mr-3" />
-                {feature}
-              </li>
-            ))}
-          </ul>
+          {/* Ultimate Plans Features */}
+          <div className="w-full md:w-1/2">
+            <h3 className="text-2xl font-bold mb-4">Ultimate Plans</h3>
+            <ul className="space-y-3 text-base">
+              {Ultimateplans.map((feature, i) => (
+                <li key={i} className="flex items-center">
+                  <IoIosCheckmarkCircle className="text-white mr-3" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        {console.log(addon)}
+        {/* Add-ons Button */}
+        <div className="w-full mt-8 flex justify-center">
+          {addon.map((plan, index) => {
+            const priceObj = Array.isArray(plan.prices)
+              ? plan.prices[0]
+              : plan.prices;
+            const price = priceObj?.unit_amount;
+            const currency = priceObj?.currency?.toUpperCase();
+            const interval = priceObj?.recurring?.interval || "one-time";
+            return (
+              <button
+                key={index}
+                onClick={() => handleSubscribe(plan)}
+                disabled={processingPlanId === plan.id}
+                className="bg-[#ED217B] hover:bg-pink-700 cursor-pointer text-white font-semibold px-9 py-4 rounded-full transition">
+                Add-ons – {price !== undefined
+                  ? `$${(price / 100).toFixed(2)} ${currency} / ${interval}`
+                  : "Contact us for pricing"}
+              </button>
+            )
+          })}
+
         </div>
       </section>
     </>

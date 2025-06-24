@@ -19,7 +19,7 @@ const SucessfullUrl = () => {
         });
         const data = await res.json();
         if (data.success) {
-          console.log('Credits updated, active plan:', data.plan_id);
+          // console.log('Credits updated, active plan:', data.plan_id);
           navigate('/dashboard'); // yahan redirect ho jayega
         } else {
           console.error('Failed to update credits:', data.message);

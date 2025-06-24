@@ -5,11 +5,15 @@ import AuthProvider from './context/AuthContext'; // Ensure Correct Path
 import Router from './router';
 
 function App() {
+
   return (
     <>
+   
       <BrowserRouter>
+      
         <AuthProvider>
           {/* <ViewRoutes /> */}
+          
           <Router />
         </AuthProvider>
       </BrowserRouter>

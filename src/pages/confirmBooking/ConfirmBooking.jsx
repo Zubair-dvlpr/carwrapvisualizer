@@ -117,14 +117,15 @@ const ConfirmBooking = () => {
           <p className='text-white text-lg'>Booking Already {bookingData?.status}</p>
         ) : (
           <>
+          {console.log(bookingData)}
             <button
-              onClick={() => upateBookingStatus('accepted')}
+              onClick={() => updateBookingStatus('accepted')}
               className='bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 cursor-pointer'
             >
               Accept
             </button>
             <button
-              onClick={() => upateBookingStatus('cancelled')}
+              onClick={() => updateBookingStatus('cancelled')}
               className='bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 cursor-pointer'
             >
               Reject

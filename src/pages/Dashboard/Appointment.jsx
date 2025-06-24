@@ -44,7 +44,7 @@ const Appointment = () => {
             const data = await dispatch(tomorrowAppointmentAPIFn({ isTomorrow: true }));
             if (data?.meta?.requestStatus === 'fulfilled') {
                 setTomorrowBookings(data.payload.data);
-                console.log("✅ Tomorrow's Appointments:", data.payload.data);
+                // console.log("✅ Tomorrow's Appointments:", data.payload.data);
             } else {
                 console.error("❌ Failed to fetch tomorrow's appointments:", data);
                 // alert('Failed to fetch tomorrow’s appointments.');

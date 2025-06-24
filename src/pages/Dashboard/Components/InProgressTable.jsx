@@ -24,22 +24,33 @@ const InProgressTable = () => {
             );
 
             if (data?.meta?.requestStatus === 'fulfilled') {
+                console.log("in process", data)
                 const formattedData = (data?.payload?.data || []).map((booking) => {
+
                     const totalCost =
                         Number(booking?.price || 0) +
                         Number(booking?.ppfCost || 0) +
                         Number(booking?.decalsCost || 0) +
                         Number(booking?.windowTintingCost || 0);
-
+                    const time = new Date(booking.completionDate).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                    })
+                    console.log(time);
                     return {
                         date: new Date(booking.bookingDate).toISOString().split('T')[0],
                         customer: `${booking.firstName} ${booking.lastName}`,
                         vehicle: `${booking.make} ${booking.model}`,
                         deliveryDate: new Date(booking.completionDate).toISOString().split('T')[0],
-                        time: new Date(booking.completionDate).toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                        }),
+                        time: (() => {
+                            const date = new Date(booking.checkInTime);
+                            return isNaN(date.getTime())
+                                ? 'Time Not Selected'
+                                : date.toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                });
+                        })(),
                         cost: `$${totalCost.toFixed(2)}`,
                         originalBooking: booking
                     };
@@ -145,6 +156,7 @@ const InProgressTable = () => {
                                             navigate('/work-order', { state: { booking: wrap.originalBooking } })
                                         }
                                     >
+                                        {/* {console.log(wrap.time)} */}
                                         <td className="px-4 py-3">{wrap.date}</td>
                                         <td className="px-4 py-3">{wrap.customer}</td>
                                         <td className="px-4 py-3">{wrap.vehicle}</td>

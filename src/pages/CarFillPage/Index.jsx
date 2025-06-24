@@ -15,7 +15,7 @@ import loaderGif from '../../assets/loading.gif';
 import { useDispatch } from 'react-redux';
 import { generateCarImageAPIFn } from '../../redux/features/Studio/studioFus';
 const CarFillPage = ({ bg }) => {
-  console.log(bg)
+  // console.log(bg)
   const { user, domain } = useContext(AuthContext);
   const dispatch = useDispatch();
   const wrapFilmColors = {

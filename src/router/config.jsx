@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux';
 import DashboardLayout from '../layout/DashboardLayout';
 import DefaultLayout from '../Layout/DefaultLayout';
 import CarFillPage from '../pages/CarFillPage/Index';
@@ -18,15 +19,20 @@ import WorkOrder from '../pages/Dashboard/WorkOrder';
 import ErrorPage from '../pages/Error';
 import Home from '../pages/Home';
 import Login from '../pages/Login/Login';
+import ResetPassword from '../pages/resetPassword/ResetPassword';
 import SignUp from '../pages/SignUp/SignUp';
 import SucessfullUrl from '../pages/SucessfullUrl';
+import { userInfoAPIFn } from '../redux/features/auth/authFns';
+
+
+
 
 export const privateRoutes = [
   {
     path: '/dashboard',
     moduleName: 'Overview',
     element: (
-      <DashboardLayout>
+      <DashboardLayout >
         <Overview />
       </DashboardLayout>
     ),
@@ -212,6 +218,15 @@ export const commonRoutes = [
     element: (
       <DefaultLayout>
         <Contact />
+      </DefaultLayout>
+    )
+  },
+  {
+    path: '/reset-password',
+    moduleName: 'Reset Password',
+    element: (
+      <DefaultLayout>
+        <ResetPassword />
       </DefaultLayout>
     )
   },

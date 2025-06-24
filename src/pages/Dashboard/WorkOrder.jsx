@@ -12,39 +12,9 @@ import { updateBookingDetailsAPIFn } from '../../redux/features/booking/bookingF
 import { useDispatch } from 'react-redux';
 
 
-const brandOptions = [
-  '3M',
-  'Avery Dennison',
-  'Oracal (Orafol)',
-  'KPMF (Kay Premium Marking Films)',
-  'Hexis',
-  'Inozetek',
-  'Arlon',
-  'APA America (APA Spa)',
-  'TeckWrap',
-  'VViViD Vinyl',
-  'Rwraps (Rvinyl)',
-  'SOTT',
-  'CheetahWrap',
-  'PremiumTech',
-  'Metro Wrap (by Metro Restyling)',
-  'FEELISONG',
-  'Icarus Wraps',
-  'NDFOS',
-  'TactiColor',
-  'G-SWELL'
-];
-const wrapColors = {
-  '3M': [
-    { name: 'Gloss Black (G12)', colorCode: '#000000' },
-    { name: 'Gloss White (G10)', colorCode: '#FFFFFF' },
-    { name: 'Gloss Hot Rod Red (G13)', colorCode: '#C8102E' },
-    { name: 'Gloss Burnt Orange (G14)', colorCode: '#BF5700' }
-  ]
-  // Add other brand color options here
-};
+
 export default function WorkOrder() {
-  const { animation, setAnimation } = useContext(AuthContext);
+  const { animation, setAnimation, brandOptions, wrapColors } = useContext(AuthContext);
   const location = useLocation();
   const booking = location.state?.booking;
   const dispatch = useDispatch();
@@ -85,6 +55,14 @@ export default function WorkOrder() {
     netMaterialRevenue: ''
   });
 
+  function formatTimeForInput(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+
   useEffect(() => {
     if (booking) {
       const formatDate = isoString => {
@@ -103,8 +81,7 @@ export default function WorkOrder() {
         make: booking.make,
         model: booking.model,
         brand: booking.brand,
-        wrapColor: booking.wrap_color,
-        customerQuote: booking.customer_quote,
+        wrapColor: booking.wrapColor,
         price: booking.price || '',
         vipbooking: booking.vipbooking || '',
         repeat_customer: booking.repeat_customer || '',
@@ -125,8 +102,8 @@ export default function WorkOrder() {
         estimatedRolls: booking.estimatedRolls || '',
         estimatedMaterialCost: booking.estimatedMaterialCost || '',
         netMaterialRevenue: booking.netMaterialRevenue || '',
-        customerQuote: booking.customer_quote || '',
-        checkInTime: booking.checkInTime || '',
+        customerQuote: booking.price || '',
+        checkInTime: formatTimeForInput(booking.checkInTime) || '',
         status: booking.status || '',
       }));
 
@@ -137,7 +114,7 @@ export default function WorkOrder() {
 
       // Update local states too:
       setSelectedBrand(booking.brand || '');
-      setSelectedColor(booking.wrap_color || '');
+      setSelectedColor(booking.wrapColor || '');
     }
   }, [booking]);
 
@@ -259,25 +236,25 @@ export default function WorkOrder() {
           {/* Left column */}
           <div className='sm:flex-1 w-full pr-6'>
             <h2 className='text-2xl font-semibold mb-4'>Car Wrap Visualizer™</h2>
-            <div className='max-w-[170px]'>
+            <div className='max-w-[190px]'>
               <label htmlFor='typeOrCustomer' className='block mb-2 font-medium text-gray-700'>
                 Type or Customer
               </label>
               <select
                 id='typeOrCustomer'
+                name='dealership' // ✅ This line is important
                 value={formData.dealership}
                 onChange={handleChange}
                 className='w-full bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF] rounded-md p-2'
               >
-                <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
+                <option value="" className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
                   Dealer
                 </option>
-                <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
-                  Customer
-                </option>
-                <option className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>
-                  Other
-                </option>
+                <option value="Authorized Dealer" className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>Authorized Dealer</option>
+                <option value="Independent Dealer" className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>Independent Dealer</option>
+                <option value="Fleet Account" className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>Fleet Account</option>
+                <option value="Private Seller" className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>Private Seller</option>
+                <option value="Not Applicable" className='bg-[#F6F9FF] focus:outline-0 focus:border focus:border-[#EEF4FF]'>Not Applicable</option>
               </select>
             </div>
           </div>
@@ -299,6 +276,7 @@ export default function WorkOrder() {
               <button
                 type='button'
                 aria-label='Canal Appointment'
+                onClick={() => updateBookingStatus('cancelled')}
                 className='flex flex-col items-center space-x-1'
               >
                 <span className='text-[#111827] font-Lato text-xs leading-6'>Cancel Appointment</span>
@@ -315,7 +293,7 @@ export default function WorkOrder() {
                 <span className='text-[#111827] font-Lato text-xs leading-6'>Credit Used</span>
                 <span className='bg-[#d9d9d963] rounded-[99px] px-4 py-3 mt-1.5 text-[#111827] font-Lato text-xs '>
                   {' '}
-                  8/10{' '}
+                  0/10{' '}
                 </span>
               </button>
             </div>
@@ -435,7 +413,7 @@ export default function WorkOrder() {
                 value={formData.checkInTime}
                 onChange={handleChange}
                 name='checkInTime'
-                className='inputStyle  w-full'
+                className='inputStyle w-full'
               />
             </div>
             <div>

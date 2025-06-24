@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { loginUserAPIFn } from '../../redux/features/auth/authFns.js';
 const Login = () => {
   const dispatch = useDispatch();
-  const { animation, setAnimation } = useContext(AuthContext);
+  const { animation, setAnimation, setCountLogin } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -30,7 +30,7 @@ const Login = () => {
       if (data?.meta?.requestStatus === 'fulfilled') {
         // Check if 'welcomeShown' already exists
         const alreadyWelcomed = localStorage.getItem('welcomeShown');
-
+        setCountLogin(data?.payload?.data?.user?.loginCount)
         if (!alreadyWelcomed) {
           localStorage.setItem('showWelcome', 'true');
           localStorage.setItem('welcomeShown', 'true'); // So it doesn't show again
