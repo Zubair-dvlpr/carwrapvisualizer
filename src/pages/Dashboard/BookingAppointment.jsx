@@ -293,7 +293,7 @@ const BookingAppointment = () => {
 
                         <div>
                             <label htmlFor="completionDate" className="block labelStyle">
-                                Completion Date
+                                Estimated Completion Date
                             </label>
                             <input
                                 type="date"

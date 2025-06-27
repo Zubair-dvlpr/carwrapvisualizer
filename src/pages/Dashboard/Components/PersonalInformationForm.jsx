@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { userUpdateAPIFn } from '../../../redux/features/auth/authFns';
 
 const PersonalInformationForm = ({ userInfo }) => {
   const dispatch = useDispatch();
+  const [countries, setCountries] = useState([]);
+  const [cities, setCities] = useState([]);
+  // Add these new state variables
+  const [loadingCountries, setLoadingCountries] = useState(true);
+  const [loadingCities, setLoadingCities] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     phoneNumber: '',
+    country: '',
     city: '',
-    region: '',
     businessName: '',
     businessAddress: '',
   });
@@ -18,24 +24,83 @@ const PersonalInformationForm = ({ userInfo }) => {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
-  // Prefill form with userInfo on mount/update
+  // Fetch country list on mount
+  useEffect(() => {
+    const fetchCountries = async () => {
+      setLoadingCountries(true);
+      try {
+        const res = await axios.get('https://countriesnow.space/api/v0.1/countries');
+        if (!res.data.error) {
+          setCountries(res.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      } finally {
+        setLoadingCountries(false);
+      }
+    };
+    fetchCountries();
+  }, []);
+
+  // Prefill form with user data
   useEffect(() => {
     if (userInfo) {
-      setFormData({
+      setFormData(prev => ({
+        ...prev,
         firstName: userInfo.firstName || '',
         lastName: userInfo.lastName || '',
         phoneNumber: userInfo.phoneNumber || '',
+        country: userInfo.country || '',
         city: userInfo.city || '',
-        region: userInfo.region || '',
         businessName: userInfo.businessName || '',
         businessAddress: userInfo.businessAddress || '',
-      });
+      }));
+
+      // If user has a country selected, fetch its cities
+      if (userInfo.country) {
+        fetchCities(userInfo.country);
+      }
     }
   }, [userInfo]);
 
-  const handleChange = (e) => {
+  // Fetch cities by country
+  const fetchCities = async (countryName) => {
+    setLoadingCities(true);
+    try {
+      const res = await axios.post(
+        'https://countriesnow.space/api/v0.1/countries/cities',
+        { country: countryName },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      if (!res.data.error) {
+        setCities(res.data.data);
+      } else {
+        setCities([]);
+      }
+    } catch (err) {
+      console.error('Error fetching cities:', err);
+      setCities([]);
+    } finally {
+      setLoadingCities(false);
+    }
+  };
+
+  const handleChange = async (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+
+    if (name === 'country') {
+      setFormData(prev => ({
+        ...prev,
+        country: value,
+        city: '' // reset city
+      }));
+      fetchCities(value);
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -106,30 +171,56 @@ const PersonalInformationForm = ({ userInfo }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
+            <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+            <select
+              name="country"
+              value={formData.country}
               onChange={handleChange}
-              placeholder="Enter your city"
               className="w-full rounded-md p-3 bg-white focus:outline-none focus:ring-2 focus:ring-[#EB227C]"
-            />
+              disabled={loadingCountries}
+            >
+              {loadingCountries ? (
+                <option value="">Loading countries...</option>
+              ) : (
+                <>
+                  <option value="">Select Country</option>
+                  {countries.map((item) => (
+                    <option key={item.iso2} value={item.country}>
+                      {item.country}
+                    </option>
+                  ))}
+                </>
+              )}
+            </select>
+
           </div>
         </div>
 
         {/* Row 3 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Region</label>
-            <input
-              type="text"
-              name="region"
-              value={formData.region}
+            <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+            <select
+              name="city"
+              value={formData.city}
               onChange={handleChange}
-              placeholder="Enter your region"
+              disabled={!cities.length || loadingCities}
               className="w-full rounded-md p-3 bg-white focus:outline-none focus:ring-2 focus:ring-[#EB227C]"
-            />
+            >
+              {loadingCities ? (
+                <option value="">Loading cities...</option>
+              ) : (
+                <>
+                  <option value="">Select City</option>
+                  {cities.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </>
+              )}
+            </select>
+
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
@@ -157,14 +248,14 @@ const PersonalInformationForm = ({ userInfo }) => {
           />
         </div>
 
-        {/* Submit Button */}
+        {/* Submit */}
         <div className="flex justify-center pt-4">
           <button
             type="submit"
             disabled={loading}
             className={`bg-[#EB227C] text-white px-8 py-4 rounded-full transition ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}`}
           >
-            {loading ? 'Updating...' : 'Continue'}
+            {loading ? 'Updating...' : 'Save'}
           </button>
         </div>
       </form>

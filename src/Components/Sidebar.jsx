@@ -37,9 +37,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   // const { logout } = useContext(AuthContext);
   const user = useSelector(state => state?.currentUser?.currentUser);
   const accountType = addon;
-  console.log("context addon",addon);
+  // console.log("context addon",addon);
   const role = user?.data?.user?.role?.role;
-
+  console.log("addon", addon);
   const shopmanRoutes = [...menuItems].filter(item => item.path != "/Subscription")
 
   const dynamicRoutes = role === "shop-man" ? shopmanRoutes : menuItems;

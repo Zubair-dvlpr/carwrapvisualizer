@@ -18,14 +18,14 @@ const PlansList = ({ location }) => {
 
   // Dummy descriptions per plan id
   const planDescriptions = {
-    price_1RbMmgP4XyjYmRGvOnUmwVjl: "For small shops just starting out or with light needs.",
-    price_1RbMnLP4XyjYmRGv3I0cTBjT: "Built for shops growing rapidly and growing needs.",
-    price_1RbMngP4XyjYmRGvkXnwEeJ8: "Designed for high-volume shops, chains, or white-label partners.",
+    price_1Rb4xu07wQI64Hn2uOqCD36v: "For small shops just starting out or with light needs.",
+    price_1RbMc307wQI64Hn2g07zfgq0: "Built for shops growing rapidly and growing needs.",
+    price_1RbMdt07wQI64Hn2YllPmztE: "Designed for high-volume shops, chains, or white-label partners.",
   };
 
   // Dummy features list per plan id
   const planFeatures = {
-    price_1RbMmgP4XyjYmRGvOnUmwVjl: [
+    price_1Rb4xu07wQI64Hn2uOqCD36v: [
       "250 wrap generations/month",
       "All vehicles (1990–2026), all makes & models",
       "Finishes: Gloss, Satin, Matte, Carbon Fibre, Brushed Metal",
@@ -35,7 +35,7 @@ const PlansList = ({ location }) => {
       "Lead Generation: Invite unlimited customers Customers can preview up to 2 designs Customers can book appointments after selecting a color",
       "Add-On: Purchase additional images at a discounted rate (up to 250 extra images/month)",
     ],
-    price_1RbMnLP4XyjYmRGv3I0cTBjT: [
+    price_1RbMc307wQI64Hn2g07zfgq0: [
       "1000 wrap generations/month",
       "All features from Basic",
       "2 seats/user logins",
@@ -45,7 +45,7 @@ const PlansList = ({ location }) => {
       "Add-On: Purchase additional images at a discounted rate (up to 600 extra images/month)",
       "Tints",
     ],
-    price_1RbMngP4XyjYmRGvkXnwEeJ8: [
+    price_1RbMdt07wQI64Hn2YllPmztE: [
       "2,500 wrap generations/month",
       "All features from Pro",
       "5 seats/user logins",

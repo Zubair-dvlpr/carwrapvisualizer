@@ -8,7 +8,7 @@ import { completedAppointmentAPIFn } from '../../../redux/features/booking/booki
 const getCreditsLimit = (planName) => {
   const limits = {
     "Basic Plan": 250,
-    "Ultimate Plan": 1200,
+    "Ultimate Plan": 1000,
     "Pro Plan": 2500,
   };
   return limits[planName] || 5;

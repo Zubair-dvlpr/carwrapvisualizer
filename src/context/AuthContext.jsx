@@ -19,7 +19,43 @@ const AuthProvider = ({ children }) => {
   });
   const [loading, setLoading] = useState(true);
   const [animation, setAnimation] = useState(false);
+  const getTokenFromLocalStorage = () => {
+    try {
+      const root = localStorage.getItem('persist:root');
+      if (!root) return null;
 
+      const parsedRoot = JSON.parse(root);
+      const currentUser = JSON.parse(parsedRoot.currentUser);
+      const token = currentUser?.currentUser?.data?.accessToken;
+
+      return token || null;
+    } catch (err) {
+      console.error('Failed to parse token from localStorage:', err);
+      return null;
+    }
+  };
+
+
+  const fetchUserInfo = async () => {
+    const token = getTokenFromLocalStorage();
+    console.log("token", token)
+    try {
+      const response = await axios.get('https://api.carwrapvisualizer.com/api/v1/auth/user-info', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Cookie: 'connect.sid=s%3AVjqt-nXCB_jyulZh5PP0p9E6QJHi2JaT.lCVb409EHXNtyDgq6txalyN7RyRsdC8uCSfgkBWCSoU'
+        }
+      });
+
+      setUser(response.data);
+      setCredits(response.data.data.user.credits)
+      setAddon(response.data.data.user.accountType)
+      // console.log('context User Info: ', response.data.data.user.credits);
+    } catch (error) {
+      console.error('Failed to fetch user info:', error);
+      // Optionally: navigate('/login') if token is invalid or expired
+    }
+  };
   // Load user from localStorage when the app is reloaded
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -27,6 +63,8 @@ const AuthProvider = ({ children }) => {
       setUser(JSON.parse(storedUser)); // Set user data from localStorage
     }
     setLoading(false); // Stop loading after checking localStorage
+
+    fetchUserInfo();
   }, []);
 
 
@@ -131,6 +169,7 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        fetchUserInfo,
         credits,
         countLogin,
         setCountLogin,

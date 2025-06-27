@@ -14,9 +14,9 @@ import { AuthContext } from '../../context/AuthContext';
 import loaderGif from '../../assets/loading.gif';
 import { useDispatch } from 'react-redux';
 import { generateCarImageAPIFn } from '../../redux/features/Studio/studioFus';
+import { Link } from 'react-router-dom';
 const CarFillPage = ({ bg }) => {
   // console.log(bg)
-  const { user, domain } = useContext(AuthContext);
   const dispatch = useDispatch();
   const wrapFilmColors = {
     Gloss: [
@@ -100,9 +100,10 @@ const CarFillPage = ({ bg }) => {
       logo: avery, // Replace with your path
       colors: wrapFilmColors
     },
-    
+
   ];
-  const { animation, setAnimation } = useContext(AuthContext);
+  const { animation, setAnimation, fetchUserInfo, credits } = useContext(AuthContext);
+  const [showNoCreditsPopup, setShowNoCreditsPopup] = useState(false); // ✅ Popup flag
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedFinish, setSelectedFinish] = useState('');
@@ -115,6 +116,15 @@ const CarFillPage = ({ bg }) => {
   const generateImage = async (year, make, model, finish, color) => {
     try {
       setAnimation(true);
+      // ✅ Fetch latest user info from context
+      await fetchUserInfo();
+
+
+      if (credits <= 0) {
+        setAnimation(false);
+        setShowNoCreditsPopup(true); // ✅ Show popup
+        return;
+      }
       const response = await dispatch(
         generateCarImageAPIFn({
           year,
@@ -132,17 +142,21 @@ const CarFillPage = ({ bg }) => {
         if (!base64Image) throw new Error('Image data not found in response');
 
         const imageUrl = `data:image/png;base64,${base64Image}`;
+
         setAnimation(false);
         return imageUrl;
 
       } else {
         setAnimation(false);
+        // setShowNoCreditsPopup(true); // ✅ Show popup
         throw new Error(response.payload || 'Image generation failed');
       }
     } catch (error) {
       setAnimation(false);
       console.error(error);
       throw error;
+    } finally {
+
     }
   };
 
@@ -182,6 +196,55 @@ const CarFillPage = ({ bg }) => {
           <img src={loaderGif} alt='Loading...' className='w-36' />
         </div>
       )}
+
+      {showNoCreditsPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#000000d8] backdrop-blur-sm ">
+          <div className="bg-[#0b0f1a] text-white rounded-2xl p-6 w-full max-w-md shadow-xl">
+            <div className="flex items-center space-x-2 mb-4">
+              <span className="text-2xl">🚀</span>
+              <h2 className="text-lg font-semibold">You've Used All Your Free Credits</h2>
+            </div>
+
+            <p className="text-sm text-gray-300 mb-4">
+              Start generating wraps, sending quotes, and managing customers with Car Wrap Visualizer
+            </p>
+
+            <p className="text-sm font-semibold text-white mb-2">
+              Plans start at just <span className="text-yellow-400">$79/month</span>
+            </p>
+
+            <div className="flex items-start space-x-2 mb-2">
+              <span className="text-yellow-400 text-xl">➕</span>
+              <p className="text-sm text-gray-300">
+                Add CRM for $49.99/month — automate follow-ups, marketing & warranty tracking
+              </p>
+            </div>
+
+            <div className="flex items-start space-x-2 mb-6">
+              <span className="text-yellow-300 text-xl">💡</span>
+              <p className="text-sm text-gray-300">
+                Show real wraps, close more jobs, and scale your shop — all in one platform.
+              </p>
+            </div>
+
+            <Link
+              to="/Subscription"
+              className="w-full py-3 block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
+            >
+              Join Car Wrap Visualizer™
+            </Link>
+
+            <button
+              onClick={() => setShowNoCreditsPopup(false)}
+              className="mt-4 w-full text-sm text-gray-400 hover:text-gray-200 transition"
+            >
+              Maybe later
+            </button>
+          </div>
+        </div>
+      )}
+
+
       <div className={`flex max-w-7xl mx-auto  ${bg ? 'text-white ' : 'text-black'}  flex-col h-full `}>
         {/* Left Side Image */}
         <div className=' flex flex-col justify-center items-center'>

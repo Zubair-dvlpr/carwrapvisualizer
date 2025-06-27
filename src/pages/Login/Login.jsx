@@ -95,7 +95,7 @@ const Login = () => {
             {error && <p className='text-red-500'>{error}</p>}
             <button
               type='submit'
-              className='w-full cursor-pointer font-[Apercu] mt-6 bg-gradient-to-r from-[#1AE1AB] to-[#712FFF] text-white py-4 rounded-full hover:bg-blue-600'
+              className='w-full cursor-pointer mt-6 bg-gradient-to-r from-[#1AE1AB] to-[#712FFF] text-white py-4 rounded-full hover:bg-blue-600'
             >
               Enter Studio
             </button>
