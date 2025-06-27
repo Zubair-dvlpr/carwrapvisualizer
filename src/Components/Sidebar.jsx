@@ -28,43 +28,40 @@ const menuItems = [
   { name: 'Leads', path: '/leads', icon: Customers },
   // { name: 'Invoices', path: '/Invoices', icon: Invoices },
   { name: 'Help', path: '/Help', icon: Help },
-  { name: 'Settings', path: '/Settings', icon: Settings },
+  { name: 'Settings', path: '/Settings', icon: Settings }
 ];
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
- const { addon } = useContext(AuthContext);
+  //  const { addon } = useContext(AuthContext);
   const sidebarRef = useRef(null);
   // const { logout } = useContext(AuthContext);
   const user = useSelector(state => state?.currentUser?.currentUser);
-  const accountType = addon;
+  console.log('user', user);
+  const accountType = user?.data?.user?.accountType;
+  console.log('accountType', accountType);
   // console.log("context addon",addon);
   const role = user?.data?.user?.role?.role;
-  console.log("addon", addon);
-  const shopmanRoutes = [...menuItems].filter(item => item.path != "/Subscription")
 
-  const dynamicRoutes = role === "shop-man" ? shopmanRoutes : menuItems;
+  const shopmanRoutes = [...menuItems].filter(item => item.path != '/Subscription');
 
-  const excludedShopManPaths = ["/subscription"];
-  const excludedAccountPaths = ["/appointment", "/customers", "/leads"];
+  const dynamicRoutes = role === 'shop-man' ? shopmanRoutes : menuItems;
+
+  const excludedShopManPaths = ['/subscription'];
+  const excludedAccountPaths = ['/appointment', '/customers', '/leads'];
 
   let finalRoutes = menuItems;
 
-  if (role === "shop-man" && accountType === "free") {
+  if (role === 'shop-man' && accountType === 'free') {
     finalRoutes = menuItems.filter(
       item =>
         !excludedShopManPaths.includes(item.path.toLowerCase()) &&
         !excludedAccountPaths.includes(item.path.toLowerCase())
     );
-  } else if (role === "shop-man") {
-    finalRoutes = menuItems.filter(
-      item => !excludedShopManPaths.includes(item.path.toLowerCase())
-    );
-  } else if (accountType === "free") {
-    finalRoutes = menuItems.filter(
-      item => !excludedAccountPaths.includes(item.path.toLowerCase())
-    );
+  } else if (role === 'shop-man') {
+    finalRoutes = menuItems.filter(item => !excludedShopManPaths.includes(item.path.toLowerCase()));
+  } else if (accountType === 'free') {
+    finalRoutes = menuItems.filter(item => !excludedAccountPaths.includes(item.path.toLowerCase()));
   }
-
 
   useEffect(() => {
     const handleClickOutside = event => {
@@ -82,13 +79,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <div
       ref={sidebarRef}
-      className={`fixed top-0 left-0 h-screen w-64 bg-[#12161F]  text-white flex flex-col transform ${isOpen ? 'translate-x-0 z-20' : '-translate-x-full'
-        } transition-transform duration-300 ease-in-out md:translate-x-0 md:static`}
+      className={`fixed top-0 left-0 h-screen w-64 bg-[#12161F]  text-white flex flex-col transform ${
+        isOpen ? 'translate-x-0 z-20' : '-translate-x-full'
+      } transition-transform duration-300 ease-in-out md:translate-x-0 md:static`}
     >
       {/* Header */}
       <div
-        className={`p-4 flex ${isOpen ? 'justify-between' : 'justify-center'
-          } h-[92px] items-center`}
+        className={`p-4 flex ${
+          isOpen ? 'justify-between' : 'justify-center'
+        } h-[92px] items-center`}
       >
         {/* <h2 className="text-white font-Inter text-4xl uppercase font-extrabold">LOGO</h2> */}
         <img src={logo} alt='' className='max-w-42' />
@@ -104,7 +103,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center p-4 rounded-full transition-all ${isActive ? 'text-white bg-[#ED217B]' : 'hover:bg-[#ED217B]'
+              `flex items-center p-4 rounded-full transition-all ${
+                isActive ? 'text-white bg-[#ED217B]' : 'hover:bg-[#ED217B]'
               }`
             }
           >

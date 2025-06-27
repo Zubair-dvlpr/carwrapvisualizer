@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loginUserAPIFn} from './authFns';
+import { loginUserAPIFn } from './authFns';
 import { PURGE } from 'redux-persist';
 // Initial State
 const initialState = {
@@ -15,6 +15,12 @@ export const currentUserSlice = createSlice({
   reducers: {
     logout: state => {
       state.currentUser = null;
+    },
+    updateUser: (state, action) => {
+      console.log('action.payload', action.payload);
+      console.log('action. state.currentUser.user', state.currentUser);
+      state.currentUser.data.user.accountType = action.payload?.accountType;
+      state.currentUser.data.user.addonInfo = action.payload?.addon;
     }
   },
   extraReducers: builder => {
@@ -43,6 +49,6 @@ export const currentUserSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { logout } = currentUserSlice.actions;
+export const { logout, updateUser } = currentUserSlice.actions;
 
 export default currentUserSlice.reducer;

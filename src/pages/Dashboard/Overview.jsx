@@ -19,11 +19,12 @@ import {
 import { userInfoAPIFn } from '../../redux/features/auth/authFns';
 import InProgressTable from './Components/InProgressTable';
 import { AuthContext } from '../../context/AuthContext';
+import { updateUser } from '../../redux/features/auth/authSlice';
 
 const Overview = () => {
   const dispatch = useDispatch();
   const [todayBookings, setTodayBookings] = useState([]);
-    const { setAddon } = useContext(AuthContext);
+  // const { setAddon } = useContext(AuthContext);
   const [params, setParams] = useSearchParams();
   const sessionId = params.get('session_id');
   const [loading, setLoading] = useState(true); // For spinner
@@ -41,7 +42,17 @@ const Overview = () => {
     if (data?.meta?.requestStatus === 'fulfilled') {
       // setPlans(data)
       // console.log('sucess active plan', data);
+      const info = await dispatch(userInfoAPIFn());
+      if (info?.meta?.requestStatus === 'fulfilled') {
+        await dispatch(
+          updateUser({
+            accountType: info?.payload?.data?.user?.accountType,
+            addon: info?.payload?.data?.user?.addonInfo
+          })
+        );
+      }
       setParams({});
+      // window.location.reload();
     }
     if (data?.meta?.requestStatus === 'rejected') {
       console.log('failer', data);
@@ -54,7 +65,7 @@ const Overview = () => {
     try {
       const data = await dispatch(
         todayAppointmentAPIFn({
-          isToday: true,
+          isToday: true
         })
       );
 
@@ -78,12 +89,13 @@ const Overview = () => {
         const [userRes, planRes, subRes] = await Promise.all([
           dispatch(userInfoAPIFn()),
           dispatch(stripeFetchPlansAPIFn()),
-          dispatch(stripeActiveSubscriptionsAPIFn()),
+          dispatch(stripeActiveSubscriptionsAPIFn())
         ]);
 
         if (userRes?.meta?.requestStatus === 'fulfilled') {
+          console.log('userRes', userRes);
           setUserInfo(userRes?.payload?.data?.user);
-          setAddon(userRes?.payload?.data?.user.accountType)
+          // setAddon(userRes?.payload?.data?.user.accountType);
         } else {
           console.error('User info fetch failed:', userRes);
         }
@@ -118,7 +130,9 @@ const Overview = () => {
   return (
     <div className='grid md:grid-cols-10 grid-cols-1 gap-10'>
       <div className='md:col-span-6 col-span-full'>
-        <h3 className='text-2xl font-semibold leading-9 text-[#2C2C2C] capitalize'>Hi, {userInfo?.firstName} {userInfo?.lastName}</h3>
+        <h3 className='text-2xl font-semibold leading-9 text-[#2C2C2C] capitalize'>
+          Hi, {userInfo?.firstName} {userInfo?.lastName}
+        </h3>
         <p className='text-[#858585] mt-2.5 text-[12px] max-w-[516px]'>
           Welcome to the Car Wrap Visualizer™ — Streamline your vehicle branding: design, preview,
           and approve wraps with precision.
@@ -135,7 +149,7 @@ const Overview = () => {
       <div className='md:col-span-4 col-span-full flex flex-col gap-4 p-4 bg-[#F5F5F7] rounded-4xl'>
         <BookedAppointments data={todayBookings} title='Booked Appointments' loading={loading} />
         <CustomCalendar full={true} />
-       { !userInfo.parentId && <MembersList /> }
+        {!userInfo.parentId && <MembersList />}
       </div>
     </div>
   );
