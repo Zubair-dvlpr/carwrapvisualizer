@@ -36,9 +36,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const sidebarRef = useRef(null);
   // const { logout } = useContext(AuthContext);
   const user = useSelector(state => state?.currentUser?.currentUser);
-  console.log('user', user);
+  // console.log('user', user);
   const accountType = user?.data?.user?.accountType;
-  console.log('accountType', accountType);
+  // console.log('accountType', accountType);
   // console.log("context addon",addon);
   const role = user?.data?.user?.role?.role;
 

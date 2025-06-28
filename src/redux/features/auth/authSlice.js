@@ -17,8 +17,8 @@ export const currentUserSlice = createSlice({
       state.currentUser = null;
     },
     updateUser: (state, action) => {
-      console.log('action.payload', action.payload);
-      console.log('action. state.currentUser.user', state.currentUser);
+      // console.log('action.payload', action.payload);
+      // console.log('action. state.currentUser.user', state.currentUser);
       state.currentUser.data.user.accountType = action.payload?.accountType;
       state.currentUser.data.user.addonInfo = action.payload?.addon;
     }

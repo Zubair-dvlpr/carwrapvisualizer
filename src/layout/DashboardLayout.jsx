@@ -21,7 +21,7 @@ const DashboardLayout = ({ children, popup }) => {
   const toggleSidebar = (open) => {
     setIsSidebarOpen(open);
   };
-  console.log(countLogin);
+  // console.log(countLogin);
   return (
     <div className="flex h-screen relative bg-[#12161F]">
      {countLogin < 1 && <WelcomeModal onClose={() => {setCountLogin(1); setShowModal(false) } } />  } 

@@ -95,16 +95,11 @@ const CarFillPage = ({ bg }) => {
       logo: vector, // Replace with your path
       colors: wrapFilmColors
     },
-    {
-      name: 'avery',
-      logo: avery, // Replace with your path
-      colors: wrapFilmColors
-    },
-
   ];
   const { animation, setAnimation, fetchUserInfo, credits } = useContext(AuthContext);
   const [showNoCreditsPopup, setShowNoCreditsPopup] = useState(false); // ✅ Popup flag
   const [selectedBrand, setSelectedBrand] = useState(null);
+  const [showTooManyRequestsPopup, setShowTooManyRequestsPopup] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedFinish, setSelectedFinish] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
@@ -116,15 +111,15 @@ const CarFillPage = ({ bg }) => {
   const generateImage = async (year, make, model, finish, color) => {
     try {
       setAnimation(true);
-      // ✅ Fetch latest user info from context
-      await fetchUserInfo();
 
 
       if (credits <= 0) {
+
         setAnimation(false);
-        setShowNoCreditsPopup(true); // ✅ Show popup
+        setShowNoCreditsPopup(true);
         return;
       }
+
       const response = await dispatch(
         generateCarImageAPIFn({
           year,
@@ -137,28 +132,32 @@ const CarFillPage = ({ bg }) => {
       );
 
       if (response?.meta?.requestStatus === 'fulfilled') {
-        // Extract image URL from the new response structure
-        const base64Image = response.payload?.data?.image?.inlineData?.data;
-        if (!base64Image) throw new Error('Image data not found in response');
+        const imageArray = response.payload?.data?.image || [];
+        const inlineData = imageArray.find((img) => img.inlineData)?.inlineData?.data;
+        console.log("img response ", response.payload)
+        if (!inlineData) {
+          console.log(inlineData);
+          setAnimation(false);
+          setShowTooManyRequestsPopup(true); // ✅ Show the new popup
+          return;
+        }
 
-        const imageUrl = `data:image/png;base64,${base64Image}`;
-
+        const imageUrl = `data:image/png;base64,${inlineData}`;
+        await fetchUserInfo();
         setAnimation(false);
         return imageUrl;
 
       } else {
         setAnimation(false);
-        // setShowNoCreditsPopup(true); // ✅ Show popup
         throw new Error(response.payload || 'Image generation failed');
       }
     } catch (error) {
       setAnimation(false);
       console.error(error);
       throw error;
-    } finally {
-
     }
   };
+
 
   const handleConfirmSelection = async () => {
     try {
@@ -244,13 +243,59 @@ const CarFillPage = ({ bg }) => {
         </div>
       )}
 
+      {showTooManyRequestsPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#000000d8] backdrop-blur-sm">
+          <div className="bg-[#0b0f1a] text-white rounded-2xl p-6 w-full max-w-md shadow-xl">
+            <div className="flex items-center space-x-2 mb-4">
+              <span className="text-2xl">⚠️</span>
+              <h2 className="text-lg font-semibold">Too Many Requests</h2>
+            </div>
+
+            <p className="text-sm text-gray-300 mb-4">
+              We’ve received too many requests from your account. This usually means the system is busy or you’ve just generated an image recently.
+            </p>
+
+            <p className="text-sm font-semibold text-white mb-4">
+              Please wait a few seconds and try again.
+            </p>
+
+            <button
+              onClick={() => setShowTooManyRequestsPopup(false)}
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
+            >
+              Okay, Got It
+            </button>
+
+            <button
+              onClick={() => setShowTooManyRequestsPopup(false)}
+              className="mt-4 w-full text-sm text-gray-400 hover:text-gray-200 transition"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="w-full bg-[#12161F] text-white px-6 py-3 rounded shadow-md mb-6">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
+          <h2 className="text-lg sm:text-xl font-semibold">
+            Available Credits: <span >{credits}</span>
+          </h2>
+          <Link
+            to="/Subscription"
+            className="mt-2 sm:mt-0 text-sm font-semibold bg-[#ED217B] hover:bg-[#ED217B] text-white px-4 py-3 rounded-md transition"
+          >
+            Buy More Credits
+          </Link>
+        </div>
+      </div>
 
       <div className={`flex max-w-7xl mx-auto  ${bg ? 'text-white ' : 'text-black'}  flex-col h-full `}>
         {/* Left Side Image */}
         <div className=' flex flex-col justify-center items-center'>
           <div ref={imageRef} className=''>
             {generatedImage ? (
-              <img src={generatedImage} alt='Generated Car' className='w-full' />
+              <img src={generatedImage} alt='Generated Car' className='w-full rounded' />
             ) : (
               <div className='w-full bg-cover bg-center'>
                 <img src={colorfullcar} alt='Car' className='mx-auto max-w-4xl w-full' />
@@ -294,18 +339,29 @@ const CarFillPage = ({ bg }) => {
             <div className={`mx-auto max-w-4xl ${bg ? "text-white" : "text-black"} py-10 text-center`}>
               <div className='bg-[#2B2C2C]  p-5 rounded-xl'>
                 <h4 className='text-xl text-white text-left mb-4'>Select Wrap Brand</h4>
-                <div className='grid md:grid-cols-5 grid-cols-2 gap-6 mb-8'>
+                <div className='flex justify-center gap-12 mb-8'>
                   {brands.map(brand => (
-                    <img
-                      key={brand.name}
-                      src={brand.logo}
-                      alt={brand.name}
-                      className={`h-16 mx-auto cursor-pointer border-2 rounded-lg p-1 transition ${selectedBrand?.name === brand.name
-                        ? 'border-blue-500'
-                        : 'border-transparent'
-                        }`}
-                      onClick={() => handleBrandClick(brand)}
-                    />
+                    <>
+                      <div key={brand.name} onClick={() => handleBrandClick(brand)} className={`text-white border-2 rounded-lg transition ${brand.name === "vector" ? 'flex': ''} ${selectedBrand?.name === brand.name
+                            ? 'border-blue-500'
+                            : 'border-transparent'
+                            }`}>
+                        <img
+                          key={brand.name}
+                          src={brand.logo}
+                          alt={brand.name}
+                          className={`h-16 mx-auto cursor-pointer  p-1 transition `}
+                          
+                        /> {brand.name === "vector" ? (
+                          <img
+                            src={avery}
+                            alt={brand.name}
+                            className={`h-16 mx-auto cursor-pointer p-1 transition `}
+                            onClick={() => handleBrandClick(brand)}
+                          />
+                        ) : ''}
+                      </div>
+                    </>
                   ))}
                 </div>
               </div>

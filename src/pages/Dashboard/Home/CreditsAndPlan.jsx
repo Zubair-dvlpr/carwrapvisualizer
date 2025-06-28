@@ -4,6 +4,7 @@ import colorfulcarImg from '../../../assets/images/colorful-car-illustration.png
 import creditslabel from '../../../assets/icons/creditslabel.svg';
 import { AuthContext } from '../../../context/AuthContext';
 import { completedAppointmentAPIFn } from '../../../redux/features/booking/bookingFus';
+import Credits from '../../../Components/Credits';
 
 const getCreditsLimit = (planName) => {
   const limits = {
@@ -11,7 +12,7 @@ const getCreditsLimit = (planName) => {
     "Ultimate Plan": 1000,
     "Pro Plan": 2500,
   };
-  return limits[planName] || 5;
+  return limits[planName] || 10;
 };
 
 const CreditsAndPlan = ({ userInfo, activePlan, plans, isLoading }) => {
@@ -49,10 +50,6 @@ const CreditsAndPlan = ({ userInfo, activePlan, plans, isLoading }) => {
                 </h2>
               </>
             )}
-
-
-
-
           </div>
         </div>
         <p className='text-[#8F8F8F] text-[12px] font-medium'>Remaining Credits</p>
