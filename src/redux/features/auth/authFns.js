@@ -18,6 +18,38 @@ export const signUpAPIFn = createAsyncThunk(
   }
 );
 
+// Verify OTP
+export const verifyOtpAPIFn = createAsyncThunk(
+  'auth/verifyOtp',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(endPoints.verifyOtp, {
+        ...values
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.error?.message || 'OTP verification failed');
+    }
+  }
+);
+
+// Resend OTP
+export const resendOtpAPIFn = createAsyncThunk(
+  'auth/resendOtp',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(endPoints.resendOtp, {
+        ...values
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.error?.message || 'Failed to resend OTP');
+    }
+  }
+);
+
+
+
 // Login User API Fn
 export const loginUserAPIFn = createAsyncThunk(
   'auth/loginUser',
@@ -32,7 +64,26 @@ export const loginUserAPIFn = createAsyncThunk(
     }
   }
 );
-// Login User API Fn
+
+
+// Forgot Password Request API Fn
+export const forgotPasswordRequestAPIFn = createAsyncThunk(
+  'auth/forgotPassword',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(endPoints.forgotPasswordRequest, {
+        ...values
+      });
+      return data;
+    } catch (err) {
+      return rejectWithValue(err?.response?.data?.error?.message || 'Error sending reset link');
+    }
+  }
+);
+
+
+
+// info User API Fn
 export const userInfoAPIFn = createAsyncThunk(
   'auth/userInfoAPIFn',
   async (values, { rejectWithValue }) => {

@@ -90,7 +90,7 @@ const Customers = () => {
               .map((c, index) => (
                 <tr key={index}
                   onClick={() => navigate('/work-order', { state: { booking: c.originalBooking } })}
-                  className="border-b border-[#E1E1E1] hover:bg-gray-50">
+                  className="border-b cursor-pointer border-[#E1E1E1] hover:bg-gray-50">
                   <td className="px-4 py-4">{c.date}</td>
                   <td className="px-4 py-4">{c.customer}</td>
                   <td className="px-4 py-4">{c.vehicle}</td>

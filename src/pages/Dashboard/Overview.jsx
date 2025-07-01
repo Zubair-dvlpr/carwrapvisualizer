@@ -1,7 +1,5 @@
 import MyWrap from './Home/MyWraps';
 import CreditsAndPlan from './Home/CreditsAndPlan';
-import BookedAppointments from './Home/BookedAppointments';
-import CustomCalendar from './Home/CustomCalendar';
 import MembersList from './Home/MembersList';
 import { useContext, useEffect, useState } from 'react';
 import {
@@ -9,22 +7,18 @@ import {
   stripeFetchPlansAPIFn,
   stripeVerifySessionAPIFn
 } from '../../redux/features/stripe/stripeFns';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-  canceledAppointmentAPIFn,
-  todayAppointmentAPIFn,
-  tomorrowAppointmentAPIFn
-} from '../../redux/features/booking/bookingFus';
+
 import { userInfoAPIFn } from '../../redux/features/auth/authFns';
 import InProgressTable from './Components/InProgressTable';
 import { AuthContext } from '../../context/AuthContext';
 import { updateUser } from '../../redux/features/auth/authSlice';
 import Userdetails from '../../Components/Userdetails';
+import DateBooking from '../../Components/DateBooking';
 
 const Overview = () => {
   const dispatch = useDispatch();
-  const [todayBookings, setTodayBookings] = useState([]);
   // const { setAddon } = useContext(AuthContext);
   const [params, setParams] = useSearchParams();
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -61,28 +55,6 @@ const Overview = () => {
     }
     if (data?.meta?.requestStatus === 'rejected') {
       console.log('failer', data);
-    }
-  };
-
-  const todayAppointmentfn = async () => {
-    setLoading(true); // Start spinner
-
-    try {
-      const data = await dispatch(
-        todayAppointmentAPIFn({
-          isToday: true
-        })
-      );
-
-      if (data?.meta?.requestStatus === 'fulfilled') {
-        setTodayBookings(data.payload.data); // Load bookings
-      } else {
-        console.log('❌ Failed:', data);
-      }
-    } catch (error) {
-      console.error('⚠️ Error fetching today’s appointments:', error);
-    } finally {
-      setLoading(false); // Stop spinner
     }
   };
 
@@ -127,50 +99,47 @@ const Overview = () => {
     if (sessionId) {
       verifySession();
     }
-
-    todayAppointmentfn();
     fetchAllData();
   }, []);
 
   return (
     <>
       {showSuccessPopup && subscribedPlanData && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center  bg-[#000000d8] backdrop-blur-sm">
-        <div className="bg-[#0b0f1a] text-white p-6 md:p-10 rounded-2xl max-w-lg w-full shadow-2xl">
-          <h2 className="text-2xl font-bold  mb-4">✅ Welcome to Car Wrap Visualizer™</h2>
-          <p className=" mb-4">
-            {/* You’ve successfully subscribed to the <strong>{subscribedPlanData.name}</strong> plan at */}
-            You’ve successfully subscribed to the <strong>Pro Plan</strong> plan at
-            {/* <strong> ${subscribedPlanData.price}</strong>/month. */}
-            <strong> $100</strong>/month.
-          </p>
-          <p className=" mb-4">
-            {/* 🎉 You now have <strong>{subscribedPlanData.credits}</strong> wrap credits to start generating stunning visuals for your customers. */}
-            🎉 You now have <strong>1000</strong> wrap credits to start generating stunning visuals for your customers.
-          </p>
-          <div className="text-left text-sm mb-4">
-            <p>🚀 What you can do now:</p>
-            <ul className="list-disc list-inside ml-2">
-              <li>Generate hyper-realistic vehicle wrap renders</li>
-              <li>Send branded quotes instantly</li>
-              <li>Manage leads, customers, and wrap history in one place</li>
-            </ul>
-            <p className="mt-2">
-              💼 Add CRM anytime for <strong>$49.99/month</strong> — includes follow-up automation, marketing tools, and warranty tracking.
+        <div className="fixed inset-0 z-50 flex items-center justify-center  bg-[#000000d8] backdrop-blur-sm">
+          <div className="bg-[#0b0f1a] text-white p-6 md:p-10 rounded-2xl max-w-lg w-full shadow-2xl">
+            <h2 className="text-2xl font-bold  mb-4">✅ Welcome to Car Wrap Visualizer™</h2>
+            <p className=" mb-4">
+              You’ve successfully subscribed to the <strong>{subscribedPlanData.name}</strong> plan at
+
+              <strong> ${subscribedPlanData.price}</strong>/month.
+
             </p>
-          </div>
-          <p className="text-sm  mb-6">Need help? Contact our support team anytime.</p>
-          <div className='flex justify-center'>
-            <button
-              onClick={() => setShowSuccessPopup(false)}
-              className="bg-pink-600 hover:bg-pink-700 text-white cursor-pointer px-6 py-2 rounded-full transition"
-            >
-              Get Started
-            </button>
+            <p className=" mb-4">
+              🎉 You now have <strong>{subscribedPlanData.credits}</strong> wrap credits to start generating stunning visuals for your customers.
+            </p>
+            <div className="text-left text-sm mb-4">
+              <p>🚀 What you can do now:</p>
+              <ul className="list-disc list-inside ml-2">
+                <li>Generate hyper-realistic vehicle wrap renders</li>
+                <li>Send branded quotes instantly</li>
+                <li>Manage leads, customers, and wrap history in one place</li>
+              </ul>
+              <p className="mt-2">
+                💼 Add CRM anytime for <strong>$49.99/month</strong> — includes follow-up automation, marketing tools, and warranty tracking.
+              </p>
+            </div>
+            <p className="text-sm  mb-6">Need help? Contact our support team anytime.</p>
+            <div className='flex justify-center'>
+              <button
+                onClick={() => setShowSuccessPopup(false)}
+                className="bg-pink-600 hover:bg-pink-700 text-white cursor-pointer px-6 py-2 rounded-full transition"
+              >
+                Get Started
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-     )} 
+      )}
 
       <div className='grid md:grid-cols-10 grid-cols-1 gap-10'>
         <div className='md:col-span-6 col-span-full'>
@@ -189,8 +158,7 @@ const Overview = () => {
           <InProgressTable />
         </div>
         <div className='md:col-span-4 col-span-full flex flex-col gap-4 p-4 bg-[#F5F5F7] rounded-4xl'>
-          <BookedAppointments data={todayBookings} title='Booked Appointments' loading={loading} />
-          <CustomCalendar full={true} />
+          <DateBooking /> 
           {!userInfo.parentId && <MembersList />}
         </div>
       </div>

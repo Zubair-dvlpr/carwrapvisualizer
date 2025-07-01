@@ -28,7 +28,7 @@ const menuItems = [
   { name: 'Leads', path: '/leads', icon: Customers },
   // { name: 'Invoices', path: '/Invoices', icon: Invoices },
   { name: 'Help', path: '/Help', icon: Help },
-  { name: 'Settings', path: '/Settings', icon: Settings }
+  // { name: 'Settings', path: '/Settings', icon: Settings }
 ];
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {

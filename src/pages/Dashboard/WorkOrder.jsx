@@ -400,6 +400,7 @@ export default function WorkOrder() {
                 name='bookingDate'
                 value={formData.bookingDate}
                 onChange={handleChange}
+                min={new Date().toISOString().split("T")[0]}
                 className='inputStyle  w-full'
               />
             </div>
@@ -425,6 +426,7 @@ export default function WorkOrder() {
                 id='completionDate'
                 value={formData.completionDate}
                 onChange={handleChange}
+                min={new Date().toISOString().split("T")[0]}
                 name='completionDate'
                 className='inputStyle  w-full'
               />

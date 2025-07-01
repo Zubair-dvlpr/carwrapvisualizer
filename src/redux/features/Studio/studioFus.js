@@ -52,7 +52,7 @@ export const generateCarImageAPIFn = createAsyncThunk(
       const { data } = await axiosInstance.post(endPoints.generateCarImage, values);
       return data;
     } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || 'Image generation failed');
+      return rejectWithValue(error?.response?.data || 'Image generation failed');
     }
   }
 );

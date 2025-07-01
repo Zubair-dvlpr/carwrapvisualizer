@@ -1,11 +1,9 @@
-import React from 'react';
+
 import bannerImg from "../../../assets/images/bannerImg.png"
-import bannerbg from "../../../assets/images/bannerbg.png"
-import ImageCarousel from './ImageCarousel';
+
 const Banner = () => {
   return (
     <section className="py-10 text-white bg-center bg-cover" >
-      {/* style={{ backgroundImage: `url('${bannerbg}')` }} */}
       <div className="max-w-[1420px] ml-auto  flex flex-col md:flex-row items-center justify-between gap-8">
 
         {/* Left Column */}

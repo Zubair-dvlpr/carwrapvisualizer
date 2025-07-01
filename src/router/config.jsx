@@ -23,6 +23,7 @@ import ResetPassword from '../pages/resetPassword/ResetPassword';
 import SignUp from '../pages/SignUp/SignUp';
 import SucessfullUrl from '../pages/SucessfullUrl';
 import { userInfoAPIFn } from '../redux/features/auth/authFns';
+import VerifyOtp from '../pages/verifyOtp/VerifyOtp';
 
 
 
@@ -227,6 +228,15 @@ export const commonRoutes = [
     element: (
       <DefaultLayout>
         <ResetPassword />
+      </DefaultLayout>
+    )
+  },
+  {
+    path: '/verify-otp',
+    moduleName: 'Verify Otp',
+    element: (
+      <DefaultLayout>
+        <VerifyOtp />
       </DefaultLayout>
     )
   },

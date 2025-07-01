@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import YearSelector from './Components/YearSelector';
 import MakeSelector from './Components/MakeSelector';
 import ModelSelector from './Components/ModelSelector';
@@ -6,7 +6,7 @@ import garage from '../../assets/images/garage.png';
 import colorfullcar from '../../assets/images/carshowRoom.png';
 import logo3m from '../../assets/images/3m.png';
 import vector from '../../assets/images/vector.png';
-import avery from '../../assets/images/vvivid.svg';
+import avery from '../../assets/images/avery2.png';
 import vvivid from '../../assets/images/vvivid.png';
 import inozetek from '../../assets/images/inozetek.png';
 import { AuthContext } from '../../context/AuthContext';
@@ -108,10 +108,14 @@ const CarFillPage = ({ bg }) => {
   const [selectedModel, setSelectedModel] = useState('');
   const [generatedImage, setGeneratedImage] = useState('');
   const imageRef = useRef(null);
+  useEffect(()=> {
+    console.log(credits, " udpated")
+    fetchUserInfo()
+  }, [])
+  // fetchUserInfo();
   const generateImage = async (year, make, model, finish, color) => {
     try {
       setAnimation(true);
-
 
       if (credits <= 0) {
 
@@ -342,23 +346,19 @@ const CarFillPage = ({ bg }) => {
                 <div className='flex justify-center gap-12 mb-8'>
                   {brands.map(brand => (
                     <>
-                      <div key={brand.name} onClick={() => handleBrandClick(brand)} className={`text-white border-2 rounded-lg transition ${brand.name === "vector" ? 'flex': ''} ${selectedBrand?.name === brand.name
-                            ? 'border-blue-500'
-                            : 'border-transparent'
-                            }`}>
+                      <div key={brand.name} onClick={() => handleBrandClick(brand)} className={`text-white  items-center border-2 rounded-lg transition ${brand.name === "vector" ? 'flex' : ''} ${selectedBrand?.name === brand.name
+                        ? 'border-blue-500'
+                        : 'border-transparent'
+                        }`}>
                         <img
                           key={brand.name}
                           src={brand.logo}
                           alt={brand.name}
                           className={`h-16 mx-auto cursor-pointer  p-1 transition `}
-                          
-                        /> {brand.name === "vector" ? (
-                          <img
-                            src={avery}
-                            alt={brand.name}
-                            className={`h-16 mx-auto cursor-pointer p-1 transition `}
-                            onClick={() => handleBrandClick(brand)}
-                          />
+
+                        />
+                        {brand.name === "vector" ? (
+                          <span className='text-2xl font-semibold'> Avery Dennision </span>
                         ) : ''}
                       </div>
                     </>

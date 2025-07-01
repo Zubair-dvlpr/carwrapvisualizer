@@ -40,33 +40,33 @@ const SignUp = () => {
     );
     if (data?.meta?.requestStatus === 'fulfilled') {
       localStorage.setItem('showWelcome', 'true'); // Set flag
+      setAnimation(false);
+      navigate(`/verify-otp?email=${formData.email}`);
+      // try {
+      //   const data = await dispatch(
+      //     loginUserAPIFn({
+      //       email: formData.email,
+      //       password: formData.password
+      //     })
+      //   );
 
-
-      try {
-        const data = await dispatch(
-          loginUserAPIFn({
-            email: formData.email,
-            password: formData.password
-          })
-        );
-
-        if (data?.meta?.requestStatus === 'fulfilled') {
-          // Check if 'welcomeShown' already exists
-          const alreadyWelcomed = localStorage.getItem('welcomeShown');
-          setCountLogin(data?.payload?.data?.user?.loginCount)
-          if (!alreadyWelcomed) {
-            localStorage.setItem('showWelcome', 'true');
-            localStorage.setItem('welcomeShown', 'true'); // So it doesn't show again
-          }
-          navigate('/dashboard');
-        } else if (data?.meta?.requestStatus === 'rejected') {
-          setError(data?.payload || 'Login failed'); // <- Show server error message
-        }
-      } catch (err) {
-        setError('Something went wrong. Please try again.');
-      } finally {
-        setAnimation(false);
-      }
+      //   if (data?.meta?.requestStatus === 'fulfilled') {
+      //     // Check if 'welcomeShown' already exists
+      //     const alreadyWelcomed = localStorage.getItem('welcomeShown');
+      //     setCountLogin(data?.payload?.data?.user?.loginCount)
+      //     if (!alreadyWelcomed) {
+      //       localStorage.setItem('showWelcome', 'true');
+      //       localStorage.setItem('welcomeShown', 'true'); // So it doesn't show again
+      //     }
+      //     navigate('/dashboard');
+      //   } else if (data?.meta?.requestStatus === 'rejected') {
+      //     setError(data?.payload || 'Login failed'); // <- Show server error message
+      //   }
+      // } catch (err) {
+      //   setError('Something went wrong. Please try again.');
+      // } finally {
+      //   setAnimation(false);
+      // }
 
     }
     if (data?.meta?.requestStatus === 'rejected') {

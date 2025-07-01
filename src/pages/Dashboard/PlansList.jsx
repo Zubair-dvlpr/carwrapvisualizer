@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
 import ultimateplanbg from '../../assets/images/ultimateplanbg.png';
 import pricebelowSection from '../../assets/images/pricebelowSection.png';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { stripeActiveSubscriptionsAPIFn, stripeFetchPlansAPIFn, stripeCheckoutSessionAPIFn } from '../../redux/features/stripe/stripeFns';
 
 const PlansList = ({ location }) => {
   const dispatch = useDispatch();
-
+  const user = useSelector(state => state?.currentUser?.currentUser);
+  console.log("PlansList", user.data.user.accountType);
   const [plans, setPlans] = useState([]);
   const [addon, setAddon] = useState([]);
   const [loadingPlans, setLoadingPlans] = useState(true);
@@ -17,15 +18,21 @@ const PlansList = ({ location }) => {
   const [activePlan, setActivePlan] = useState();
 
   // Dummy descriptions per plan id
+  // const planDescriptions = {
+  //   price_1Rb4xu07wQI64Hn2uOqCD36v: "For small shops just starting out or with light needs.",
+  //   price_1RbMc307wQI64Hn2g07zfgq0: "Built for shops growing rapidly and growing needs.",
+  //   price_1RbMdt07wQI64Hn2YllPmztE: "Designed for high-volume shops, chains, or white-label partners.",
+  // };
+
   const planDescriptions = {
-    price_1Rb4xu07wQI64Hn2uOqCD36v: "For small shops just starting out or with light needs.",
-    price_1RbMc307wQI64Hn2g07zfgq0: "Built for shops growing rapidly and growing needs.",
-    price_1RbMdt07wQI64Hn2YllPmztE: "Designed for high-volume shops, chains, or white-label partners.",
+    price_1RbMngP4XyjYmRGvkXnwEeJ8: "For small shops just starting out or with light needs.",
+    price_1RbMnLP4XyjYmRGv3I0cTBjT: "Built for shops growing rapidly and growing needs.",
+    price_1RbMmgP4XyjYmRGvOnUmwVjl: "Designed for high-volume shops, chains, or white-label partners.",
   };
 
   // Dummy features list per plan id
   const planFeatures = {
-    price_1Rb4xu07wQI64Hn2uOqCD36v: [
+    price_1RbMngP4XyjYmRGvkXnwEeJ8: [
       "250 wrap generations/month",
       "All vehicles (1990–2026), all makes & models",
       "Finishes: Gloss, Satin, Matte, Carbon Fibre, Brushed Metal",
@@ -35,7 +42,7 @@ const PlansList = ({ location }) => {
       "Lead Generation: Invite unlimited customers Customers can preview up to 2 designs Customers can book appointments after selecting a color",
       "Add-On: Purchase additional images at a discounted rate (up to 250 extra images/month)",
     ],
-    price_1RbMc307wQI64Hn2g07zfgq0: [
+    price_1RbMnLP4XyjYmRGv3I0cTBjT: [
       "1000 wrap generations/month",
       "All features from Basic",
       "2 seats/user logins",
@@ -45,7 +52,7 @@ const PlansList = ({ location }) => {
       "Add-On: Purchase additional images at a discounted rate (up to 600 extra images/month)",
       "Tints",
     ],
-    price_1RbMdt07wQI64Hn2YllPmztE: [
+    price_1RbMmgP4XyjYmRGvOnUmwVjl: [
       "2,500 wrap generations/month",
       "All features from Pro",
       "5 seats/user logins",
@@ -285,20 +292,31 @@ const PlansList = ({ location }) => {
             const price = priceObj?.unit_amount;
             const currency = priceObj?.currency?.toUpperCase();
             const interval = priceObj?.recurring?.interval || "one-time";
+
+            const isActive = user?.data?.user?.accountType === "addon_access_paid";
+
             return (
               <button
                 key={index}
-                onClick={() => handleSubscribe(plan)}
-                disabled={processingPlanId === plan.id}
-                className="bg-[#ED217B] hover:bg-pink-700 cursor-pointer text-white font-semibold px-9 py-4 rounded-full transition">
-                {processingPlanId === plan.id ? "Processing..." : "Add-on"} – {price !== undefined
-                  ? `$${(price / 100).toFixed(2)} ${currency} / ${interval}`
-                  : "Contact us for pricing"}
+                onClick={() => !isActive && handleSubscribe(plan)}
+                disabled={processingPlanId === plan.id || isActive}
+                className={`${isActive ? "bg-[#bd4d7e] cursor-not-allowed" : "bg-[#ED217B] hover:bg-pink-700 cursor-pointer"
+                  } text-white font-semibold px-9 py-4 rounded-full transition`}
+              >
+                {isActive
+                  ? "Add-on Active"
+                  : processingPlanId === plan.id
+                    ? "Processing..."
+                    : `Add-on – ${price !== undefined
+                      ? `$${(price / 100).toFixed(2)} ${currency} / ${interval}`
+                      : "Contact us for pricing"
+                    }`}
               </button>
-            )
+            );
           })}
-
         </div>
+
+
       </section>
     </>
   );

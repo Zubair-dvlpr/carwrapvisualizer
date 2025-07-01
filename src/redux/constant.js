@@ -8,7 +8,10 @@ const v = 'api/v1';
 export const endPoints = {
   /*********************** Auth End Points Start *************************/
   login: `${baseURL}/${v}/auth/login`,
+  forgotPasswordRequest: `${baseURL}/${v}/auth/forgot-password-request`,
   signup: `${baseURL}/${v}/auth/sign-up`,
+  verifyOtp: `${baseURL}/${v}/auth/verify-otp`,
+  resendOtp: `${baseURL}/${v}/auth/resend-otp`,
   userInfo: `${baseURL}/${v}/auth/user-info`,
   userUpdate: `${baseURL}/${v}/auth/update-user`,
   fetchPlans: `${baseURL}/${v}/user/stripe/get-plans`,
@@ -29,5 +32,6 @@ export const endPoints = {
   updateBooking: `${baseURL}/${v}/auth/users-list`,
   getPublicBooking: `${baseURL}/${v}/public/get-booking`,
   updateBookingStatus: `${baseURL}/${v}/public/update-booking-status`,
-  updateBookingDetails: `${baseURL}/${v}/user/booking`
+  updateBookingDetails: `${baseURL}/${v}/user/booking`,
+  uploadBookingImgsAPIFn: `${baseURL}/${v}/user/images/upload-booking`
 };

@@ -8,14 +8,16 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useDispatch } from "react-redux";
 import loaderGif from '../../assets/loading.gif';
-import { bookingAppointmentAPIFn } from "../../redux/features/booking/bookingFus";
+import { bookingAppointmentAPIFn, uploadBookingImgsAPIFn } from "../../redux/features/booking/bookingFus";
+import ImageUploadModal from "./Components/ImageUploadModal";
 
 const BookingAppointment = () => {
     const dispatch = useDispatch();
     const [showPopup, setShowPopup] = useState(false);
 
-    const { animation, setAnimation, brandOptions, wrapColors  } = useContext(AuthContext);
+    const { animation, setAnimation, brandOptions, wrapColors } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [showUploadModal, setShowUploadModal] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedYear, setSelectedYear] = useState('');
     const [selectedMake, setSelectedMake] = useState('');
@@ -45,17 +47,27 @@ const BookingAppointment = () => {
     });
 
 
-   
+
     const handleFileChange = (e) => {
         if (e.target.files.length) {
             setSelectedFile(e.target.files[0]);
         }
     };
 
-    const removeFile = () => setSelectedFile(null);
+    const removeFile =  () => setSelectedFile(null);
+
+    
+    const uploadImgs = async (bookingId, file) => {
+        console.log("bookingId", bookingId)
+        console.log("file", file)
+        const formData = new FormData();
+        formData.append('bookingId', bookingId);
+        formData.append('images', file);
+        const response = await dispatch(uploadBookingImgsAPIFn(formData));
+        console.log("img upload response", response)
+    }
 
     const handleSubmit = async (e, isQuoted) => {
-        // console.log("booking ");
         e.preventDefault();
         setAnimation(true);
         if (isQuoted) {
@@ -90,9 +102,13 @@ const BookingAppointment = () => {
         };
 
         try {
-            const response = await dispatch(bookingAppointmentAPIFn(payload)).unwrap();
+            const response = await dispatch(bookingAppointmentAPIFn(payload));
             // This depends on your backend, adjust as needed:
-            if (response?.success || response?.data) {
+            if (response?.meta?.requestStatus === 'fulfilled') {
+                // console.log("booking respone",response.payload?.data?._id)
+                const bookingId = response.payload?.data?._id;
+                await uploadImgs(bookingId, selectedFile)
+
                 if (isQuoted) {
                     setShowPopup(true); // Show popup now, navigate later
                 } else {
@@ -275,6 +291,7 @@ const BookingAppointment = () => {
                                 onChange={(e) => setFormState(prev => ({ ...prev, bookingDate: e.target.value }))}
                                 name="bookingDate"
                                 className="inputStyle  w-full"
+                                min={new Date().toISOString().split("T")[0]}
                             />
                         </div>
                         <div>
@@ -302,6 +319,7 @@ const BookingAppointment = () => {
                                 onChange={(e) => setFormState(prev => ({ ...prev, completionDate: e.target.value }))}
                                 name="completionDate"
                                 className="inputStyle  w-full"
+                                min={new Date().toISOString().split("T")[0]}
                             />
                         </div>
                     </div>
@@ -424,26 +442,18 @@ const BookingAppointment = () => {
                         </div>
 
                         {/* Upload file */}
+                        {/* Upload file */}
                         <div>
-                            <label className="block labelStyle">
-                                Upload File
-                            </label>
-                            <div className="flex flex-col items-center  bg-[#F6F9FF] rounded p-4 cursor-pointer hover:shadow-xl relative">
-                                <label
-                                    htmlFor="file-upload"
-                                    className="flex flex-col items-center justify-center cursor-pointer"
-                                >
-                                    <div className="flex items-center space-x-2">
-                                        <FiUpload className="w-5 h-5 text-gray-700" />
-                                        <span className="font-medium text-gray-700">Upload file</span>
-                                    </div>
-                                    <input
-                                        id="file-upload"
-                                        type="file"
-                                        onChange={handleFileChange}
-                                        className="hidden"
-                                    />
-                                </label>
+                            <label className="block labelStyle">Upload File</label>
+                            <div
+                                className="flex flex-col items-center bg-[#F6F9FF] rounded p-4 cursor-pointer hover:shadow-xl relative"
+                                onClick={() => setShowUploadModal(true)}
+                            >
+                                <div className="flex items-center space-x-2">
+                                    <FiUpload className="w-5 h-5 text-gray-700" />
+                                    <span className="font-medium text-gray-700">Upload file</span>
+                                </div>
+
                                 {selectedFile && (
                                     <div className="flex items-center justify-between w-full mt-2 border border-gray-200 rounded p-2 bg-gray-50">
                                         <div className="flex items-center space-x-2">
@@ -459,6 +469,13 @@ const BookingAppointment = () => {
                                 )}
                             </div>
                         </div>
+                        {showUploadModal && (
+                            <ImageUploadModal
+                                onClose={() => setShowUploadModal(false)}
+                                onFileSelect={handleFileChange}
+                            />
+                        )}
+
                     </div>
 
                     {/* Row 7 */}

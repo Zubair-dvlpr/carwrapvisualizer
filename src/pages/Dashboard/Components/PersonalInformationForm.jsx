@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { userUpdateAPIFn } from '../../../redux/features/auth/authFns';
 
 const PersonalInformationForm = ({ userInfo }) => {
+  console.log("Personal Information Form", userInfo);
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
@@ -14,7 +15,7 @@ const PersonalInformationForm = ({ userInfo }) => {
     firstName: '',
     lastName: '',
     phoneNumber: '',
-    country: '',
+    region: '',
     city: '',
     businessName: '',
     businessAddress: '',

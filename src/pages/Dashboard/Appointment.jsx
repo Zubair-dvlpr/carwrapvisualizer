@@ -14,6 +14,7 @@ const Appointment = () => {
 
     const dispatch = useDispatch();
     const [todayBookings, setTodayBookings] = useState([]);
+    const [dateloading, setDateloading] = useState(true); // For spinner
     const [tomorrowBookings, setTomorrowBookings] = useState([]);
     const [canceledBookings, setCanceledBookings] = useState([]);
     const [loading, setLoading] = useState(true); // For spinner
@@ -75,6 +76,28 @@ const Appointment = () => {
         canceledAppointmentfn();
     }, []);
 
+    const handleDateSelect = async (selectedDate) => {
+        console.log("handleDateSelect", selectedDate)
+        setLoading(true);
+        try {
+            const data = await dispatch(
+                todayAppointmentAPIFn({
+                    bookingDate: selectedDate
+                })
+            );
+
+            if (data?.meta?.requestStatus === 'fulfilled') {
+                setLoading(data.payload.data);
+            } else {
+                console.log('❌ Failed to fetch appointments for:', selectedDate);
+            }
+        } catch (error) {
+            console.error('⚠️ Error fetching appointments:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     // console.log(cancelledBookings);
     return (
         <div className="grid md:grid-cols-10 grid-cols-1 gap-10">
@@ -82,7 +105,7 @@ const Appointment = () => {
                 <h3 className='text-2xl font-semibold leading-9 text-[#2C2C2C]'>Car Wrap Visualizer™</h3>
                 <p className='text-[#858585] mt-2.5 text-[12px] '>Welcome to the Car Wrap Visualizer™ — Streamline your vehicle branding: design, preview, and approve wraps with precision.</p>
                 <div className='flex mt-4  sm:flex-row flex-col items-start justify-start gap-7'>
-                    <CustomCalendar full={false} />
+                    <CustomCalendar full={false} onDateSelect={handleDateSelect} />
 
                     <Link
                         to="/BookingAppointment"
@@ -94,7 +117,7 @@ const Appointment = () => {
                 <InProgressTable />
             </div>
             <div className='md:col-span-4 col-span-full p-4 flex flex-col gap-4 bg-[#F5F5F7] rounded-4xl'>
-                <BookedAppointments data={todayBookings} title="Booked Appointments"  loading={loading} />
+                <BookedAppointments data={todayBookings} title="Booked Appointments" loading={loading} />
                 <BookedAppointments data={tomorrowBookings} title="Tomorrow Appointments" loading={loading} />
                 <BookedAppointments data={canceledBookings} title="Canceled Appointments" loading={loading} />
             </div>

@@ -10,7 +10,7 @@ const WelcomeModal = ({ onClose }) => {
 
                 <ul className="space-y-2 text-sm mb-4">
                     <li className="flex items-start gap-2">
-                        <span>You've unlocked 5 free wrap previews - show customers real designs on their exact vehicle.</span>
+                        <span>You've unlocked 10 free wrap previews - show customers real designs on their exact vehicle.</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <IoIosCheckmarkCircle className="text-green-600 text-xl mt-0.5" />

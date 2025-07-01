@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
-import dayjs from 'dayjs';
+// import React, { useContext, useEffect, useState } from 'react';
+// import dayjs from 'dayjs';
 import colorfulcarImg from '../../../assets/images/colorful-car-illustration.png';
 import creditslabel from '../../../assets/icons/creditslabel.svg';
-import { AuthContext } from '../../../context/AuthContext';
-import { completedAppointmentAPIFn } from '../../../redux/features/booking/bookingFus';
-import Credits from '../../../Components/Credits';
-
+// import { AuthContext } from '../../../context/AuthContext';
+// import { completedAppointmentAPIFn } from '../../../redux/features/booking/bookingFus';
+// import Credits from '../../../Components/Credits';
+// nuzopam@mailinator.com
 const getCreditsLimit = (planName) => {
   const limits = {
     "Basic Plan": 250,
@@ -16,14 +16,15 @@ const getCreditsLimit = (planName) => {
 };
 
 const CreditsAndPlan = ({ userInfo, activePlan, plans, isLoading }) => {
-  // console.log("userInfo" ,userInfo)
-  // console.log("activePlan" ,activePlan)
-  // console.log("plans" ,plans)
+  console.log("userInfo" ,userInfo)
+  console.log("activePlan" ,activePlan)
+  console.log("plans" ,plans)
   const mergedPlan = {
     ...activePlan,
     ...plans?.find(plan => plan?.default_price === activePlan?.priceId)
   };
-  // console.log(mergedPlan)
+
+  console.log("mergedPlan",mergedPlan)
 
   return (
     <div className='grid mt-5 sm:grid-cols-11 grid-cols-1 gap-5'>
@@ -71,7 +72,7 @@ const CreditsAndPlan = ({ userInfo, activePlan, plans, isLoading }) => {
 
               {/* <p className='text-xs text-[#000] font-medium font-Lato'>Subscription Tier <span className='text-[#454545] font-light text-[10px] sm:ml-3 ml-1'>Trials Ends in 6 Days</span></p> */}
 
-              <p className='text-xs text-[#000] font-medium font-Lato'>
+              {/* <p className='text-xs text-[#000] font-medium font-Lato'>
                 Subscription Tier
                 {mergedPlan?.endDate && (
                   <span className='text-[#454545] font-light text-[10px] sm:ml-3 ml-1'>
@@ -79,7 +80,7 @@ const CreditsAndPlan = ({ userInfo, activePlan, plans, isLoading }) => {
                     Days
                   </span>
                 )}
-              </p>
+              </p> */}
             </div>
           </div>
           <img src={colorfulcarImg} alt='' />

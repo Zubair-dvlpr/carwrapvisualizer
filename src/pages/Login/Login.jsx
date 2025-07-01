@@ -6,14 +6,16 @@ import loginbg from '../../assets/images/loginbg.webp';
 import loaderGif from '../../assets/loading.gif';
 import { useDispatch } from 'react-redux';
 import { loginUserAPIFn } from '../../redux/features/auth/authFns.js';
+import ForgotPasswordModal from './ForgotPasswordModal.jsx';
 const Login = () => {
   const dispatch = useDispatch();
   const { animation, setAnimation, setCountLogin } = useContext(AuthContext);
   const [email, setEmail] = useState('');
+  const [showForgotModal, setShowForgotModal] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
+// setAnimation(false)
   const handleLogin = async e => {
     e.preventDefault();
     setError('');
@@ -48,6 +50,7 @@ const Login = () => {
 
   return (
     <>
+      <ForgotPasswordModal isOpen={showForgotModal} onClose={() => setShowForgotModal(false)} />
       {animation && (
         <div className='absolute w-full  bg-[#000000d2] flex justify-center h-screen items-center'>
           <img src={loaderGif} alt='Loading...' className='w-36' />
@@ -106,6 +109,15 @@ const Login = () => {
             <Link to='/signup' className='text-blue-400 hover:underline'>
               Sign up
             </Link>
+          </p>
+          <p className="text-center mt-2">
+            <button
+              type="button"
+              onClick={() => setShowForgotModal(true)}
+              className="text-blue-400 cursor-pointer hover:underline text-sm"
+            >
+              Forgot Password?
+            </button>
           </p>
         </div>
       </div>
