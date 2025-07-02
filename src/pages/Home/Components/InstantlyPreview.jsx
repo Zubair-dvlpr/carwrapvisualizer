@@ -17,14 +17,14 @@ const tabs = [
     paragraph: 'Select from top-tier vinyl brands and explore every color and finish.',
     list: ['Gloss', 'Matte', 'Satin', 'Chrome'],
   },
-  {
-    id: 'tab3',
-    label: 'Calipers',
-    heading: 'Customize Calipers',
-    image: tabimg1,
-    paragraph: 'Change caliper colors to suit the wrap style or highlight performance.',
-    list: ['Red', 'Yellow', 'Black', 'Custom Paint'],
-  },
+  // {
+  //   id: 'tab3',
+  //   label: 'Calipers',
+  //   heading: 'Customize Calipers',
+  //   image: tabimg1,
+  //   paragraph: 'Change caliper colors to suit the wrap style or highlight performance.',
+  //   list: ['Red', 'Yellow', 'Black', 'Custom Paint'],
+  // },
   {
     id: 'tab4',
     label: 'Chrome Deletes',
@@ -40,13 +40,13 @@ const tabs = [
     paragraph: 'Add contrast or continuity with roof and mirror wraps.',
     list: ['Gloss Black Roof', 'Satin Mirrors', 'Carbon Fiber Option'],
   },
-  {
-    id: 'tab6',
-    label: 'Environments',
-    heading: 'Preview in Real Environments',
-    image: tabimg1,
-    paragraph: 'See your wrap in a realistic setting to impress clients.',
-  },
+  // {
+  //   id: 'tab6',
+  //   label: 'Environments',
+  //   heading: 'Preview in Real Environments',
+  //   image: tabimg1,
+  //   paragraph: 'See your wrap in a realistic setting to impress clients.',
+  // },
 ];
 
 const InstantlyPreview = () => {
@@ -60,7 +60,7 @@ const InstantlyPreview = () => {
         <p className="text-sm uppercase text-gray-400 mb-2">Real Photos. Real Colors. Real Impact.</p>
         <h2 className="text-4xl font-bold mb-4">🎨 Instantly Preview Any Wrap on Any Car</h2>
         <p className="text-lg text-gray-300">
-          Whether you’re using your own custom wrap line or global brands like 3M, Avery, or Inozetek — Car Wrap Visualizer™ lets your customers see the final look before you ever unwrap a roll.
+          Whether you’re using your own custom wrap line or global brands like 3M, Avery, or VViViD — Car Wrap Visualizer™ lets your customers see the final look before you ever unwrap a roll. We can integrate any wrap brand from around the world through our integration program, so your full product line is always ready to showcase.
         </p>
       </div>
 

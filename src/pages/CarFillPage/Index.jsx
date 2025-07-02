@@ -344,9 +344,9 @@ const CarFillPage = ({ bg }) => {
               <div className='bg-[#2B2C2C]  p-5 rounded-xl'>
                 <h4 className='text-xl text-white text-left mb-4'>Select Wrap Brand</h4>
                 <div className='flex justify-center gap-12 mb-8'>
-                  {brands.map(brand => (
-                    <>
-                      <div key={brand.name} onClick={() => handleBrandClick(brand)} className={`text-white  items-center border-2 rounded-lg transition ${brand.name === "vector" ? 'flex' : ''} ${selectedBrand?.name === brand.name
+                  {brands.map((brand, index) => (
+
+                      <div key={index} onClick={() => handleBrandClick(brand)} className={`text-white  items-center border-2 rounded-lg transition ${brand.name === "vector" ? 'flex' : ''} ${selectedBrand?.name === brand.name
                         ? 'border-blue-500'
                         : 'border-transparent'
                         }`}>
@@ -361,7 +361,6 @@ const CarFillPage = ({ bg }) => {
                           <span className='text-2xl font-semibold'> Avery Dennision </span>
                         ) : ''}
                       </div>
-                    </>
                   ))}
                 </div>
               </div>

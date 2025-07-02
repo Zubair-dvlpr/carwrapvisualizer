@@ -8,61 +8,92 @@ const SupportHelp = () => {
 
     const faqs = [
         {
-            question: "What is Car Wrap Visualizer™ and how does it help my shop?",
+            question: "What is Car Wrap Visualizer™️ and how does it help my shop?",
             answer:
-                "Car Wrap Visualizer™ is a sales and marketing tool that lets your customers preview their exact vehicle with real wrap colors and finishes. It helps you close more jobs by giving customers confidence in their wrap choices — right from your site or in-store."
+                "Car Wrap Visualizer™️ is a sales and marketing tool that lets your customers preview their exact vehicle with real wrap colors and finishes. It helps you close more jobs by giving customers confidence in their wrap choices — right from your site or in-store.",
         },
         {
             question: "Can I add my shop’s branding to the visualizer?",
             answer:
-                "Yes. Your business name, logo, and contact info are fully white-labeled and appear throughout the platform."
+                "Yes. Your business name, logo, and contact info are fully white-labeled and appear throughout the platform.",
         },
         {
             question: "Can I embed the visualizer on my website?",
             answer:
-                "Yes. We provide a simple embed code or direct share link that works on any website. No developer needed."
+                "Yes. We provide a simple embed code or direct share link that works on any website. No developer needed.",
         },
         {
             question: "How do customers use it?",
             answer:
-                "Customers select their year, make, and model, then explore different wrap colors and finishes. Each render uses 1 credit from your shop’s account."
+                "Customers select their year, make, and model, then explore different wrap colors and finishes. Each render uses 1 credit from your shop’s account.",
         },
         {
             question: "Can I upload my own custom wrap colors?",
             answer:
-                "Yes. You can submit a support ticket with your custom color data (HEX codes, material type, finish, and photos). We’ll model it to reflect the real-life appearance and add it to your dashboard with a specialized shareable link for customers."
+                "Yes. If you’re a brand looking to showcase your wrap colors inside Car Wrap Visualizer™, we offer an integration program for a one-time fee of $999. Your finishes will be modeled to reflect their true real-life appearance and added directly to our system for users to preview. To get started, email integrate@carwrapvisualizer.com and our team will guide you through the onboarding process.",
         },
         {
             question: "What vehicles are supported?",
             answer:
-                "We support 60,000+ vehicles from 1990 to 2026. New models are added regularly."
+                "We support 1.2 million+ vehicles from 1990 to 2026. New models are added regularly.",
         },
         {
             question: "Which wrap brands and finishes are included?",
             answer:
-                "You can show colors from 3M, Avery, KPMF, Inozetek, TeckWrap, APA, and others. Finishes include matte, satin, gloss, chrome, carbon, and flip."
+                "We currently have the full 3M 1080, 2080, and Avery Dennison wrap catalogs uploaded and ready to use. We’re also actively partnering with wrap brands and wrap shops that offer their own private-label films to integrate their collections into our platform. This allows other shops to use them in previews—and gives customers a true-to-life look at available options.",
         },
         {
             question: "Can I also show tint, PPF, or chrome delete previews?",
             answer:
-                "Yes. These services can be enabled in your dashboard if your shop offers them."
+                "Yes. These services can be enabled in your dashboard if your shop offers them.",
         },
         {
             question: "Is there a CRM or booking system included?",
             answer:
-                "Yes. Our optional CRM includes:\n• Customer profiles and wrap history\n• Quote and invoice tools\n• Job assignments and reminders\n\nIt’s available as an add-on for just $49.99/month.\n\nYes. Optional Appointment booking\n\nIt’s available as an add-on for just $14.99/month or $9.99/month when bundled with our CRM option"
+                "Yes. Our optional CRM includes:\n• Customer profiles and wrap history\n• Quote and invoice tools\n• Job assignments and reminders\n\nIt’s available as an add-on for just $49.99/month.\n\nYes. Optional Appointment booking\nIt’s available as an add-on for just $14.99/month or $9.99/month when bundled with our CRM option.",
         },
         {
             question: "How much does it cost?",
             answer:
-                "We offer flexible subscription plans:\n• Basic Plan: $79/month\n• CRM Add-On: $49.99/month (optional)\n• Appointment Booking Add-On: $14.99/month (optional)\n\n👉 Subscribe here to get started."
+                "To get started, you’ll need to subscribe to one of our monthly Studio plans:\n• Basic – $79/month for 250 image generations\n• Ultimate – $149/month for 1,000 image generations\n• Pro – $249/month for 2,500 image generations\n\nAll plans include full access to the Car Wrap Visualizer™ studio.Need customer management? Add our optional CRM system for $49.99/month to manage leads, track jobs, and send quotes—all from one dashboard.\n\n👉 Subscribe to activate your account.",
         },
         {
             question: "Can I use it in-store with customers?",
             answer:
-                "Yes. It works great on tablets, desktops, or showroom kiosks — perfect for consultations and upselling."
+                "Yes. It works great on tablets, desktops, or showroom kiosks — perfect for consultations and upselling.",
+        },
+        {
+            question: "Can I use the visualizer on an iPad or TV in-store?",
+            answer:
+                "Yes. The visualizer is fully compatible with tablets, touchscreen displays, and smart TVs—perfect for in-store demos or sales consultations.",
+        },
+        {
+            question: "Is there a free trial available?",
+            answer:
+                "We offer a limited free trial for verified wrap shops. Reach out to our team to request access and explore the platform before subscribing.",
+        },
+        {
+            question: "How realistic are the wrap previews?",
+            answer:
+                "Wrap previews are designed to match real-life finishes—gloss, matte, satin, chrome, carbon, and more—so customers can see exactly what to expect.",
+        },
+        {
+            question: "Can I see how customers are interacting with the tool?",
+            answer:
+                "Yes. Your dashboard provides insights like preview usage, popular vehicles, and trends to help you understand what your customers are exploring.",
+        },
+        {
+            question: "I have my own wrap brand—can I get it added to the platform?",
+            answer:
+                "Absolutely. We offer a $999 integration program that allows brands and wrap shops to upload their own product lines. Email integrate@carwrapvisualizer.com to get started.",
+        },
+        {
+            question: "Can I cancel or switch plans anytime?",
+            answer:
+                "Yes. All plans are month-to-month and can be upgraded, downgraded, or canceled directly from your dashboard.",
         }
     ];
+
 
 
 
@@ -77,7 +108,7 @@ const SupportHelp = () => {
             {/* Support Boxes */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                 {/* Contact Support */}
-                <div className="shadow-lg rounded-lg px-6 py-10 flex flex-col items-center text-center">
+                <div className="shadow-lg col-span-full rounded-lg px-6 py-10 flex flex-col items-center text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
                         <g clip-path="url(#clip0_79_1545)">
                             <path d="M41.2969 41.4221C40.3264 41.4221 39.5391 42.209 39.5391 43.1799V46.9455C39.5391 47.916 40.3264 48.7033 41.2969 48.7033C42.2678 48.7033 43.0547 47.916 43.0547 46.9455V43.1799C43.0547 42.209 42.2678 41.4221 41.2969 41.4221Z" fill="url(#paint0_linear_79_1545)" />
@@ -116,7 +147,7 @@ const SupportHelp = () => {
                 </div>
 
                 {/* Email Support */}
-                <div className=" shadow-lg rounded-lg p-6 flex flex-col items-center text-center">
+                {/* <div className=" shadow-lg rounded-lg p-6 flex flex-col items-center text-center">
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
                         <path d="M20.8076 16.8078L22.9286 18.9288C26.8352 15.0234 33.1658 15.0234 37.0706 18.9288L39.1934 16.8078C34.115 11.7306 25.886 11.7294 20.8076 16.8078Z" fill="url(#paint0_linear_79_1555)" />
@@ -134,7 +165,7 @@ const SupportHelp = () => {
                     </svg>
                     <h2 className="text-2xl mt-4 capitalize">Live Chat</h2>
 
-                </div>
+                </div> */}
             </div>
 
             {/* FAQ Section */}

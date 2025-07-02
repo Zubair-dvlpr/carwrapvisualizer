@@ -7,16 +7,16 @@ const Banner = () => {
       <div className="max-w-[1420px] ml-auto  flex flex-col md:flex-row items-center justify-between gap-8">
 
         {/* Left Column */}
-        <div className="md:w-1/2 text-center md:text-left">
+        <div className="md:w-1/2 px-1 sm:px-0 text-center md:text-left">
           <p className="font-Inter text-2xl font-light leading-9 tracking-[7.02px] uppercase mb-6">
             Where Dream Cars Become Reality
           </p>
-          <h1 className="text-7xl leading-[69px] font-extrabold font-Inter  mb-4">
+          <h1 className="sm:text-7xl text-5xl leading-[69px] font-extrabold font-Inter  mb-4">
             World’s First Consumer Car Wrap Visualizer
           </h1>
 
           <p className=" text-base mb-6">
-            Let customers preview wraps on their own car in seconds. Choose from over 60,000+ cars.
+            Let customers preview wraps on their own car in seconds. Choose from over 1.2 million cars.
           </p>
           
         </div>

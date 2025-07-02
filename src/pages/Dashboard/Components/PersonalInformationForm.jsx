@@ -4,13 +4,12 @@ import { useDispatch } from 'react-redux';
 import { userUpdateAPIFn } from '../../../redux/features/auth/authFns';
 
 const PersonalInformationForm = ({ userInfo }) => {
-  console.log("Personal Information Form", userInfo);
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
-  // Add these new state variables
   const [loadingCountries, setLoadingCountries] = useState(true);
   const [loadingCities, setLoadingCities] = useState(false);
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -25,7 +24,7 @@ const PersonalInformationForm = ({ userInfo }) => {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
-  // Fetch country list on mount
+  // Fetch countries on mount
   useEffect(() => {
     const fetchCountries = async () => {
       setLoadingCountries(true);
@@ -43,7 +42,7 @@ const PersonalInformationForm = ({ userInfo }) => {
     fetchCountries();
   }, []);
 
-  // Prefill form with user data
+  // Prefill user data and handle country/city
   useEffect(() => {
     if (userInfo) {
       setFormData(prev => ({
@@ -51,15 +50,20 @@ const PersonalInformationForm = ({ userInfo }) => {
         firstName: userInfo.firstName || '',
         lastName: userInfo.lastName || '',
         phoneNumber: userInfo.phoneNumber || '',
-        country: userInfo.country || '',
-        city: userInfo.city || '',
+        region: userInfo.country || '',
         businessName: userInfo.businessName || '',
         businessAddress: userInfo.businessAddress || '',
       }));
 
-      // If user has a country selected, fetch its cities
       if (userInfo.country) {
-        fetchCities(userInfo.country);
+        fetchCities(userInfo.country).then(() => {
+          if (userInfo.city) {
+            setFormData(prev => ({
+              ...prev,
+              city: userInfo.city,
+            }));
+          }
+        });
       }
     }
   }, [userInfo]);
@@ -86,24 +90,26 @@ const PersonalInformationForm = ({ userInfo }) => {
     }
   };
 
-  const handleChange = async (e) => {
+  // Handle input changes
+  const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === 'country') {
       setFormData(prev => ({
         ...prev,
-        country: value,
-        city: '' // reset city
+        region: value,
+        city: '',
       }));
       fetchCities(value);
     } else {
       setFormData(prev => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
     }
   };
 
+  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -175,7 +181,7 @@ const PersonalInformationForm = ({ userInfo }) => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
             <select
               name="country"
-              value={formData.country}
+              value={formData.region}
               onChange={handleChange}
               className="w-full rounded-md p-3 bg-white focus:outline-none focus:ring-2 focus:ring-[#EB227C]"
               disabled={loadingCountries}
@@ -193,7 +199,6 @@ const PersonalInformationForm = ({ userInfo }) => {
                 </>
               )}
             </select>
-
           </div>
         </div>
 
@@ -221,7 +226,6 @@ const PersonalInformationForm = ({ userInfo }) => {
                 </>
               )}
             </select>
-
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>

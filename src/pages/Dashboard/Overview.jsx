@@ -114,9 +114,9 @@ const Overview = () => {
               <strong> ${subscribedPlanData.price}</strong>/month.
 
             </p>
-            <p className=" mb-4">
+            {/* <p className=" mb-4">
               🎉 You now have <strong>{subscribedPlanData.credits}</strong> wrap credits to start generating stunning visuals for your customers.
-            </p>
+            </p> */}
             <div className="text-left text-sm mb-4">
               <p>🚀 What you can do now:</p>
               <ul className="list-disc list-inside ml-2">
@@ -124,9 +124,9 @@ const Overview = () => {
                 <li>Send branded quotes instantly</li>
                 <li>Manage leads, customers, and wrap history in one place</li>
               </ul>
-              <p className="mt-2">
+              {/* <p className="mt-2">
                 💼 Add CRM anytime for <strong>$49.99/month</strong> — includes follow-up automation, marketing tools, and warranty tracking.
-              </p>
+              </p> */}
             </div>
             <p className="text-sm  mb-6">Need help? Contact our support team anytime.</p>
             <div className='flex justify-center'>

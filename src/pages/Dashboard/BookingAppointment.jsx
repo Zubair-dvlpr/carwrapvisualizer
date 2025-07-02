@@ -204,7 +204,7 @@ const BookingAppointment = () => {
                                 <option value="Authorized Dealer">Authorized Dealer</option>
                                 <option value="Independent Dealer">Independent Dealer</option>
                                 <option value="Fleet Account">Fleet Account</option>
-                                <option value="Private Seller">Private Seller</option>
+                                <option value="Private Seller">Private Customer</option>
                                 <option value="Not Applicable">Not Applicable</option>
                             </select>
                         </div>

@@ -87,7 +87,8 @@ const Appointment = () => {
             );
 
             if (data?.meta?.requestStatus === 'fulfilled') {
-                setLoading(data.payload.data);
+                setLoading(false);
+                setTodayBookings(data.payload.data);
             } else {
                 console.log('❌ Failed to fetch appointments for:', selectedDate);
             }

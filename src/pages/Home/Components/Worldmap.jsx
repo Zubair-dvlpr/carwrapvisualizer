@@ -12,14 +12,14 @@ const Worldmap = () => {
 
                 <div className='col-span-full flex md:flex-row flex-col items-center justify-center px-3 md:px-0'>
                     <div className='flex md:flex-row flex-col gap-10' >
-                        <div className=' flex-1 text-center'>
+                        {/* <div className=' flex-1 text-center'>
                             <h3 className='text-4xl font-Lato font-bold text-white'>60000+ </h3>
                             <p className='text-[#ffffff99] mt-3 '>1990-2026- We have the largest selection of any visualizser</p>
                         </div>
                         <div className=' flex-1 text-center'>
                             <h3 className='text-4xl font-Lato font-bold text-white'>3M</h3>
                             <p className='text-[#ffffff99] mt-3 '>Gloss Black (G12)</p>
-                        </div>
+                        </div> */}
                         <div className=' flex-1 text-center'>
                             <h3 className='text-4xl font-Lato font-bold text-white'>Build For Shops - Available Worldwide</h3>
                             <p className='text-[#ffffff99] mt-3 '>Seamless integration, full support and API access globally</p>

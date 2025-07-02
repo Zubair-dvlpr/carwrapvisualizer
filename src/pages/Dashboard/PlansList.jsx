@@ -17,32 +17,19 @@ const PlansList = ({ location }) => {
   const [processingPlanId, setProcessingPlanId] = useState(null);
   const [activePlan, setActivePlan] = useState();
 
-  // Dummy descriptions per plan id
-  // const planDescriptions = {
-  //   price_1Rb4xu07wQI64Hn2uOqCD36v: "For small shops just starting out or with light needs.",
-  //   price_1RbMc307wQI64Hn2g07zfgq0: "Built for shops growing rapidly and growing needs.",
-  //   price_1RbMdt07wQI64Hn2YllPmztE: "Designed for high-volume shops, chains, or white-label partners.",
-  // };
-
-  const planDescriptions = {
-    price_1RbMngP4XyjYmRGvkXnwEeJ8: "For small shops just starting out or with light needs.",
-    price_1RbMnLP4XyjYmRGv3I0cTBjT: "Built for shops growing rapidly and growing needs.",
-    price_1RbMmgP4XyjYmRGvOnUmwVjl: "Designed for high-volume shops, chains, or white-label partners.",
-  };
-
   // Dummy features list per plan id
   const planFeatures = {
-    price_1RbMngP4XyjYmRGvkXnwEeJ8: [
+    "Basic Plan": [
       "250 wrap generations/month",
       "All vehicles (1990–2026), all makes & models",
       "Finishes: Gloss, Satin, Matte, Carbon Fibre, Brushed Metal",
       "1 seat/user login",
       "Standard resolution exports",
-      "Commercial use license ",
+      "Commercial use license",
       "Lead Generation: Invite unlimited customers Customers can preview up to 2 designs Customers can book appointments after selecting a color",
       "Add-On: Purchase additional images at a discounted rate (up to 250 extra images/month)",
     ],
-    price_1RbMnLP4XyjYmRGv3I0cTBjT: [
+    "Ultimate Plan": [
       "1000 wrap generations/month",
       "All features from Basic",
       "2 seats/user logins",
@@ -52,7 +39,7 @@ const PlansList = ({ location }) => {
       "Add-On: Purchase additional images at a discounted rate (up to 600 extra images/month)",
       "Tints",
     ],
-    price_1RbMmgP4XyjYmRGvOnUmwVjl: [
+    "Pro Plan": [
       "2,500 wrap generations/month",
       "All features from Pro",
       "5 seats/user logins",
@@ -65,6 +52,7 @@ const PlansList = ({ location }) => {
       "Volume top-up: If usage exceeds plan limits, buy extra generations at a discounted rate",
     ],
   };
+
 
   const fetchPlans = async () => {
     setLoadingPlans(true);
@@ -170,22 +158,19 @@ const PlansList = ({ location }) => {
     <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#EB227C] border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
     <div className="text-sm text-gray-500 mt-2">Loading Plans</div>
   </div>;
+
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <>
       <div className="plans-list grid gap-8 grid-cols-1 md:grid-cols-3">
         {Array.isArray(plans) &&
-          plans.map((plan, idx) => {
+          plans.toReversed().map((plan, idx) => {
             const isSecondPlan = idx === 1;
-            // price can be array or object, handle both
-            const priceObj = Array.isArray(plan.prices)
-              ? plan.prices[0]
-              : plan.prices;
-
+            const priceObj = Array.isArray(plan.prices) ? plan.prices[0] : plan.prices;
             const priceId = priceObj?.id;
-            const planDesc = planDescriptions?.[priceId] || "No description available.";
-            const features = planFeatures?.[priceId] || [];
+            const planDesc = plan?.description || "No description available.";
+            const features = planFeatures?.[plan.name] || [];
             const price = priceObj?.unit_amount;
             const currency = priceObj?.currency?.toUpperCase();
             const interval = priceObj?.recurring?.interval || "one-time";
@@ -196,21 +181,12 @@ const PlansList = ({ location }) => {
                 className={`plan-card p-4 bg-cover bg-center rounded-lg ${plan?.default_price === activePlan?.priceId ? 'opacity-35' : 'opacity-100'} flex flex-col justify-between hover:shadow-2xl transition-shadow duration-300`}
                 style={plan.name === "Ultimate Plan"
                   ? { backgroundImage: `url(${ultimateplanbg})`, color: "white" }
-                  : { backgroundColor: 'transparent' }
-                }
+                  : { backgroundColor: 'transparent' }}
               >
-
                 <div>
-                  {/* Plan Name */}
                   <h3 className="text-xl font-bold mb-3">{plan.name}</h3>
-
-                  {/* Plan Description */}
                   <p className="mb-3">{planDesc}</p>
-
-                  {/* Border line only for center plan */}
                   {isSecondPlan && <div className="border-b mb-3"></div>}
-
-                  {/* Features List */}
                   <ul className="my-6 space-y-2">
                     {features.map((feature, i) => (
                       <li key={i} className="flex items-start">
@@ -227,28 +203,11 @@ const PlansList = ({ location }) => {
                     ))}
                   </ul>
                 </div>
-
-                <div>
-                  {/* Price Centered */}
-                  <div className="text-center text-base font-Poppins font-semibold mb-6">
-                    {price !== undefined
-                      ? `$${(price / 100).toFixed(2)} ${currency} / ${interval}`
-                      : "Contact us for pricing"}
-                  </div>
-
-                  {/* Subscribe Button */}
-                  <button
-                    onClick={() => handleSubscribe(plan)}
-
-                    disabled={processingPlanId === plan.id}
-                    className={`w-full ${plan?.default_price === activePlan?.priceId ? 'cursor-no-drop pointer-events-none' : 'cursor-pointer pointer-events-auto'} py-3 rounded font-semibold  bg-[#ED217B] hover:brightness-110 hover:scale-105 text-white transition disabled:opacity-50 disabled:cursor-not-allowed`}
-                  >
-                    {processingPlanId === plan.id ? "Processing..." : "Get this plan"}
-                  </button>
-                </div>
+                {/* ...price and button part */}
               </div>
             );
-          })}
+          })
+        }
       </div>
 
       <section

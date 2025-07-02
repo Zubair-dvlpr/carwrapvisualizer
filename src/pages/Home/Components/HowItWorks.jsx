@@ -13,7 +13,7 @@ const HowItWorks = () => {
       <div className="max-w-3xl mx-auto">
         <h2 className="text-5xl font-Inter sm:text-4xl font-extrabold leading-20  mb-4">How it Works </h2>
         <p className=" text-lg">
-          Unlock the largest vehicle selection with our Car Wrap Visualizer™! Choose from over 26,000 cars & see how any car—from 1990 to 2026, any make or model—looks with premium wraps from top brands like 3M, Avery Dennison, and Hexis.
+          Unlock the largest vehicle selection with our Car Wrap Visualizer™! Choose from over 1.2 million cars & see how any car—from 1990 to 2026, any make or model—looks with premium wraps from top brands like 3M, Avery Dennison, and Hexis.
         </p>
 
       </div>
@@ -29,7 +29,7 @@ const HowItWorks = () => {
                 Use the Car Wrap Visualizer™ to showcase any wrap on any vehicle — select any year, make, and model from 1990 to 2026. Whether in person, through a shared link, or embedded on your website, clients can see hyper-realistic previews of their own car in real time.
               </p>
 
-              <img src={howtoworkimg1} alt="" />
+              <img src={howtoworkimg1} alt="" className='w-full rounded-xl' />
             </div>
           </div>
           <div className='flex items-center'>

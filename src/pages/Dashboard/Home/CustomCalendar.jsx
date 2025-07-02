@@ -1,25 +1,22 @@
-import React, { useContext, useState } from 'react';
+import { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './CustomCalendar.css'; // For custom styles
-import { AuthContext } from '../../../context/AuthContext';
 
-const CustomCalendar = ({ full, onDateSelect  }) => {
+const CustomCalendar = ({ full, onDateSelect }) => {
   // console.log(full)
   const [value, setValue] = useState(new Date());
-  const { setSelectedDate, bookingsByDate } = useContext(AuthContext);
   const handleChange = (date) => {
     if (!(date instanceof Date) || isNaN(date.getTime())) {
       console.error("❌ Invalid date selected:", date);
       return;
     }
-    const formattedDate = date.toISOString().split('T')[0]; // "YYYY-MM-DD"
-    console.log("Formatted Date: ",formattedDate);
-     onDateSelect(formattedDate);
-    // setValue(date);
-    // setSelectedDate(date); // Send to context
+    const formattedDate = date.toLocaleDateString('en-CA'); // Fix timezone issue
+    console.log("Formatted Date: ", formattedDate);
+    setValue(date); // Also update selected state
+    onDateSelect(formattedDate);
   };
+
 
   return (
     <div className={`p-6 ${full ? 'w-full' : 'md:max-w-md max-w-full'}  bg-white rounded-2xl shadow`}>
