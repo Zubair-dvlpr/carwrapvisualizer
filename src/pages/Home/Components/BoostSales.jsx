@@ -19,13 +19,13 @@ const BoostSales = () => {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                to="/demo"
+                to="/signup"
                 className=" bg-[#12161F] uppercase  text-white px-6 py-2 hover:scale-105  transition"
               >
                 Use Demo
               </Link>
               <Link
-                to="/get-started"
+                to="/signup"
                 className=" bg-[#12161F] capitalize  text-white  px-6 py-2 hover:scale-105   transition"
               >
                 Get Started Now

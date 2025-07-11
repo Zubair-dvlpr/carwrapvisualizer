@@ -95,7 +95,7 @@ const HowItWorks = () => {
 
 
       <div className='mt-10'>
-        <Link to="" className='bg-white text-gray-700 p-4 rounded-lg transition hover:scale-105'>
+        <Link to="/signup" className='bg-white text-gray-700 p-4 rounded-lg transition hover:scale-105'>
           Start Free Trial
         </Link>
       </div>
