@@ -56,3 +56,15 @@ export const generateCarImageAPIFn = createAsyncThunk(
     }
   }
 );
+
+export const generateStudioImageAPIFn = createAsyncThunk(
+  'studio/generateStudioImage',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.post(endPoints.generateStudioImage, values);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || 'Image generation failed');
+    }
+  }
+);

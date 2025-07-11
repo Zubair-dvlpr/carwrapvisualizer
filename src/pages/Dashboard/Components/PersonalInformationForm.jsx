@@ -50,13 +50,14 @@ const PersonalInformationForm = ({ userInfo }) => {
         firstName: userInfo.firstName || '',
         lastName: userInfo.lastName || '',
         phoneNumber: userInfo.phoneNumber || '',
-        region: userInfo.country || '',
+        region: userInfo.region || '',
+        city: userInfo.city || '',
         businessName: userInfo.businessName || '',
         businessAddress: userInfo.businessAddress || '',
       }));
 
-      if (userInfo.country) {
-        fetchCities(userInfo.country).then(() => {
+      if (userInfo.region) {
+        fetchCities(userInfo.region).then(() => {
           if (userInfo.city) {
             setFormData(prev => ({
               ...prev,

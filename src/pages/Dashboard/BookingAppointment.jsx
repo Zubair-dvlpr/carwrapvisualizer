@@ -67,7 +67,7 @@ const BookingAppointment = () => {
         console.log("img upload response", response)
     }
 
-    const handleSubmit = async (e, isQuoted) => {
+    const handleSubmit = async (e, isQuoted, isVisualizerSelected = false) => {
         e.preventDefault();
         setAnimation(true);
         if (isQuoted) {
@@ -99,6 +99,7 @@ const BookingAppointment = () => {
             repeatCustomer: formState.repeatCustomer,
             dealership: formState.dealershipType,
             isQuoted: isQuoted,
+            isVisualizerSelected
         };
 
         try {
@@ -574,11 +575,11 @@ const BookingAppointment = () => {
 
                 </form>
                 <div className="flex md:flex-row flex-col gap-3">
-                    <button type="button" onClick={(e) => handleSubmit(e, false)} className="bg-[#EB227C] text-white px-16 py-4 cursor-pointer rounded-full ">
+                    <button type="button" onClick={(e) => handleSubmit(e, false, false)} className="bg-[#EB227C] text-white px-16 py-4 cursor-pointer rounded-full ">
                         Book Now
                     </button>
 
-                    <button type="button" onClick={(e) => handleSubmit(e, true)} className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
+                    <button type="button" onClick={(e) => handleSubmit(e, true, false)} className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
                         Send Quote
                     </button>
 
@@ -603,7 +604,7 @@ const BookingAppointment = () => {
                     )}
 
 
-                    <button className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
+                    <button onClick={(e) => handleSubmit(e, false, true)} className="bg-[#2B892B] text-white px-16 py-4 cursor-pointer rounded-full ">
                         Generate Visualizer
                     </button>
                 </div>

@@ -27,9 +27,10 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center pt-4 text-sm">
           {/* Menu */}
           <div className="flex space-x-6 mb-4 md:mb-0">
-            <a href="#" className="hover:text-gray-300">Home</a>
-            <a href="#" className="hover:text-gray-300">About</a>
-            <a href="#" className="hover:text-gray-300">Contact</a>
+            <Link to="/" className="hover:text-gray-300">Home</Link>
+            <Link to="/contact" className="hover:text-gray-300">Contact</Link>
+            <Link to="/login" className="hover:text-gray-300">login</Link>
+            
           </div>
 
           {/* Copyright */}

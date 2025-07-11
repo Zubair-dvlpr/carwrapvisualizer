@@ -204,6 +204,24 @@ const PlansList = ({ location }) => {
                   </ul>
                 </div>
                 {/* ...price and button part */}
+                 <div>
+                  {/* Price Centered */}
+                  <div className="text-center text-base font-Poppins font-semibold mb-6">
+                    {price !== undefined
+                      ? `$${(price / 100).toFixed(2)} ${currency} / ${interval}`
+                      : "Contact us for pricing"}
+                  </div>
+
+                  {/* Subscribe Button */}
+                  <button
+                    onClick={() => handleSubscribe(plan)}
+
+                    disabled={processingPlanId === plan.id}
+                    className={`w-full ${plan?.default_price === activePlan?.priceId ? 'cursor-no-drop pointer-events-none' : 'cursor-pointer pointer-events-auto'} py-3 rounded font-semibold  bg-[#ED217B] hover:brightness-110 hover:scale-105 text-white transition disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {processingPlanId === plan.id ? "Processing..." : "Get this plan"}
+                  </button>
+                </div>
               </div>
             );
           })

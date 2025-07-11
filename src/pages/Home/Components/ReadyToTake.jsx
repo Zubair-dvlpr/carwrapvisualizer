@@ -14,7 +14,7 @@ const ReadyToTake = () => {
                         <p className='font-Lato mt-3'>Join the world’s first wrap visualization platform built for shops like yours. Get early access to the latest vehicles, unlock new revenue streams, enjoy hands-on support, and stand out in the industry’s top network.</p>
 
                         <div className='mt-10'>
-                            <Link className="bg-[#ED217B] rounded px-12 font-Poppins font-medium py-4">Start Free Trial</Link>
+                            <Link to="/signup" className="bg-[#ED217B] rounded px-12 font-Poppins font-medium py-4">Start Free Trial</Link>
 
                         </div>
                         <p className='mt-6 '>No Credit Card Required</p>

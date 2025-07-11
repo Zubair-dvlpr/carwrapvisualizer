@@ -1,5 +1,5 @@
 // StaggingBaseURLS
-export const baseURL = 'https://api.carwrapvisualizer.com';
+export const baseURL = 'http://13.51.196.87:8000';
 // export const baseURL = 'http://localhost:8000';
 
 const v = 'api/v1';
@@ -22,6 +22,7 @@ export const endPoints = {
   getMakes: `${baseURL}/${v}/user/tool/get-makes`,
   getModels: `${baseURL}/${v}/user/tool/get-models`,
   generateCarImage: `${baseURL}/${v}/user/tool/generate-car-image`,
+  generateStudioImage: `${baseURL}/${v}/public/tool/generate-image`,
   bookingAppointment: `${baseURL}/${v}/user/booking`,
   appointmentDetail: `${baseURL}/${v}/user/booking/all`,
   addNewUser: `${baseURL}/${v}/auth/add-user`,

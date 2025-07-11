@@ -131,7 +131,12 @@ const Overview = () => {
             <p className="text-sm  mb-6">Need help? Contact our support team anytime.</p>
             <div className='flex justify-center'>
               <button
-                onClick={() => setShowSuccessPopup(false)}
+                onClick={() => {
+                  setShowSuccessPopup(false);
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 500);
+                }}
                 className="bg-pink-600 hover:bg-pink-700 text-white cursor-pointer px-6 py-2 rounded-full transition"
               >
                 Get Started
@@ -158,7 +163,7 @@ const Overview = () => {
           <InProgressTable />
         </div>
         <div className='md:col-span-4 col-span-full flex flex-col gap-4 p-4 bg-[#F5F5F7] rounded-4xl'>
-          <DateBooking /> 
+          <DateBooking />
           {!userInfo.parentId && <MembersList />}
         </div>
       </div>

@@ -25,7 +25,7 @@ const BoostSales = () => {
                 Use Demo
               </Link>
               <Link
-                to="/get-started"
+                to="/signup"
                 className=" bg-[#12161F] capitalize  text-white  px-6 py-2 hover:scale-105   transition"
               >
                 Get Started Now

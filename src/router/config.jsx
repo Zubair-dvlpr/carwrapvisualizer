@@ -24,6 +24,7 @@ import SignUp from '../pages/SignUp/SignUp';
 import SucessfullUrl from '../pages/SucessfullUrl';
 import { userInfoAPIFn } from '../redux/features/auth/authFns';
 import VerifyOtp from '../pages/verifyOtp/VerifyOtp';
+import Stuido from '../pages/stuido/Stuido';
 
 
 
@@ -181,6 +182,15 @@ export const commonRoutes = [
     element: (
       <DefaultLayout>
         <Home />
+      </DefaultLayout>
+    )
+  },
+  {
+    path: '/generate-visualizer/:id',
+    moduleName: 'Studio',
+    element: (
+      <DefaultLayout>
+        <Stuido  />
       </DefaultLayout>
     )
   },
