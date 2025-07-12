@@ -1,20 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
-import NewBooking from './Home/NewBooking'
 import BookedAppointments from './Home/BookedAppointments'
 import CustomCalendar from './Home/CustomCalendar'
-import MembersList from './Home/MembersList'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import InProgressTable from './Components/InProgressTable'
-import { AuthContext } from '../../context/AuthContext'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { canceledAppointmentAPIFn, todayAppointmentAPIFn, tomorrowAppointmentAPIFn } from '../../redux/features/booking/bookingFus'
+import TrialExpiredPopup from './Components/TrialExpiredPopup'
 
 const Appointment = () => {
-    // const { } = useContext(AuthContext);
-
     const dispatch = useDispatch();
+    const user = useSelector(state => state?.currentUser?.currentUser);
+    const [showTrialPopup, setShowTrialPopup] = useState(false);
+
     const [todayBookings, setTodayBookings] = useState([]);
-    const [dateloading, setDateloading] = useState(true); // For spinner
     const [tomorrowBookings, setTomorrowBookings] = useState([]);
     const [canceledBookings, setCanceledBookings] = useState([]);
     const [loading, setLoading] = useState(true); // For spinner
@@ -71,6 +69,15 @@ const Appointment = () => {
     };
 
     useEffect(() => {
+
+        const trialExpired =
+            user?.data?.user?.accountType === 'addon_access_trials' &&
+            user?.data?.user?.isTrialPeriodExpired === true;
+
+        if (trialExpired) {
+            setShowTrialPopup(true);
+        }
+
         todayAppointmentfn();
         tomorrowAppointmentfn();
         canceledAppointmentfn();
@@ -122,6 +129,10 @@ const Appointment = () => {
                 <BookedAppointments data={tomorrowBookings} title="Tomorrow Appointments" loading={loading} />
                 <BookedAppointments data={canceledBookings} title="Canceled Appointments" loading={loading} />
             </div>
+
+            {/* Popup if trial expired */}
+            {showTrialPopup && <TrialExpiredPopup onClose={() => setShowTrialPopup(false)} />}
+
         </div>
     )
 }

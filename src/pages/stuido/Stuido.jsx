@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import YearSelector from './Components/YearSelector';
 import MakeSelector from './Components/MakeSelector';
 import ModelSelector from './Components/ModelSelector';
@@ -7,19 +7,34 @@ import logo3m from '../../assets/images/3m.png';
 import vector from '../../assets/images/vector.png';
 import loaderGif from '../../assets/loading.gif';
 import { useDispatch } from 'react-redux';
-import { generateCarImageAPIFn, generateStudioImageAPIFn } from '../../redux/features/Studio/studioFus';
+import axios from 'axios';
+import { generateStudioImageAPIFn } from '../../redux/features/Studio/studioFus';
+import { useLocation } from 'react-router-dom';
 
 const Studio = () => {
     const dispatch = useDispatch();
+    const location = useLocation();
     const [selectedBrand, setSelectedBrand] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedFinish, setSelectedFinish] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
+
+    const [bookingData, setBookingData] = useState(null);
+    const [bookingError, setBookingError] = useState(false);
+    const [loadingBooking, setLoadingBooking] = useState(true);
     const [selectedYear, setSelectedYear] = useState('');
     const [selectedMake, setSelectedMake] = useState('');
     const [selectedModel, setSelectedModel] = useState('');
     const [generatedImage, setGeneratedImage] = useState('');
     const [animation, setAnimation] = useState(false);
+    const [savedImages, setSavedImages] = useState([]);
+    const [selectedSavedId, setSelectedSavedId] = useState(null);
+
+    useEffect(() => {
+        const history = JSON.parse(localStorage.getItem('wrapHistory') || '[]');
+        setSavedImages(history);
+    }, [generatedImage]); // update after image generation
+
 
     const imageRef = useRef(null);
 
@@ -39,40 +54,115 @@ const Studio = () => {
         { name: 'Avery Dennison', logo: vector, colors: wrapFilmColors }
     ];
 
-    const generateImage = async (year, make, model, finish, color) => {
-        try {
-            setAnimation(true);
 
+
+    useEffect(() => {
+        const pathSegments = location.pathname.split('/');
+        const bookingId = pathSegments[pathSegments.length - 1];
+
+        const fetchBooking = async () => {
+            try {
+                const response = await axios.get(
+                    `http://13.51.196.87:8000/api/v1/public/get-booking/${bookingId}`
+                );
+
+                if (response?.data?.status === 'success') {
+                    console.log('✅ Booking Data:', response.data.data);
+                    setBookingData(response.data.data);
+                    setBookingError(false);
+                } else {
+                    setBookingError(true);
+                }
+            } catch (error) {
+                console.error('❌ Error fetching booking:', error);
+                setBookingError(true);
+            } finally {
+                setLoadingBooking(false);
+            }
+        };
+
+        fetchBooking();
+    }, [location]);
+
+
+
+    const generateImage = async (year, make, model, finish, color) => {
+        if (localStorage.getItem('wrapCredits') === null) {
+            localStorage.setItem('wrapCredits', '5'); // default on first use
+        }
+
+        let remainingCredits = parseInt(localStorage.getItem('wrapCredits'), 10);
+
+        if (remainingCredits <= 0) {
+            alert('❌ You have used all 5 wrap credits.');
+            return;
+        }
+
+        setAnimation(true);
+
+        try {
             const response = await dispatch(
                 generateStudioImageAPIFn({ year, make, model, finish, color, description: '' })
             );
 
-            if (response?.meta?.requestStatus === 'fulfilled') {
-                const imageArray = response.payload?.data?.image || [];
-                const inlineData = imageArray.find((img) => img.inlineData)?.inlineData?.data;
+            const images = response?.payload?.data?.image || [];
+            const inlineData = images.find((img) => img.inlineData)?.inlineData?.data;
 
-                if (!inlineData) {
-                    setAnimation(false);
-                    alert('Too many requests. Please wait and try again.');
-                    return;
-                }
-
-                const imageUrl = `data:image/png;base64,${inlineData}`;
-                setGeneratedImage(imageUrl);
-                setTimeout(() => {
-                    imageRef.current?.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-            } else {
-                alert(response.payload || 'Image generation failed');
+            if (!inlineData) {
+                setAnimation(false);
+                alert('Too many requests. Please wait and try again.');
+                return;
             }
 
-            setAnimation(false);
+            const imageUrl = `data:image/png;base64,${inlineData}`;
+            setGeneratedImage(imageUrl);
+
+            // Save to localStorage
+            const newRecord = {
+                id: Date.now(),
+                year, make, model, finish, color,
+                image: imageUrl
+            };
+
+            const history = JSON.parse(localStorage.getItem('wrapHistory') || '[]');
+            const updatedHistory = [...history, newRecord];
+            localStorage.setItem('wrapHistory', JSON.stringify(updatedHistory));
+
+            // Update credits
+            remainingCredits -= 1;
+            localStorage.setItem('wrapCredits', remainingCredits.toString());
+
+            setTimeout(() => {
+                imageRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
         } catch (error) {
-            setAnimation(false);
             console.error(error);
             alert(error.message || 'Something went wrong');
+        } finally {
+            setAnimation(false);
         }
     };
+
+
+    if (loadingBooking) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-white bg-black">
+                <p>Loading booking details...</p>
+            </div>
+        );
+    }
+
+    if (bookingError || !bookingData) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-white bg-black">
+                <div className="text-center">
+                    <h2 className="text-2xl font-bold mb-4">🚫 Booking Not Found</h2>
+                    <p className="text-lg">The booking ID is invalid or has been removed. Please check the link again.</p>
+                </div>
+            </div>
+        );
+    }
+
 
     return (
         <>
@@ -83,7 +173,7 @@ const Studio = () => {
             )}
 
             <div className='text-white pt-10'>
-                
+
 
                 <div className="max-w-7xl mx-auto flex flex-col items-center">
                     {/* Image Preview */}
@@ -170,6 +260,88 @@ const Studio = () => {
                         </div>
                     )}
                 </div>
+
+                {savedImages.length > 0 && (
+                    <div className="w-full max-w-4xl mb-4">
+                        <label className="block text-white mb-1 font-medium">🔁 Select Previous Wrap:</label>
+                        <select
+                            className="w-full p-2 rounded bg-[#1f1f1f] text-white"
+                            onChange={(e) => {
+                                const selected = savedImages.find(img => img.id === parseInt(e.target.value));
+                                if (selected) {
+                                    setSelectedYear(selected.year);
+                                    setSelectedMake(selected.make);
+                                    setSelectedModel(selected.model);
+                                    setSelectedBrand({ name: 'Custom', colors: wrapFilmColors }); // or detect from saved
+                                    setSelectedFinish(selected.finish);
+                                    setSelectedColor(selected.color);
+                                    setGeneratedImage(selected.image);
+                                }
+                                setSelectedSavedId(e.target.value);
+                            }}
+                        >
+                            <option value="">-- Select a saved image --</option>
+                            {savedImages.map(item => (
+                                <option key={item.id} value={item.id}>
+                                    {item.year} {item.make} {item.model} ({item.finish})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
+
+
+                {bookingData && (
+                    <div className="bg-[#1a1a1a] text-white mt-10 px-6 py-4 rounded-xl max-w-4xl w-full mx-auto shadow-lg text-sm">
+                        <h3 className="text-lg font-semibold mb-2 border-b border-gray-600 pb-1">
+                            📋 Booking Summary
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4">
+                            <div><span className="font-medium">👤 Name:</span> {bookingData.firstName} {bookingData.lastName}</div>
+                            <div><span className="font-medium">📧 Email:</span> {bookingData.email}</div>
+                            <div><span className="font-medium">📞 Phone:</span> {bookingData.phone}</div>
+                            <div><span className="font-medium">🚘 Vehicle:</span> {bookingData.year} {bookingData.make} {bookingData.model}</div>
+                            <div><span className="font-medium">🎨 Wrap Color:</span> {bookingData.wrapColor}</div>
+                            <div><span className="font-medium">🗓️ Booking Date:</span> {new Date(bookingData.bookingDate).toLocaleDateString()}</div>
+                            <div><span className="font-medium">💬 Notes:</span> {bookingData.notes || '—'}</div>
+                        </div>
+                    </div>
+                )}
+                <div className='w-full text-center'>
+                    <button
+                        onClick={async () => {
+                            const selected = savedImages.find(i => i.id === parseInt(selectedSavedId));
+                            if (!selected) return alert("No image selected");
+
+                            try {
+                                const publicId = bookingData?.publicAccessId;
+                                const payload = {
+                                    publicId,
+                                    year: selected.year,
+                                    make: selected.make,
+                                    model: selected.model,
+                                    wrapColor: selected.finish
+                                };
+
+                                const res = await axios.post("http://13.51.196.87:8000/api/v1/public/update-booking", payload);
+
+                                if (res.data?.status === 'success') {
+                                    alert('✅ Booking updated successfully');
+                                } else {
+                                    alert('❌ Failed to update booking');
+                                }
+                            } catch (err) {
+                                console.error(err);
+                                alert('🔥 Error while updating booking');
+                            }
+                        }}
+                        className="mt-4 bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 mx-auto rounded-full transition"
+                    >
+                        Update Booking
+                    </button>
+                </div>
+
+
             </div>
         </>
     );
