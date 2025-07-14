@@ -281,10 +281,10 @@ const PlansList = ({ location }) => {
                   } text-white font-semibold px-9 py-4 rounded-full transition`}
               >
                 {isActive
-                  ? "Add-on Active"
+                  ? "Wrap Shop Workflow Active"
                   : processingPlanId === plan.id
                     ? "Processing..."
-                    : `Add-on – ${price !== undefined
+                    : `Wrap Shop Workflow – ${price !== undefined
                       ? `$${(price / 100).toFixed(2)} ${currency} / ${interval}`
                       : "Contact us for pricing"
                     }`}
