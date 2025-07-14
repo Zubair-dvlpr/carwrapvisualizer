@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 const Router = () => {
   const user = useSelector(state => state?.currentUser?.currentUser);
-  console.log(user);
+  // console.log(user);
   const role = user?.data?.user?.role?.role;
 
   const shopmanRoutes = [...privateRoutes].filter(item => item.path != "/subscription")
