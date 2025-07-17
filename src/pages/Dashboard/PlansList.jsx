@@ -16,6 +16,13 @@ const PlansList = ({ location }) => {
   const [error, setError] = useState(null);
   const [processingPlanId, setProcessingPlanId] = useState(null);
   const [activePlan, setActivePlan] = useState();
+  const [showFullDesc, setShowFullDesc] = useState(false);
+  const toggleDesc = () => setShowFullDesc(prev => !prev);
+
+  const MAX_LENGTH = 100; // Characters to show before "Read More"
+
+
+
 
   // Dummy features list per plan id
   const planFeatures = {
@@ -170,6 +177,9 @@ const PlansList = ({ location }) => {
             const priceObj = Array.isArray(plan.prices) ? plan.prices[0] : plan.prices;
             const priceId = priceObj?.id;
             const planDesc = plan?.description || "No description available.";
+            const displayDesc = showFullDesc || planDesc.length <= MAX_LENGTH
+              ? planDesc
+              : planDesc.slice(0, MAX_LENGTH) + '...';
             const features = planFeatures?.[plan.name] || [];
             const price = priceObj?.unit_amount;
             const currency = priceObj?.currency?.toUpperCase();
@@ -185,7 +195,18 @@ const PlansList = ({ location }) => {
               >
                 <div>
                   <h3 className="text-xl font-bold mb-3">{plan.name}</h3>
-                  <p className="mb-3">{planDesc}</p>
+                  <p className="mb-3">
+                    {displayDesc}
+                    {planDesc.length > MAX_LENGTH && (
+                      <span
+                        onClick={toggleDesc}
+                        className="text-pink-500 cursor-pointer ml-1 underline"
+                      >
+                        {showFullDesc ? "Show Less" : "Read More"}
+                      </span>
+                    )}
+                  </p>
+
                   {isSecondPlan && <div className="border-b mb-3"></div>}
                   <ul className="my-6 space-y-2">
                     {features.map((feature, i) => (
@@ -232,10 +253,11 @@ const PlansList = ({ location }) => {
         className=" mt-3  text-white bg-center bg-no-repeat bg-cover rounded-2xl  w-full mx-auto py-12 px-4 gap-4"
         style={{ backgroundImage: `url(${pricebelowSection})` }}
       >
+        <h3 className='text-3xl font-bold mb-4 text-center'>Wrap Shop Workflow</h3>
         <div className='flex flex-col md:flex-row items-stretch justify-center'>
           {/* Wrapflow Features */}
           <div className="w-full md:w-1/2">
-            <h3 className="text-2xl font-bold mb-4">Wrapflow</h3>
+            {/* <h3 className="text-2xl font-bold mb-4">Wrapflow</h3> */}
             <ul className="space-y-3 text-base">
               {Wrapflow.map((feature, i) => (
                 <li key={i} className="flex items-center">
@@ -248,7 +270,7 @@ const PlansList = ({ location }) => {
 
           {/* Ultimate Plans Features */}
           <div className="w-full md:w-1/2">
-            <h3 className="text-2xl font-bold mb-4">Ultimate Plans</h3>
+            {/* <h3 className="text-2xl font-bold mb-4">Ultimate Plans</h3> */}
             <ul className="space-y-3 text-base">
               {Ultimateplans.map((feature, i) => (
                 <li key={i} className="flex items-center">
@@ -281,10 +303,10 @@ const PlansList = ({ location }) => {
                   } text-white font-semibold px-9 py-4 rounded-full transition`}
               >
                 {isActive
-                  ? "Wrap Shop Workflow Active"
+                  ? "Add on Active"
                   : processingPlanId === plan.id
                     ? "Processing..."
-                    : `Wrap Shop Workflow – ${price !== undefined
+                    : `Add on – ${price !== undefined
                       ? `$${(price / 100).toFixed(2)} ${currency} / ${interval}`
                       : "Contact us for pricing"
                     }`}
