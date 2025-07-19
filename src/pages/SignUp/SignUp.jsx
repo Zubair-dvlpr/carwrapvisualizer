@@ -67,16 +67,13 @@ const SignUp = () => {
       // } finally {
       //   setAnimation(false);
       // }
-
     }
     if (data?.meta?.requestStatus === 'rejected') {
       setError(data?.payload);
-      console.error(data?.payload)
+      console.error(data?.payload);
       setAnimation(false); // Stop loading
     }
-
   };
-
 
   return (
     <>
@@ -97,7 +94,9 @@ const SignUp = () => {
             <h2 className='text-[32px] font-semibold capitalize mb-2 '>
               Get Started with Car Wrap Visualizer
             </h2>
-            <p className='text-lg mb-2'>Join now to unlock full access to wrap Visualizers, projects, and Studio tools</p>
+            <p className='text-lg mb-2'>
+              Join now to unlock full access to wrap visualizers, projects, and studio tools.
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className='space-y-3'>
@@ -173,7 +172,6 @@ const SignUp = () => {
               Create My Account
             </button>
           </form>
-
 
           <p className='text-center mt-4'>
             Already have an account?{' '}
