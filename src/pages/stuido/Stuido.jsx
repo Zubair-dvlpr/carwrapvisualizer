@@ -63,7 +63,7 @@ const Studio = () => {
         const fetchBooking = async () => {
             try {
                 const response = await axios.get(
-                    `http://13.51.196.87:8000/api/v1/public/get-booking/${bookingId}`
+                    `https://carwrapvisualizer-backend-52873ccc984d.herokuapp.com/api/v1/public/get-booking/${bookingId}`
                 );
 
                 if (response?.data?.status === 'success') {
@@ -107,7 +107,8 @@ const Studio = () => {
 
             const images = response?.payload?.data?.image || [];
             const inlineData = images.find((img) => img.inlineData)?.inlineData?.data;
-
+            console.log(response)
+            console.log(inlineData)
             if (!inlineData) {
                 setAnimation(false);
                 alert('Too many requests. Please wait and try again.');

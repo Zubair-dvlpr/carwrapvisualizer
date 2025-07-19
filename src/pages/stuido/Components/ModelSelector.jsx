@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 // Public API base
-const baseURL = 'http://13.51.196.87:8000';
+const baseURL = 'https://carwrapvisualizer-backend-52873ccc984d.herokuapp.com';
 const v = 'api/v1';
 const getModelsURL = `${baseURL}/${v}/public/tool/get-models`;
 

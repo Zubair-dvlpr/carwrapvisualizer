@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 // Define baseURL and version
-const baseURL = 'http://13.51.196.87:8000';
+const baseURL = 'https://carwrapvisualizer-backend-52873ccc984d.herokuapp.com';
 const v = 'api/v1';
 const getMakesURL = `${baseURL}/${v}/public/tool/get-makes`;
 

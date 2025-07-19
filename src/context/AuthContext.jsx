@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
     const token = getTokenFromLocalStorage();
     // console.log("token", token)
     try {
-      const response = await axios.get('https://api.carwrapvisualizer.com/api/v1/auth/user-info', {
+      const response = await axios.get('https://carwrapvisualizer-backend-52873ccc984d.herokuapp.com/api/v1/auth/user-info', {
         headers: {
           Authorization: `Bearer ${token}`,
           // Cookie: 'connect.sid=s%3AVjqt-nXCB_jyulZh5PP0p9E6QJHi2JaT.lCVb409EHXNtyDgq6txalyN7RyRsdC8uCSfgkBWCSoU'
@@ -52,7 +52,7 @@ const AuthProvider = ({ children }) => {
       setAddon(response.data.data.user.accountType)
       // console.log('context User Info: ', response.data.data.user.credits);
     } catch (error) {
-      console.error('Failed to fetch user info:', error);
+      console.log('Failed to fetch user info:', error);
       // Optionally: navigate('/login') if token is invalid or expired
     }
   };
