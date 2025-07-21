@@ -12,7 +12,7 @@ const getCreditsLimit = (planName) => {
     "Ultimate Plan": 1000,
     "Pro Plan": 2500,
   };
-  return limits[planName] || 10;
+  return limits[planName] || 5;
 };
 
 const CreditsAndPlan = ({ userInfo, activePlan, plans, isLoading }) => {

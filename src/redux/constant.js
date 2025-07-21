@@ -1,5 +1,5 @@
 // StaggingBaseURLS
-export const baseURL = 'https://api.carwrapvisualizer.com';
+export const baseURL = 'https://prod.carwrapvisualizer.com';
 // export const baseURL = 'http://localhost:8000';
 
 const v = 'api/v1';
