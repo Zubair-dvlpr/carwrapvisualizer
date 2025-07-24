@@ -7,7 +7,7 @@ const tabs = [
     heading: '🚗 Real Vehicle Wrap Visualizer: 1990–2026 Models',
     image: tabimg1, // Replace with actual image path
     paragraph: ' Car Wrap Visualizer™ Your wraps. Your brand. Instant previews—standalone or embedded. Show clients exactly how their car will look—full-body or caliper wraps—on real vehicle templates, right in your browser or seamlessly integrated into your site.',
-    list: ['Coverage for any make/model 1990–2026', '200+ wrap colors plus upload your own custom lines', 'Finish options: gloss, matte, satin, chrome, carbon fiber', 'Caliper color customizations to match any design','White-label option to fully brand as your own', 'White-label option to fully brand as your own', 'Use as a standalone studio or embed directly on your website', 'No downloads, no guesswork—just instant, photo-real previews'],
+    list: ['Coverage for any make/model 1990–2026', '200+ wrap colors plus upload your own custom lines', 'Finish options: gloss, matte, satin, chrome, carbon fiber', 'Caliper color customizations to match any design','White-label option to fully brand as your own', 'Use as a standalone studio or embed directly on your website', 'No downloads, no guesswork—just instant, photo-real previews'],
   },
   {
     id: 'tab2',

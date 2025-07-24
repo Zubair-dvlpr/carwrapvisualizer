@@ -92,7 +92,7 @@ const SignUp = () => {
               <img src={logo} alt='Logo' className='w-44 mx-auto mb-4' />
             </Link>
             <h2 className='text-[32px] font-semibold capitalize mb-2 '>
-              Get Started with Car Wrap Visualizer
+              Get Started with Car Wrapvisualizer™
             </h2>
             <p className='text-lg mb-2'>
               Join now to unlock full access to wrap visualizers, projects, and studio tools.

@@ -66,7 +66,7 @@ const Login = () => {
               <img src={logo} alt='Logo' className='w-44 mx-auto mb-8' />
             </Link>
             <h2 className='text-[32px] font-semibold capitalize mb-4'>
-              Welcome to Car Wrap Visualizer™
+              Welcome to Car Wrapvisualizer™
             </h2>
             <p className='text-lg mb-4'>Log In to access your dashboard and start visualizing wraps instantly.</p>
           </div>
