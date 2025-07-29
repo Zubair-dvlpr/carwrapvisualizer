@@ -12,6 +12,7 @@ import loaderGif from '../../assets/loading.gif';
 import { useDispatch } from 'react-redux';
 import { generateCarImageAPIFn } from '../../redux/features/Studio/studioFus';
 import { Link } from 'react-router-dom';
+import { BrandDropdown } from './Components/BrandDropdown';
 const CarFillPage = ({ bg }) => {
   // console.log(bg)
   const dispatch = useDispatch();
@@ -355,7 +356,7 @@ const CarFillPage = ({ bg }) => {
       { name: 'Raven Black', sku: 'CM14', colorCode: '#131217' },
       { name: 'Grainy Black', sku: 'CM02-MS', colorCode: '#2D2C33' }
     ],
-    MirrorChrome: [
+    Mirror_Chrome: [
       { name: 'White Gold', sku: 'CHM01-HD', colorCode: '#797979' },
       { name: 'Yellow Gold', sku: 'CHM02-HD', colorCode: '#EFA114' },
       { name: 'Cherry Red', sku: 'CHM04-HD', colorCode: '#E0373F' },
@@ -366,7 +367,7 @@ const CarFillPage = ({ bg }) => {
       { name: 'Inferno Red', sku: 'CHM24-HD', colorCode: '#D30625' },
       { name: 'Nova Blue', sku: 'CHM26-HD', colorCode: '#2A1C76' }
     ],
-    SatinChrome: [
+    Satin_Chrome: [
       { name: 'Crimson Red', sku: 'VCH401-S', colorCode: '#9A1915' },
       { name: 'Velvet Blue', sku: 'VCH402-S', colorCode: '#0A2C83' },
       { name: 'Concord Grape', sku: 'VCH403-S', colorCode: '#571B51' },
@@ -385,7 +386,7 @@ const CarFillPage = ({ bg }) => {
       { name: 'Sangria Red', sku: 'VCH422-S', colorCode: '#B31319' },
       { name: 'Gable Green', sku: 'VCH423-S', colorCode: '#006C43' }
     ],
-    SatinMetallic: [
+    Satin_Metallic: [
       { name: 'Dark Grey Silk', sku: 'HM01', colorCode: '#262228' },
       { name: 'Black Silver', sku: 'HM02-R', colorCode: '#65544C' },
       { name: 'Matte Green Black Silk', sku: 'HM07', colorCode: '#1A300D' },
@@ -497,25 +498,6 @@ const CarFillPage = ({ bg }) => {
   };
 
 
-  const handleConfirmSelection = async () => {
-    try {
-      const img = await generateImage(
-        selectedYear,
-        selectedMake,
-        selectedModel,
-        selectedFinish,
-        selectedColor
-      );
-      setGeneratedImage(img);
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-  const handleFinishChange = e => {
-    const finish = e.target.value;
-    setSelectedFinish(finish);
-    setSelectedColor(''); // reset color on finish change
-  };
 
   const handleBrandClick = brand => {
     setSelectedBrand(brand);
@@ -675,28 +657,16 @@ const CarFillPage = ({ bg }) => {
               </div>
             </div>
             <div className={`mx-auto max-w-4xl ${bg ? "text-white" : "text-black"} py-10 text-center`}>
-              <div className='bg-[#2B2C2C]  p-5 rounded-xl'>
-                <h4 className='text-xl text-white text-left mb-4'>Select Wrap Brand</h4>
-                <div className='flex justify-center gap-12 mb-8'>
-                  {brands.map((brand, index) => (
+              <div className='bg-[#2B2C2C] flex items-center gap-4 flex-col sm:flex-row justify-around  p-5 rounded-xl'>
+                <h4 className='text-2xl text-white font-semibold text-left'>Select Wrap Brand</h4>
+      
+                <BrandDropdown
+                  brands={brands}
+                  selectedBrand={selectedBrand}
+                  setSelectedBrand={handleBrandClick}
+                />
 
-                    <div key={index} onClick={() => handleBrandClick(brand)} className={`text-white  items-center border-2 rounded-lg transition ${brand.name === "vector" ? 'flex' : ''} ${selectedBrand?.name === brand.name
-                      ? 'border-blue-500'
-                      : 'border-transparent'
-                      }`}>
-                      <img
-                        key={brand.name}
-                        src={brand.logo}
-                        alt={brand.name}
-                        className={`h-16 mx-auto cursor-pointer  p-1 transition `}
 
-                      />
-                      {brand.name === "vector" ? (
-                        <span className='text-2xl font-semibold'> Avery Dennision </span>
-                      ) : ''}
-                    </div>
-                  ))}
-                </div>
               </div>
               {selectedBrand && (
                 <div>
@@ -708,13 +678,13 @@ const CarFillPage = ({ bg }) => {
                           }`}
                         onClick={() => handleCategoryClick(cat)}
                       >
-                        {cat}
+                        {cat.replace(/_/g, ' ')}
                       </button>
                     ))}
                   </div>
 
                   {selectedCategory && (
-                    <div className='border-t pt-6'>
+                    <div className='border-t h-[480px] rounded-2xl overflow-y-scroll hide-scrollbar'>
                       {/* <h6 className="text-lg font-medium mb-3">{selectedCategory} Colors</h6> */}
                       <div className='grid grid-cols-1'>
                         {selectedBrand.colors[selectedCategory].map((item, index) => (
@@ -753,7 +723,7 @@ const CarFillPage = ({ bg }) => {
                             <p className='grow  p-4 border-x border-[#353535]  text-md font-medium'>
                               {item.name}
                             </p>
-                            <span className='text-sm  p-4'>{selectedCategory}</span>
+                            <span className='text-sm  p-4'>{selectedCategory.replace(/_/g, ' ')}</span>
                           </div>
                         ))}
                       </div>

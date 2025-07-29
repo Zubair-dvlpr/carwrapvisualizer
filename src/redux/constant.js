@@ -1,6 +1,6 @@
 // StaggingBaseURLS
-export const baseURL = 'https://prod.carwrapvisualizer.com';
-// export const baseURL = 'http://localhost:8000';
+export const baseURL = 'https://carwrapvisualizer-backend-52873ccc984d.herokuapp.com';
+
 
 const v = 'api/v1';
 
