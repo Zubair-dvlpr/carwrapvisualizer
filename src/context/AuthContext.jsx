@@ -5,8 +5,6 @@ export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   // live domain http://34.106.73.252/backend
-  const domain = 'http://localhost/carApi/';
-  const localhost = 'http://localhost/carApi/';
 
   const navigate = useNavigate();
   const [credits, setCredits] = useState();
@@ -43,7 +41,6 @@ const AuthProvider = ({ children }) => {
       const response = await axios.get('https://api.carwrapvisualizer.com/api/v1/auth/user-info', {
         headers: {
           Authorization: `Bearer ${token}`,
-          // Cookie: 'connect.sid=s%3AVjqt-nXCB_jyulZh5PP0p9E6QJHi2JaT.lCVb409EHXNtyDgq6txalyN7RyRsdC8uCSfgkBWCSoU'
         }
       });
 
@@ -178,7 +175,6 @@ const AuthProvider = ({ children }) => {
         animation,
         setAnimation,
         todayBookings,
-        domain,
         tomorrowBookings,
         cancelledBookings,
         selectedDate,

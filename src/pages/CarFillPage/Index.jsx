@@ -17,10 +17,11 @@ import { generateCarImageAPIFn } from '../../redux/features/Studio/studioFus';
 import { Link } from 'react-router-dom';
 import { BrandDropdown } from './Components/BrandDropdown';
 import { brand3MHex, brandAPAHex, brandAvery, brandTeckwrapHex, brandVinylFrogHex, brandVvividHex } from './Components/Brands';
+import PopupModal from './Components/PopupModal';
 const CarFillPage = ({ bg }) => {
   // console.log(bg)
   const dispatch = useDispatch();
-  
+
 
   const brands = [
     {
@@ -62,6 +63,7 @@ const CarFillPage = ({ bg }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedFinish, setSelectedFinish] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
+  const [showIncompleteSelectionPopup, setShowIncompleteSelectionPopup] = useState(false);
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedMake, setSelectedMake] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
@@ -83,32 +85,54 @@ const CarFillPage = ({ bg }) => {
         return;
       }
 
+      const formatFinishLabel = (finishKey) => {
+        const map = {
+          Matte: 'Matte (flat, no reflections)',
+          Satin: 'Satin (soft sheen, no gloss)',
+          Gloss: 'Gloss (highly reflective)',
+          Chrome: 'Chrome (mirror-like shine)',
+          Carbon: 'Carbon (textured weave)',
+          Flip: 'Flip (color-shifting)'
+        };
+        return map[finishKey] || finishKey;
+      };
+
+      const getColorNameByCode = (brand, finishKey, colorCode) => {
+        const list = brand?.colors?.[finishKey] || [];
+        const found = list.find(c => c.colorCode === colorCode);
+        return found?.name || 'Unknown Color';
+      };
+
+
       const response = await dispatch(
         generateCarImageAPIFn({
           year,
           make,
           model,
-          finish,
+          finish: formatFinishLabel(finish),
           color,
-          description: ''
+          description: '',
+          wrap: `${formatFinishLabel(finish)} ${getColorNameByCode(selectedBrand, finish, color)}`,
+          promptType: 'side_view'
         })
       );
 
+
       if (response?.meta?.requestStatus === 'fulfilled') {
-        const imageArray = response.payload?.data?.image || [];
-        const inlineData = imageArray.find((img) => img.inlineData)?.inlineData?.data;
-        console.log("img response ", response.payload)
-        if (!inlineData) {
-          console.log(inlineData);
+        const imageBytes = response.payload?.data?.image?.image?.imageBytes;
+        const mimeType = response.payload?.data?.image?.image?.mimeType || 'image/png';
+
+        if (!imageBytes) {
           setAnimation(false);
-          setShowTooManyRequestsPopup(true); // ✅ Show the new popup
+          setShowTooManyRequestsPopup(true);
           return;
         }
 
-        const imageUrl = `data:image/png;base64,${inlineData}`;
+        const imageUrl = `data:${mimeType};base64,${imageBytes}`;
         await fetchUserInfo();
         setAnimation(false);
         return imageUrl;
+
 
       } else {
         setAnimation(false);
@@ -256,7 +280,7 @@ const CarFillPage = ({ bg }) => {
 
               <div className='grid sm:grid-cols-3 grid-cols-1  gap-3'>
                 <label className='flex flex-col gap-2 text-black'>
-                  <span className='text-white'> Year</span>
+                  <span className=''> Year</span>
                   <YearSelector
                     onSelect={year => {
                       setSelectedYear(year);
@@ -266,12 +290,12 @@ const CarFillPage = ({ bg }) => {
                 </label>
                 {/* Make Selector */}
                 <label className='flex flex-col gap-2 text-black'>
-                  <span className='text-white'> Make</span>
+                  <span className=''> Make</span>
                   <MakeSelector selectedYear={selectedYear} onSelect={setSelectedMake} />
                 </label>
                 {/* Model Selector */}
                 <label className='flex flex-col gap-2 text-black'>
-                  <span className='text-white'> Model</span>
+                  <span className=''> Model</span>
                   <ModelSelector
                     selectedYear={selectedYear}
                     selectedMake={selectedMake}
@@ -283,7 +307,7 @@ const CarFillPage = ({ bg }) => {
             <div className={`mx-auto max-w-4xl ${bg ? "text-white" : "text-black"} py-10 text-center`}>
               <div className='bg-[#2B2C2C] flex items-center gap-4 flex-col sm:flex-row justify-around  p-5 rounded-xl'>
                 <h4 className='text-2xl text-white font-semibold text-left'>Select Wrap Brand</h4>
-      
+
                 <BrandDropdown
                   brands={brands}
                   selectedBrand={selectedBrand}
@@ -316,6 +340,11 @@ const CarFillPage = ({ bg }) => {
                             key={index}
                             className='flex items-center justify-between border border-[#353535] text-white bg-black shadow-sm cursor-pointer hover:shadow-md transition'
                             onClick={async () => {
+                              if (!selectedYear || !selectedMake || !selectedModel) {
+                                setShowIncompleteSelectionPopup(true);
+                                return;
+                              }
+
                               try {
                                 setSelectedFinish(selectedCategory);
                                 setSelectedColor(item.colorCode);
@@ -329,14 +358,14 @@ const CarFillPage = ({ bg }) => {
                                 );
                                 setGeneratedImage(img);
 
-                                // Scroll to image after slight delay to ensure it has rendered
                                 setTimeout(() => {
                                   imageRef.current?.scrollIntoView({ behavior: 'smooth' });
                                 }, 100);
                               } catch (err) {
-                                alert(err.message);
+                                console.error(err.message);
                               }
                             }}
+
                           >
                             <div className='p-4'>
                               <div
@@ -359,8 +388,21 @@ const CarFillPage = ({ bg }) => {
           </div>
         </div>
       </div>
+
+      {showIncompleteSelectionPopup && (
+        <PopupModal
+          title="Select All Vehicle Details"
+          message="Please select Year, Make, and Model before choosing a wrap color."
+          onClose={() => setShowIncompleteSelectionPopup(false)}
+          icon="⚠️"
+        />
+      )}
+
     </>
   );
 };
 
 export default CarFillPage;
+
+
+
