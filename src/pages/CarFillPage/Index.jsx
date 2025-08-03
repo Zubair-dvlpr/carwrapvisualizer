@@ -18,10 +18,19 @@ import { Link } from 'react-router-dom';
 import { BrandDropdown } from './Components/BrandDropdown';
 import { brand3MHex, brandAPAHex, brandAvery, brandTeckwrapHex, brandVinylFrogHex, brandVvividHex } from './Components/Brands';
 import PopupModal from './Components/PopupModal';
+import { AngleDropdown } from './Components/AngleDropdown';
 const CarFillPage = ({ bg }) => {
   // console.log(bg)
   const dispatch = useDispatch();
 
+
+  const angles = [
+    { label: 'Default', value: 'default' },
+    { label: 'Side View', value: 'side_view' },
+    { label: 'Front Angle', value: 'front_view' },
+    { label: 'Rear Angle', value: 'rear_view' },
+    { label: 'Top Down', value: 'top_down_view' }
+  ];
 
   const brands = [
     {
@@ -61,6 +70,7 @@ const CarFillPage = ({ bg }) => {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [showTooManyRequestsPopup, setShowTooManyRequestsPopup] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedAngle, setSelectedAngle] = useState('default');
   const [selectedFinish, setSelectedFinish] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [showIncompleteSelectionPopup, setShowIncompleteSelectionPopup] = useState(false);
@@ -113,7 +123,7 @@ const CarFillPage = ({ bg }) => {
           color,
           description: '',
           wrap: `${formatFinishLabel(finish)} ${getColorNameByCode(selectedBrand, finish, color)}`,
-          promptType: 'side_view'
+          promptType: selectedAngle
         })
       );
 
@@ -307,6 +317,16 @@ const CarFillPage = ({ bg }) => {
             <div className={`mx-auto max-w-4xl ${bg ? "text-white" : "text-black"} py-10 text-center`}>
               <div className='bg-[#2B2C2C] flex items-center gap-4 flex-col sm:flex-row justify-around  p-5 rounded-xl'>
                 <h4 className='text-2xl text-white font-semibold text-left'>Select Wrap Brand</h4>
+
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+                  <AngleDropdown
+                    angles={angles}
+                    selectedAngle={selectedAngle}
+                    setSelectedAngle={setSelectedAngle}
+                  />
+                </div>
+
+
 
                 <BrandDropdown
                   brands={brands}
