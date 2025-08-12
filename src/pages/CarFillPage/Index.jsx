@@ -85,6 +85,7 @@ const CarFillPage = ({ bg }) => {
   }, [])
   // fetchUserInfo();
   const generateImage = async (year, make, model, finish, color) => {
+    
     try {
       setAnimation(true);
 
@@ -97,12 +98,12 @@ const CarFillPage = ({ bg }) => {
 
       const formatFinishLabel = (finishKey) => {
         const map = {
-          Matte: 'Matte (flat, no reflections)',
-          Satin: 'Satin (soft sheen, no gloss)',
-          Gloss: 'Gloss (highly reflective)',
-          Chrome: 'Chrome (mirror-like shine)',
-          Carbon: 'Carbon (textured weave)',
-          Flip: 'Flip (color-shifting)'
+          Matte: 'Matte',
+          Satin: 'Satin',
+          Gloss: 'Gloss',
+          Chrome: 'Chrome',
+          Carbon: 'Carbon',
+          Flip: 'Flip'
         };
         return map[finishKey] || finishKey;
       };
@@ -120,12 +121,14 @@ const CarFillPage = ({ bg }) => {
           make,
           model,
           finish: formatFinishLabel(finish),
+          finishType: formatFinishLabel(finish),
           color,
           description: '',
           wrap: `${formatFinishLabel(finish)} ${getColorNameByCode(selectedBrand, finish, color)}`,
           promptType: selectedAngle
         })
       );
+
 
 
       if (response?.meta?.requestStatus === 'fulfilled') {

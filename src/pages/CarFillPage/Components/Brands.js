@@ -80,17 +80,6 @@ export const brand3MHex = {
     ],
     Chrome: [
         { name: 'Gloss Silver Chrome (GC451)', colorCode: '#C0C0C0' }
-    ],
-    Textures: [
-        { name: 'Shadow Military Green (SB26)', colorCode: '' },
-        { name: 'Shadow Black (SB12)', colorCode: '' },
-        { name: 'Brushed Black Metallic (BR212)', colorCode: '' },
-        { name: 'Matrix Black (MX12)', colorCode: '' },
-        { name: 'Carbon Fibre Black (CFS12)', colorCode: '' },
-        { name: 'Brushed Steel (BR201)', colorCode: '' },
-        { name: 'Brushed Titanium (BR230)', colorCode: '' },
-        { name: 'Brushed Aluminum (BR120)', colorCode: '' },
-        { name: 'Carbon Fiber Anthracite (CFS201)', colorCode: '' }
     ]
 };
 
