@@ -18,7 +18,8 @@ import { Link } from 'react-router-dom';
 import { BrandDropdown } from './Components/BrandDropdown';
 import { brand3MHex, brandAPAHex, brandAvery, brandTeckwrapHex, brandVinylFrogHex, brandVvividHex } from './Components/Brands';
 import PopupModal from './Components/PopupModal';
-import { AngleDropdown } from './Components/AngleDropdown';
+import { AngleBoxes } from './Components/AngleBoxes';
+// import { AngleDropdown } from './Components/AngleDropdown';
 const CarFillPage = ({ bg }) => {
   // console.log(bg)
   const dispatch = useDispatch();
@@ -85,7 +86,7 @@ const CarFillPage = ({ bg }) => {
   }, [])
   // fetchUserInfo();
   const generateImage = async (year, make, model, finish, color) => {
-    
+
     try {
       setAnimation(true);
 
@@ -105,7 +106,7 @@ const CarFillPage = ({ bg }) => {
           Carbon: 'Carbon',
           Flip: 'Flip'
         };
-        return map[finishKey] || finishKey;
+        return map[finishKey] || finishKey.replace(/_/g, ' ');
       };
 
       const getColorNameByCode = (brand, finishKey, colorCode) => {
@@ -318,24 +319,24 @@ const CarFillPage = ({ bg }) => {
               </div>
             </div>
             <div className={`mx-auto max-w-4xl ${bg ? "text-white" : "text-black"} py-10 text-center`}>
-              <div className='bg-[#2B2C2C] flex items-center gap-4 flex-col sm:flex-row justify-around  p-5 rounded-xl'>
-                <h4 className='text-2xl text-white font-semibold text-left'>Select Wrap Brand</h4>
+              <div className='bg-[#2B2C2C]   p-5 rounded-xl'>
+                <h4 className='text-2xl mb-5 text-white font-semibold text-center'>Select Wrap Brand</h4>
 
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                  <AngleDropdown
-                    angles={angles}
-                    selectedAngle={selectedAngle}
-                    setSelectedAngle={setSelectedAngle}
+                <div className='flex items-center gap-4 flex-col sm:flex-row justify-around'>
+                  <div className="w-full">
+                    <AngleBoxes
+                      angles={angles}
+                      selectedAngle={selectedAngle}
+                      onSelect={setSelectedAngle}
+                    />
+                  </div>
+
+                  <BrandDropdown
+                    brands={brands}
+                    selectedBrand={selectedBrand}
+                    setSelectedBrand={handleBrandClick}
                   />
                 </div>
-
-
-
-                <BrandDropdown
-                  brands={brands}
-                  selectedBrand={selectedBrand}
-                  setSelectedBrand={handleBrandClick}
-                />
 
 
               </div>

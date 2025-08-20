@@ -14,10 +14,10 @@ export const BrandDropdown = ({ brands, selectedBrand, setSelectedBrand }) => {
   }, [query, brands])
 
   return (
-    <Combobox as="div" value={selectedBrand} onChange={setSelectedBrand} className="relative w-full max-w-xs">
+    <Combobox as="div" value={selectedBrand} onChange={setSelectedBrand} className="relative w-full md:w-fit">
       <div className="relative">
         <Combobox.Input
-          className="w-full bg-[#2B2C2C] text-white rounded-md px-4 py-2 border border-gray-600 focus:outline-none"
+          className="w-full bg-[#2B2C2C] text-white rounded-md px-4 py-3.5 border border-gray-600 focus:outline-none"
           displayValue={(brand) => 
             brand ? (brand.name === 'vector' ? 'Avery Dennison' : brand.name) : ''
           }

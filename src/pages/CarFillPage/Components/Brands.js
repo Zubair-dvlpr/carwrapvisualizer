@@ -451,31 +451,6 @@ export const brandVvividHex = {
         { name: 'Liquid Metal Yellow', colorCode: '#D5C846' },
         { name: 'Pastel Pink', colorCode: '#EFA2D1' }
     ],
-    Brushed: [
-        { name: 'Aluminum Brushed Steel', colorCode: '#AFAFAF' },
-        { name: 'Chrome Steel', colorCode: '#CFD0D0' },
-        { name: 'Metallic Blue Brushed Steel', colorCode: '#018AF4' },
-        { name: 'Gold Brushed Steel', colorCode: '#D9A352' }
-    ],
-    CarbonFiber: [
-        { name: 'Black Carbon Fiber', colorCode: '#131310' },
-        { name: 'Black Dry Carbon', colorCode: '#070707' },
-        { name: 'Tek R Black Gloss Carbon', colorCode: '#616161' },
-        { name: 'Black True R Carbon Fiber', colorCode: '#0A0A0A' },
-        { name: 'Tek R Grey Gloss Carbon', colorCode: '#595959' },
-        { name: 'Gunmetal Dry Carbon', colorCode: '#48464B' },
-        { name: 'Dark Grey True R Carbon Fiber (Gunmetal)', colorCode: '#666763' },
-        { name: 'Aluminum Dry Carbon', colorCode: '#9B999D' },
-        { name: 'White Dry Carbon', colorCode: '#EBECEC' },
-        { name: 'Lime Dry Carbon', colorCode: '#6CAD51' },
-        { name: 'Metallic Blue Dry Carbon', colorCode: '#6CAD51' },
-        { name: 'Tek R Blue Gloss Carbon', colorCode: '#6BADCD' },
-        { name: 'Tek R Pink Gloss Carbon', colorCode: '#F58DC2' },
-        { name: 'Pink Dry Carbon Fiber', colorCode: '#EEA3A4' },
-        { name: 'Red Dry Carbon (Interior Only)', colorCode: '#BD3334' },
-        { name: 'Orange Dry Carbon (interior use only)', colorCode: '#F78646' },
-        { name: 'Desert Gold Dry Carbon', colorCode: '#D9A352' }
-    ],
     Chrome: [
         { name: 'Conform Chrome Silver', colorCode: '#D2D2D2' },
         { name: 'Conform Chrome Yellow', colorCode: '#CBBF33' },
@@ -554,28 +529,6 @@ export const brandAPAHex = {
     Matte: [
         { name: 'INDIGO BLUE', colorCode: '#62A4E5' },
         { name: 'BLACK', colorCode: '#161616' }
-    ],
-    Brushed: [
-        { name: 'TECHNO GREY', colorCode: '#BEBFBA' }
-    ],
-    Carbon: [
-        { name: 'FORGED', colorCode: '#0C0A09' },
-        { name: 'BLACK', colorCode: '#0C0D10' },
-        { name: 'BLACK HS', colorCode: '#121315' },
-        { name: 'RACING', colorCode: '#353634' }
-    ],
-    Special: [
-        { name: 'Gemstone SAPPHIRE BLUE', colorCode: '#2C265E' },
-        { name: 'Gemstone AMETHYST PURPLE', colorCode: '#50257B' },
-        { name: 'Gemstone GARNET BRONZE', colorCode: '#6F685B' },
-        { name: 'Gemstone MOONSTONE BLUE', colorCode: '#697784' },
-        { name: 'Sparkle BLACK', colorCode: '#252524' },
-        { name: 'Sparkle WHITE', colorCode: '#DDDDDB' },
-        { name: 'Candy FIRE RED', colorCode: '#9D261F' },
-        { name: 'Candy BLUE', colorCode: '#2663B4' },
-        { name: 'Candy GREEN', colorCode: '#2A6226' },
-        { name: 'Fluo RED', colorCode: '#FF3300' },
-        { name: 'Fluo YELLOW', colorCode: '#FF3300' }
     ]
 };
 
@@ -762,21 +715,6 @@ export const brandVinylFrogHex = {
         { name: 'Neon Ice Blue', colorCode: '#5EB8C3' },
         { name: 'Gray Purple', colorCode: '#9C98AE' },
         { name: 'Glossy Black', colorCode: '#130F12' }
-    ],
-    CarbonFiber: [
-        { name: 'Spiral Black', colorCode: '#16181C' },
-        { name: 'Glossy Spiral Black', colorCode: '#303136' },
-        { name: 'Black Forged Carbon Fiber', colorCode: '#3B3C3E' },
-        { name: 'Red Forged Carbon Fiber', colorCode: '#410D12' },
-        { name: 'Shadow Forged Black Carbon Fiber', colorCode: '#2D2F36' },
-        { name: 'Camouflage Black Carbon Fiber', colorCode: '#111217' },
-        { name: 'Phantom Black Carbon Fiber', colorCode: '#222327' },
-        { name: 'Hexa Black Carbon Fiber', colorCode: '#0F0F13' },
-        { name: 'Ghost Rhombus Black Carbon Fiber', colorCode: '#2F3035' },
-        { name: 'Silver Black Carbon Fiber', colorCode: '#191A1F' },
-        { name: 'Matte Black PPF', colorCode: '#171717' },
-        { name: 'Military Green PPF', colorCode: '#37442B' },
-        { name: 'Matte Russian Violet PPF', colorCode: '#402B3D' }
     ]
 };
 
