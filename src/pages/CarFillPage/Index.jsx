@@ -19,6 +19,8 @@ import { BrandDropdown } from './Components/BrandDropdown';
 import { brand3MHex, brandAPAHex, brandAvery, brandTeckwrapHex, brandVinylFrogHex, brandVvividHex } from './Components/Brands';
 import PopupModal from './Components/PopupModal';
 import { AngleBoxes } from './Components/AngleBoxes';
+import InstagramCarousel from './Components/InstagramCarousel';
+
 // import { AngleDropdown } from './Components/AngleDropdown';
 const CarFillPage = ({ bg }) => {
   // console.log(bg)
@@ -78,7 +80,7 @@ const CarFillPage = ({ bg }) => {
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedMake, setSelectedMake] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
-  const [generatedImage, setGeneratedImage] = useState('');
+  const [generatedImages, setGeneratedImages] = useState([]);
   const imageRef = useRef(null);
   useEffect(() => {
     console.log(credits, " udpated")
@@ -133,19 +135,21 @@ const CarFillPage = ({ bg }) => {
 
 
       if (response?.meta?.requestStatus === 'fulfilled') {
-        const imageBytes = response.payload?.data?.image?.image?.imageBytes;
-        const mimeType = response.payload?.data?.image?.image?.mimeType || 'image/png';
-
-        if (!imageBytes) {
+        const imageArray = response.payload?.data?.image;
+        if (!Array.isArray(imageArray) || imageArray.length === 0) {
           setAnimation(false);
           setShowTooManyRequestsPopup(true);
-          return;
+          return [];
         }
+        const imageUrls = imageArray.map((it) => {
+          const bytes = it?.image?.imageBytes;
+          const mime = it?.image?.mimeType || 'image/png';
+          return bytes ? `data:${mime};base64,${bytes}` : null;
+        }).filter(Boolean);
 
-        const imageUrl = `data:${mimeType};base64,${imageBytes}`;
         await fetchUserInfo();
         setAnimation(false);
-        return imageUrl;
+        return imageUrls;
 
 
       } else {
@@ -275,9 +279,9 @@ const CarFillPage = ({ bg }) => {
       <div className={`flex max-w-7xl mx-auto  ${bg ? 'text-white ' : 'text-black'}  flex-col h-full `}>
         {/* Left Side Image */}
         <div className=' flex flex-col justify-center items-center'>
-          <div ref={imageRef} className=''>
-            {generatedImage ? (
-              <img src={generatedImage} alt='Generated Car' className='w-full rounded' />
+          <div ref={imageRef} className='w-full'>
+             {generatedImages && generatedImages.length > 0 ? (
+              <InstagramCarousel images={generatedImages} aspect="square" />
             ) : (
               <div className='w-full bg-cover bg-center'>
                 <img src={colorfullcar} alt='Car' className='mx-auto max-w-4xl w-full' />
@@ -373,14 +377,14 @@ const CarFillPage = ({ bg }) => {
                                 setSelectedFinish(selectedCategory);
                                 setSelectedColor(item.colorCode);
 
-                                const img = await generateImage(
+                                const imgs = await generateImage(
                                   selectedYear,
                                   selectedMake,
                                   selectedModel,
                                   selectedCategory,
                                   item.colorCode
                                 );
-                                setGeneratedImage(img);
+                                setGeneratedImages(imgs || []);
 
                                 setTimeout(() => {
                                   imageRef.current?.scrollIntoView({ behavior: 'smooth' });
