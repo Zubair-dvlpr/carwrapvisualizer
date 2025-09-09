@@ -1,23 +1,33 @@
-export const AngleBoxes = ({ angles, selectedAngle, onSelect }) => {
+// Components/AngleBoxes.jsx
+import React from 'react';
+
+export const AngleBoxes = ({ angles = [], selectedAngles = [], onToggle = () => {}, max = 4 }) => {
+  const isSelected = (value) => selectedAngles.includes(value);
+
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 w-full">
-      {angles.map(a => {
-        const isActive = selectedAngle === a.value;
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+      {angles.map(({ label, value }) => {
+        const active = isSelected(value);
+        const disabled = !active && selectedAngles.length >= max;
+
         return (
           <button
-            key={a.value}
+            key={value}
             type="button"
-            onClick={() => onSelect(a.value)}
+            onClick={() => onToggle(value)}
+            disabled={disabled}
             className={[
-              "px-2 py-4 rounded-xl border transition text-sm font-medium",
-              "focus:outline-none focus:ring-2 focus:ring-offset-0",
-              isActive
-                ? "bg-[#ED217B] border-[#ED217B] text-white"
-                : "bg-[#ffffff0d] border-[#8A8A8A] text-white hover:bg-[#1f2430]"
-            ].join(" ")}
-            aria-pressed={isActive}
+              'rounded-xl border px-3  py-3 text-sm transition',
+              active
+                ? 'bg-[#ED217B] border-[#ED217B] text-white'
+                : 'bg-[#ffffff0d] border-[#444] text-white hover:bg-[#ffffff1a]',
+              disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+            ].join(' ')}
+            title={disabled ? `You can select up to ${max} angles` : label}
           >
-            {a.label}
+            <div>
+              <span>{label}</span>
+            </div>
           </button>
         );
       })}

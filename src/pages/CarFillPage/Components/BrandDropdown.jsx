@@ -22,7 +22,7 @@ export const BrandDropdown = ({ brands, selectedBrand, setSelectedBrand }) => {
             brand ? (brand.name === 'vector' ? 'Avery Dennison' : brand.name) : ''
           }
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search wrap brand..."
+          placeholder="Search brand..."
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
           <svg

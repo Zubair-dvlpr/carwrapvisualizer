@@ -73,7 +73,8 @@ const CarFillPage = ({ bg }) => {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [showTooManyRequestsPopup, setShowTooManyRequestsPopup] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedAngle, setSelectedAngle] = useState('default');
+  const [selectedAngles, setSelectedAngles] = useState(['default']);
+  const [showTooManyAnglesPopup, setShowTooManyAnglesPopup] = useState(false);
   const [selectedFinish, setSelectedFinish] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [showIncompleteSelectionPopup, setShowIncompleteSelectionPopup] = useState(false);
@@ -87,12 +88,15 @@ const CarFillPage = ({ bg }) => {
     fetchUserInfo()
   }, [])
   // fetchUserInfo();
-  const generateImage = async (year, make, model, finish, color) => {
+  // NEW: accept angles array
+  const generateImage = async (year, make, model, finish, color, anglesToSend) => {
 
     try {
       setAnimation(true);
 
-      if (credits <= 0) {
+      // Optional: 1 credit per angle (adjust if your backend charges differently)
+      const requiredCredits = Math.max(1, (anglesToSend?.length || 1));
+      if (credits < requiredCredits) {
 
         setAnimation(false);
         setShowNoCreditsPopup(true);
@@ -106,7 +110,8 @@ const CarFillPage = ({ bg }) => {
           Gloss: 'Gloss',
           Chrome: 'Chrome',
           Carbon: 'Carbon',
-          Flip: 'Flip'
+          Flip: 'Flip',
+          Matte_Metallic: 'Matte_Metallic', // in case you use this exact key in UI
         };
         return map[finishKey] || finishKey.replace(/_/g, ' ');
       };
@@ -116,6 +121,15 @@ const CarFillPage = ({ bg }) => {
         const found = list.find(c => c.colorCode === colorCode);
         return found?.name || 'Unknown Color';
       };
+
+      // --- NEW: sanitize angles (unique + cap at 4)
+      let sanitizedAngles = Array.from(new Set(anglesToSend && anglesToSend.length ? anglesToSend : ['default']));
+      if (sanitizedAngles.length > 4) {
+        sanitizedAngles = sanitizedAngles.slice(0, 4);
+      }
+      // backend still expects a single promptType — use the first
+      const primaryPromptType = sanitizedAngles[0] || 'default';
+
 
 
       const response = await dispatch(
@@ -128,34 +142,41 @@ const CarFillPage = ({ bg }) => {
           color,
           description: '',
           wrap: `${formatFinishLabel(finish)} ${getColorNameByCode(selectedBrand, finish, color)}`,
-          promptType: selectedAngle
+          promptType: primaryPromptType,
+          angles: sanitizedAngles,
         })
       );
 
+      const raw = response?.payload?.data;
+      let items = [];
+      if (Array.isArray(raw)) {
+        items = raw; // new shape
+      } else if (Array.isArray(raw?.image)) {
+        items = raw.image.map(img => ({ image: img })); // older array under image
+      } else if (raw?.image) {
+        items = [raw]; // single image object inside data
+      }
 
-
-      if (response?.meta?.requestStatus === 'fulfilled') {
-        const imageArray = response.payload?.data?.image;
-        if (!Array.isArray(imageArray) || imageArray.length === 0) {
-          setAnimation(false);
-          setShowTooManyRequestsPopup(true);
-          return [];
-        }
-        const imageUrls = imageArray.map((it) => {
+      const imageUrls = items
+        .map(it => {
           const bytes = it?.image?.imageBytes;
           const mime = it?.image?.mimeType || 'image/png';
           return bytes ? `data:${mime};base64,${bytes}` : null;
-        }).filter(Boolean);
+        })
+        .filter(Boolean);
 
+      if (response?.meta?.requestStatus === 'fulfilled' && imageUrls.length > 0) {
         await fetchUserInfo();
+        setGeneratedImages(imageUrls);
+        setShowTooManyRequestsPopup(false); // hide popup on success (just in case)
         setAnimation(false);
         return imageUrls;
-
-
       } else {
         setAnimation(false);
-        throw new Error(response.payload || 'Image generation failed');
+        setShowTooManyRequestsPopup(true);
+        return [];
       }
+
     } catch (error) {
       setAnimation(false);
       console.error(error);
@@ -168,6 +189,23 @@ const CarFillPage = ({ bg }) => {
   const handleBrandClick = brand => {
     setSelectedBrand(brand);
     setSelectedCategory(null); // Reset category
+  };
+
+  // NEW: toggle multi-angle selection with a hard cap of 4.
+  const toggleAngle = (value) => {
+    setSelectedAngles(prev => {
+      // If already selected -> remove
+      if (prev.includes(value)) {
+        const next = prev.filter(v => v !== value);
+        return next.length ? next : ['default']; // never allow empty
+      }
+      // Add new, but cap at 4
+      if (prev.length >= 4) {
+        setShowTooManyAnglesPopup(true);
+        return prev;
+      }
+      return [...prev, value];
+    });
   };
 
   const handleCategoryClick = category => {
@@ -262,6 +300,16 @@ const CarFillPage = ({ bg }) => {
         </div>
       )}
 
+      {/* NEW: too many angles popup */}
+      {showTooManyAnglesPopup && (
+        <PopupModal
+          title="Angle Limit"
+          message="For best speed and reliability, select up to 4 angles per request."
+          onClose={() => setShowTooManyAnglesPopup(false)}
+          icon="🖼️"
+        />
+      )}
+
       <div className="w-full bg-[#12161F] text-white px-6 py-3 rounded shadow-md mb-6">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
           <h2 className="text-lg sm:text-xl font-semibold">
@@ -280,7 +328,7 @@ const CarFillPage = ({ bg }) => {
         {/* Left Side Image */}
         <div className=' flex flex-col justify-center items-center'>
           <div ref={imageRef} className='w-full'>
-             {generatedImages && generatedImages.length > 0 ? (
+            {generatedImages && generatedImages.length > 0 ? (
               <InstagramCarousel images={generatedImages} aspect="square" />
             ) : (
               <div className='w-full bg-cover bg-center'>
@@ -328,11 +376,16 @@ const CarFillPage = ({ bg }) => {
 
                 <div className='flex items-center gap-4 flex-col sm:flex-row justify-around'>
                   <div className="w-full">
+                    {/* NEW: multi-select angles */}
                     <AngleBoxes
                       angles={angles}
-                      selectedAngle={selectedAngle}
-                      onSelect={setSelectedAngle}
+                      selectedAngles={selectedAngles}
+                      onToggle={toggleAngle}
+                      max={4}
                     />
+                    <p className="mt-2 text-xs text-gray-300">
+                      {selectedAngles.length}/4 angles selected · More angles = slower response
+                    </p>
                   </div>
 
                   <BrandDropdown
@@ -376,13 +429,14 @@ const CarFillPage = ({ bg }) => {
                               try {
                                 setSelectedFinish(selectedCategory);
                                 setSelectedColor(item.colorCode);
-
+                                // NEW: pass selectedAngles through
                                 const imgs = await generateImage(
                                   selectedYear,
                                   selectedMake,
                                   selectedModel,
                                   selectedCategory,
-                                  item.colorCode
+                                  item.colorCode,
+                                  selectedAngles
                                 );
                                 setGeneratedImages(imgs || []);
 
@@ -404,7 +458,7 @@ const CarFillPage = ({ bg }) => {
                             <p className='grow  p-4 border-x border-[#353535]  text-md font-medium'>
                               {item.name}
                             </p>
-                            <span className='text-sm  p-4'>{selectedCategory.replace(/_/g, ' ')}</span>
+                            <span className='text-sm  p-4'>{selectedCategory.replace(/_/g, ' ')} · {selectedAngles.length} angle{selectedAngles.length > 1 ? 's' : ''}</span>
                           </div>
                         ))}
                       </div>
