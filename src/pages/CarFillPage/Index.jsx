@@ -5,6 +5,7 @@ import ModelSelector from './Components/ModelSelector';
 import colorfullcar from '../../assets/images/carshowRoom.png';
 import logo3m from '../../assets/images/3m.png';
 import vector from '../../assets/images/vector.png';
+import HEXIS_LOGO from '../../assets/images/HEXIS_LOGO.png';
 import teckwrap from '../../assets/images/Teckwrap.png';
 import Vvivid_Logo from '../../assets/images/Vvivid_Logo.webp';
 import apa from '../../assets/images/apa-logo.jpg';
@@ -15,7 +16,7 @@ import { useDispatch } from 'react-redux';
 import { generateCarImageAPIFn } from '../../redux/features/Studio/studioFus';
 import { Link } from 'react-router-dom';
 // import { BrandDropdown } from './Components/BrandDropdown'; // desktop only now
-import { brand3MHex, brandAPAHex, brandAvery, brandTeckwrapHex, brandVinylFrogHex, brandVvividHex } from './Components/Brands';
+import { brand3MHex, brandAPAHex, brandAvery, brandTeckwrapHex, brandVinylFrogHex, brandVvividHex, brandHexisHX20000, brandHexisHX30000 } from './Components/Brands';
 import PopupModal from './Components/PopupModal';
 import InstagramCarousel from './Components/InstagramCarousel';
 import { FaCompress, FaExpand } from 'react-icons/fa';
@@ -77,6 +78,8 @@ const CarFillPage = ({ bg }) => {
     { name: 'Vvivid', logo: Vvivid_Logo, colors: brandVvividHex },
     { name: 'APA', logo: apa, colors: brandAPAHex },
     { name: 'Vinyl Frog', logo: frog, colors: brandVinylFrogHex },
+    { name: 'HX30000 Series', logo: HEXIS_LOGO, colors: brandHexisHX30000 },
+    { name: 'HX20000 Series', logo: HEXIS_LOGO, colors: brandHexisHX20000 },
   ];
 
   const { animation, setAnimation, fetchUserInfo, credits } = useContext(AuthContext);
