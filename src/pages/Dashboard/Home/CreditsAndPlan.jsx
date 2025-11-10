@@ -16,15 +16,15 @@ const getCreditsLimit = (planName) => {
 };
 
 const CreditsAndPlan = ({ userInfo, activePlan, plans, isLoading }) => {
-  console.log("userInfo" ,userInfo)
-  console.log("activePlan" ,activePlan)
-  console.log("plans" ,plans)
+  // console.log("userInfo" ,userInfo)
+  // console.log("activePlan" ,activePlan)
+  // console.log("plans" ,plans)
   const mergedPlan = {
     ...activePlan,
     ...plans?.find(plan => plan?.default_price === activePlan?.priceId)
   };
 
-  console.log("mergedPlan",mergedPlan)
+  // console.log("mergedPlan",mergedPlan)
 
   return (
     <div className='grid mt-5 sm:grid-cols-11 grid-cols-1 gap-5'>

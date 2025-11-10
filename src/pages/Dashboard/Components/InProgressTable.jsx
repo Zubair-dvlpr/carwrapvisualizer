@@ -24,7 +24,7 @@ const InProgressTable = () => {
             );
 
             if (data?.meta?.requestStatus === 'fulfilled') {
-                console.log("in process", data)
+                // console.log("in process", data)
                 const formattedData = (data?.payload?.data || []).map((booking) => {
 
                     const totalCost =
@@ -36,7 +36,7 @@ const InProgressTable = () => {
                         hour: '2-digit',
                         minute: '2-digit',
                     })
-                    console.log(time);
+                    // console.log(time);
                     return {
                         date: new Date(booking.bookingDate).toISOString().split('T')[0],
                         customer: `${booking.firstName} ${booking.lastName}`,

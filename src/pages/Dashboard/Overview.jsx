@@ -8,7 +8,7 @@ import {
   stripeVerifySessionAPIFn
 } from '../../redux/features/stripe/stripeFns';
 import { useSearchParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { userInfoAPIFn } from '../../redux/features/auth/authFns';
 import InProgressTable from './Components/InProgressTable';
@@ -19,6 +19,8 @@ import DateBooking from '../../Components/DateBooking';
 
 const Overview = () => {
   const dispatch = useDispatch();
+  const user = useSelector(state => state?.currentUser?.currentUser);
+  const role = user?.data?.user?.role?.role;
   // const { setAddon } = useContext(AuthContext);
   const [params, setParams] = useSearchParams();
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -38,10 +40,11 @@ const Overview = () => {
       })
     );
     if (data?.meta?.requestStatus === 'fulfilled') {
+
       const planDetails = data?.payload?.data?.data; // { name, price, credits }
       setSubscribedPlanData(planDetails);
       setShowSuccessPopup(true); // Show the popup
-      console.log('sucess active plan', data);
+      // console.log('sucess active plan', data);
       const info = await dispatch(userInfoAPIFn());
       if (info?.meta?.requestStatus === 'fulfilled') {
         await dispatch(
@@ -68,6 +71,7 @@ const Overview = () => {
           dispatch(stripeFetchPlansAPIFn()),
           dispatch(stripeActiveSubscriptionsAPIFn())
         ]);
+        console.log("planRes", planRes)
 
         if (userRes?.meta?.requestStatus === 'fulfilled') {
           // console.log('userRes', userRes);
@@ -158,8 +162,9 @@ const Overview = () => {
           <InProgressTable />
         </div>
         <div className='md:col-span-4 col-span-full flex flex-col gap-4 p-4 bg-[#F5F5F7] rounded-4xl'>
-          <DateBooking /> 
-          {!userInfo.parentId && <MembersList />}
+          <DateBooking />
+          {!userInfo.parentId && role !== 'enthusiast' && <MembersList />}
+
         </div>
       </div>
     </>

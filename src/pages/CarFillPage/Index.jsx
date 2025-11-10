@@ -7,6 +7,10 @@ import logo3m from '../../assets/images/3m.png';
 import vector from '../../assets/images/vector.png';
 import HEXIS_LOGO from '../../assets/images/HEXIS_LOGO.png';
 import teckwrap from '../../assets/images/Teckwrap.png';
+import arlon from '../../assets/images/arlon-logo.png';
+import cheetahwrap from '../../assets/images/cheetah-wrap.png';
+import kpmf from '../../assets/images/kpmf-logo.jpg';
+import nozetek from '../../assets/images/nozetek-logo.webp';
 import Vvivid_Logo from '../../assets/images/Vvivid_Logo.webp';
 import apa from '../../assets/images/apa-logo.jpg';
 import frog from '../../assets/images/frog.png';
@@ -16,10 +20,11 @@ import { useDispatch } from 'react-redux';
 import { generateCarImageAPIFn } from '../../redux/features/Studio/studioFus';
 import { Link } from 'react-router-dom';
 // import { BrandDropdown } from './Components/BrandDropdown'; // desktop only now
-import { brand3MHex, brandAPAHex, brandAvery, brandTeckwrapHex, brandVinylFrogHex, brandVvividHex, brandHexisHX20000, brandHexisHX30000 } from './Components/Brands';
+import { brand3MHex, brandAPAHex, brandAvery, brandTeckwrapHex, brandVinylFrogHex, brandVvividHex, brandHexisHX20000, brandHexisHX30000, brandKPMFHex, brandInozetekHex, brandArlonHex, brandCheetahWrapHex } from './Components/Brands';
 import PopupModal from './Components/PopupModal';
 import InstagramCarousel from './Components/InstagramCarousel';
-import { FaCompress, FaExpand } from 'react-icons/fa';
+import { FaCompress, FaExpand, FaShareAlt } from 'react-icons/fa';
+import ShareModal from './Components/ShareModal';
 
 const CarFillPage = ({ bg }) => {
   const dispatch = useDispatch();
@@ -60,7 +65,7 @@ const CarFillPage = ({ bg }) => {
     };
   }, []);
 
-  
+
 
 
   const angles = [
@@ -80,12 +85,21 @@ const CarFillPage = ({ bg }) => {
     { name: 'Vinyl Frog', logo: frog, colors: brandVinylFrogHex },
     { name: 'HX30000 Series', logo: HEXIS_LOGO, colors: brandHexisHX30000 },
     { name: 'HX20000 Series', logo: HEXIS_LOGO, colors: brandHexisHX20000 },
+    { name: 'KPMF', logo: kpmf, colors: brandKPMFHex },
+    { name: 'nozetek', logo: nozetek, colors: brandInozetekHex },
+    { name: 'Arlon', logo: arlon, colors: brandArlonHex },
+    { name: 'CheetahWrap', logo: cheetahwrap, colors: brandCheetahWrapHex },
   ];
 
   const { animation, setAnimation, fetchUserInfo, credits } = useContext(AuthContext);
   const [showNoCreditsPopup, setShowNoCreditsPopup] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState(null);
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const [showTooManyRequestsPopup, setShowTooManyRequestsPopup] = useState(false);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
+  const [errorTitle, setErrorTitle] = useState('Error');
+  const [errorMessage, setErrorMessage] = useState('Something went wrong. Please try again.');
+
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedAngles, setSelectedAngles] = useState(['default']);
   const [showTooManyAnglesPopup, setShowTooManyAnglesPopup] = useState(false);
@@ -129,9 +143,84 @@ const CarFillPage = ({ bg }) => {
     return found?.name || 'Unknown Color';
   };
 
+  // --- Error parser: normalizes various API/thunk/axios shapes into {code, title, message} ---
+  const extractApiError = (resOrErr) => {
+    // Defaults
+    let code = 0;
+    let msg = 'Something went wrong. Please try again.';
+    let title = 'Error';
+
+    // If it's a thunk "fulfilled" but API returned error payload
+    const payload = resOrErr?.payload ?? resOrErr;
+    const data = payload?.data ?? payload?.response?.data ?? payload?.error ?? payload;
+
+    // Common places for status & message
+    const status = payload?.status
+      ?? payload?.statusCode
+      ?? payload?.response?.status
+      ?? data?.status
+      ?? data?.statusCode
+      ?? resOrErr?.status
+      ?? resOrErr?.statusCode
+      ?? 0;
+
+    const message =
+      data?.message
+      ?? data?.error?.message
+      ?? payload?.message
+      ?? payload?.error?.message
+      ?? resOrErr?.message
+      ?? msg;
+
+    code = Number(status) || 0;
+    msg = typeof message === 'string' ? message : msg;
+
+    // Titles by code
+    if (code === 429) title = 'Too Many Requests';
+    else if (code === 400) title = 'Bad Request';
+    else if (code === 401) title = 'Unauthorized';
+    else if (code === 402) title = 'Payment Required';
+    else if (code === 403) title = 'Forbidden';
+    else if (code === 404) title = 'Not Found';
+    else if (code === 408) title = 'Request Timeout';
+    else if (code === 413) title = 'Payload Too Large';
+    else if (code === 415) title = 'Unsupported Media Type';
+    else if (code === 422) title = 'Validation Error';
+    else if (code === 500) title = 'Server Error';
+    else if (code === 502) title = 'Bad Gateway';
+    else if (code === 503) title = 'Service Unavailable';
+    else if (code === 504) title = 'Gateway Timeout';
+
+    // Specific copy tweaks
+    if (/no credits/i.test(msg)) {
+      title = 'No Credits';
+    }
+
+    return { code, title, message: msg };
+  };
+
+  // Use this to show the right popup based on error content
+  const handleErrorPopup = (errObj) => {
+    const { code, title, message } = errObj || {};
+    // If API explicitly says no credits, use your credits popup
+    if (/no credits/i.test(message) || code === 402) {
+      setShowNoCreditsPopup(true);
+      return;
+    }
+    console.log(message);
+    // Otherwise show the generic error popup
+    setErrorTitle(title || 'Error');
+    setErrorMessage(message || 'Something went wrong. Please try again.');
+    setShowErrorPopup(true);
+  };
+
+
+
   const generateImage = async (year, make, model, finish, color, anglesToSend) => {
     try {
       setAnimation(true);
+
+      // Local credits check (fast path)
       const requiredCredits = Math.max(1, (anglesToSend?.length || 1));
       if (credits < requiredCredits) {
         setAnimation(false);
@@ -139,10 +228,12 @@ const CarFillPage = ({ bg }) => {
         return;
       }
 
+      // Angles sanitize
       let sanitizedAngles = Array.from(new Set(anglesToSend && anglesToSend.length ? anglesToSend : ['default']));
       if (sanitizedAngles.length > 4) sanitizedAngles = sanitizedAngles.slice(0, 4);
       const primaryPromptType = sanitizedAngles[0] || 'default';
 
+      // Call API
       const response = await dispatch(
         generateCarImageAPIFn({
           year,
@@ -158,7 +249,8 @@ const CarFillPage = ({ bg }) => {
         })
       );
 
-      const raw = response?.payload?.data;
+      // Try to read images even if fulfilled
+      const raw = response?.payload?.data ?? response?.payload;
       let items = [];
       if (Array.isArray(raw)) items = raw;
       else if (Array.isArray(raw?.image)) items = raw.image.map((img) => ({ image: img }));
@@ -172,23 +264,32 @@ const CarFillPage = ({ bg }) => {
         })
         .filter(Boolean);
 
+      // Success path
       if (response?.meta?.requestStatus === 'fulfilled' && imageUrls.length > 0) {
         await fetchUserInfo();
         setGeneratedImages(imageUrls);
-        setShowTooManyRequestsPopup(false);
+        setShowTooManyRequestsPopup(false); // legacy flag no longer used for errors
+        setShowErrorPopup(false);
         setAnimation(false);
         return imageUrls;
-      } else {
-        setAnimation(false);
-        setShowTooManyRequestsPopup(true);
-        return [];
       }
-    } catch (error) {
+
+      // If fulfilled BUT no images or API said error inside data → parse and show
+      const errObj = extractApiError(response);
       setAnimation(false);
+      handleErrorPopup(errObj);
+      return [];
+    } catch (error) {
+      // Network/Thrown errors
       console.error(error);
-      throw error;
+      setShowErrorPopup(true);
+      const errObj = extractApiError(error);
+      setAnimation(false);
+      handleErrorPopup(errObj);
+      return [];
     }
   };
+
 
   const toggleAngle = (value) => {
     setSelectedAngles((prev) => {
@@ -217,7 +318,7 @@ const CarFillPage = ({ bg }) => {
 
 
 
-  
+
 
   return (
     <>
@@ -250,20 +351,38 @@ const CarFillPage = ({ bg }) => {
         </div>
       )}
 
-      {showTooManyRequestsPopup && (
+      {showErrorPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#000000d8] backdrop-blur-sm">
           <div className="bg-[#0b0f1a] text-white rounded-2xl p-6 w-full max-w-md shadow-xl">
             <div className="flex items-center space-x-2 mb-4">
               <span className="text-2xl">⚠️</span>
-              <h2 className="text-lg font-semibold">Too Many Requests</h2>
+              <h2 className="text-lg font-semibold">{errorTitle}</h2>
             </div>
-            <p className="text-sm text-gray-300 mb-4">We’ve received too many requests from your account. This usually means the system is busy or you’ve just generated an image recently.</p>
-            <p className="text-sm font-semibold text-white mb-4">Please wait a few seconds and try again.</p>
-            <button onClick={() => setShowTooManyRequestsPopup(false)} className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200">Okay, Got It</button>
-            <button onClick={() => setShowTooManyRequestsPopup(false)} className="mt-4 w-full text-sm text-gray-400 hover:text-gray-200 transition">Close</button>
+            <p className="text-sm text-gray-300 mb-4">{errorMessage}</p>
+
+            {/* Friendly, generic guidance that works for most errors */}
+            <ul className="text-xs text-gray-400 mb-4 list-disc pl-5 space-y-1">
+              <li>Double-check your selections and try again.</li>
+              <li>Agar queue busy ho to thori dair baad retry karain.</li>
+              <li>Agar yeh credits issue hai, upar “Buy More Credits” se plan upgrade karain.</li>
+            </ul>
+
+            <button
+              onClick={() => setShowErrorPopup(false)}
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
+            >
+              Okay, Got It
+            </button>
+            <button
+              onClick={() => setShowErrorPopup(false)}
+              className="mt-4 w-full text-sm text-gray-400 hover:text-gray-200 transition"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
+
 
       {showTooManyAnglesPopup && (
         <PopupModal title="Angle Limit" message="For best speed and reliability, select up to 4 angles per request." onClose={() => setShowTooManyAnglesPopup(false)} icon="🖼️" />
@@ -287,17 +406,46 @@ const CarFillPage = ({ bg }) => {
                 <img src={colorfullcar} alt="Car" className={`mx-auto w-full 'max-w-4xl'`} />
               </div>
             )}
-            {/* Fullscreen toggle button bottom-right */}
-            {generatedImages && generatedImages.length > 0 && !isFullscreen && (
-              <button
-                onClick={toggleFullscreen}
-                className="absolute bottom-4 right-4 bg-black/60 text-white p-3 rounded-full shadow-lg hover:bg-black/80"
-              >
-                <FaExpand size={18} />
-              </button>
-            )}
-          </div>
 
+            {/* Fullscreen toggle button bottom-right */}
+            {/* Bottom-right buttons (Fullscreen + Share) */}
+            {generatedImages && generatedImages.length > 0 && (
+              <div className="absolute bottom-4 right-4 flex items-center gap-3">
+                {/* Share Button */}
+                <button
+                  onClick={() => setIsShareOpen(true)}
+                  className="bg-black/60 text-white p-3 rounded-full shadow-lg hover:bg-black/80 transition"
+                  title="Share this wrap"
+                >
+                  <FaShareAlt />
+                </button>
+
+                {/* Fullscreen Toggle Button */}
+                {!isFullscreen && (
+                  <button
+                    onClick={toggleFullscreen}
+                    className="bg-black/60 text-white p-3 rounded-full shadow-lg hover:bg-black/80 transition"
+                    title="Enlarge"
+                  >
+                    <FaExpand size={18} />
+                  </button>
+                )}
+              </div>
+            )}
+
+
+
+          </div>
+          {/* {generatedImages && generatedImages.length > 0 && (
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={() => setIsShareOpen(true)}
+                className="px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition"
+              >
+                Share
+              </button>
+            </div>
+          )} */}
 
           {/* Exit fullscreen button top-right */}
           {isFullscreen && (
@@ -470,6 +618,13 @@ const CarFillPage = ({ bg }) => {
 
       {showIncompleteSelectionPopup && (
         <PopupModal title="Select All Vehicle Details" message="Please select Year, Make, and Model before choosing a wrap color." onClose={() => setShowIncompleteSelectionPopup(false)} icon="⚠️" />
+      )}
+      {isShareOpen && (
+        <ShareModal
+          images={generatedImages}
+          setImages={setGeneratedImages}
+          onClose={() => setIsShareOpen(false)}
+        />
       )}
     </>
   );

@@ -33,5 +33,7 @@ export const endPoints = {
   getPublicBooking: `${baseURL}/${v}/public/get-booking`,
   updateBookingStatus: `${baseURL}/${v}/public/update-booking-status`,
   updateBookingDetails: `${baseURL}/${v}/user/booking`,
-  uploadBookingImgsAPIFn: `${baseURL}/${v}/user/images/upload-booking`
+  uploadBookingImgsAPIFn: `${baseURL}/${v}/user/images/upload-booking`,
+  createUserPost: `${baseURL}/${v}/user/post`,
+  getPublicPost: `${baseURL}/${v}/public/post`,
 };

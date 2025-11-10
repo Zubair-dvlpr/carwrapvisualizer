@@ -5,177 +5,204 @@ import logo from '../../assets/images/logo.png';
 import loginbg from '../../assets/images/loginbg.webp';
 import loaderGif from '../../assets/loading.gif';
 import { useDispatch } from 'react-redux';
-import { loginUserAPIFn, signUpAPIFn } from '../../redux/features/auth/authFns.js';
+import { signUpAPIFn } from '../../redux/features/auth/authFns.js';
 
 const SignUp = () => {
-  const { animation, setAnimation, setCountLogin } = useContext(AuthContext);
+  const { animation, setAnimation } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     fname: '',
     sname: '',
     email: '',
-    password: ''
+    password: '',
+    isBusinessman: false
   });
 
+  const [selectedRole, setSelectedRole] = useState(null);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleRoleSelect = role => {
+    if (role === 'businessman') {
+      setFormData({ ...formData, isBusinessman: true });
+      setSelectedRole('businessman');
+    } else {
+      setFormData({ ...formData, isBusinessman: false });
+      setSelectedRole('enthusiast');
+    }
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
     setError('');
-    setSuccess('');
-    setAnimation(true); // Start loading
+    setAnimation(true);
 
     const data = await dispatch(
       signUpAPIFn({
         firstName: formData.fname,
         lastName: formData.sname,
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        isBusinessman: formData.isBusinessman
       })
     );
+
     if (data?.meta?.requestStatus === 'fulfilled') {
-      localStorage.setItem('showWelcome', 'true'); // Set flag
+      localStorage.setItem('showWelcome', 'true');
       setAnimation(false);
       navigate(`/verify-otp?email=${formData.email}`);
-      // try {
-      //   const data = await dispatch(
-      //     loginUserAPIFn({
-      //       email: formData.email,
-      //       password: formData.password
-      //     })
-      //   );
-
-      //   if (data?.meta?.requestStatus === 'fulfilled') {
-      //     // Check if 'welcomeShown' already exists
-      //     const alreadyWelcomed = localStorage.getItem('welcomeShown');
-      //     setCountLogin(data?.payload?.data?.user?.loginCount)
-      //     if (!alreadyWelcomed) {
-      //       localStorage.setItem('showWelcome', 'true');
-      //       localStorage.setItem('welcomeShown', 'true'); // So it doesn't show again
-      //     }
-      //     navigate('/dashboard');
-      //   } else if (data?.meta?.requestStatus === 'rejected') {
-      //     setError(data?.payload || 'Login failed'); // <- Show server error message
-      //   }
-      // } catch (err) {
-      //   setError('Something went wrong. Please try again.');
-      // } finally {
-      //   setAnimation(false);
-      // }
-    }
-    if (data?.meta?.requestStatus === 'rejected') {
-      setError(data?.payload);
-      console.error(data?.payload);
-      setAnimation(false); // Stop loading
+    } else {
+      setError(data?.payload || 'Signup failed');
+      setAnimation(false);
     }
   };
 
   return (
     <>
       {animation && (
-        <div className='absolute w-full  bg-[#000000d2] flex justify-center h-screen items-center'>
-          <img src={loaderGif} alt='Loading...' className='w-36' />
+        <div className="absolute w-full bg-[#000000d2] flex justify-center h-screen items-center z-50">
+          <img src={loaderGif} alt="Loading..." className="w-36" />
         </div>
       )}
+
       <div
-        className='flex items-center justify-center bg-cover bg-no-repeat bg-center min-h-screen'
+        className="flex items-center justify-center bg-cover bg-no-repeat bg-center min-h-screen"
         style={{ backgroundImage: `url(${loginbg})` }}
       >
-        <div className='bg-[#ffffff1a] mx-3 border border-white text-white rounded-lg p-7 max-w-[650px] w-full'>
-          <div className=''>
-            <Link to='/'>
-              <img src={logo} alt='Logo' className='w-44 mx-auto mb-4' />
+        <div className="bg-[#ffffff1a] mx-3 border border-white text-white rounded-lg p-7 max-w-[650px] w-full">
+          <div>
+            <Link to="/">
+              <img src={logo} alt="Logo" className="w-44 mx-auto mb-4" />
             </Link>
-            <h2 className='text-[32px] font-semibold capitalize mb-2 '>
+            <h2 className="text-[32px] font-semibold capitalize mb-2">
               Get Started with Car Wrapvisualizer™
             </h2>
-            <p className='text-lg mb-2'>
+            <p className="text-lg mb-2">
               Join now to unlock full access to wrap visualizers, projects, and studio tools.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className='space-y-3'>
-            <div className='flex gap-4'>
-              <div>
-                <label className='text-xl font-semibold' htmlFor='fname'>
-                  First Name
-                </label>
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <div className="flex gap-4">
+              <div className="w-1/2">
+                <label className="text-xl font-semibold">First Name</label>
                 <input
-                  type='text'
-                  placeholder='Enter First Name'
+                  type="text"
+                  placeholder="Enter First Name"
                   value={formData.fname}
-                  name='fname'
+                  name="fname"
                   onChange={handleChange}
                   required
-                  className='w-full p-4 mt-3 border bg-[#ffffff1a] rounded-md focus:ring focus:ring-white'
+                  className="w-full p-4 mt-3 border bg-[#ffffff1a] rounded-md focus:ring focus:ring-white"
                 />
               </div>
-
-              <div>
-                <label className='text-xl font-semibold' htmlFor='sname'>
-                  Last Name
-                </label>
+              <div className="w-1/2">
+                <label className="text-xl font-semibold">Last Name</label>
                 <input
-                  type='text'
-                  placeholder='Enter Last Name'
+                  type="text"
+                  placeholder="Enter Last Name"
                   value={formData.sname}
-                  name='sname'
+                  name="sname"
                   onChange={handleChange}
                   required
-                  className='w-full p-4 mt-3 border bg-[#ffffff1a] rounded-md focus:ring focus:ring-white'
+                  className="w-full p-4 mt-3 border bg-[#ffffff1a] rounded-md focus:ring focus:ring-white"
                 />
               </div>
             </div>
 
-            <label className='text-xl font-semibold' htmlFor='email'>
-              Email
-            </label>
+            <label className="text-xl font-semibold">Email</label>
             <input
-              type='email'
-              placeholder='Enter Email Address'
+              type="email"
+              placeholder="Enter Email Address"
               value={formData.email}
-              name='email'
+              name="email"
               onChange={handleChange}
               required
-              className='w-full p-4 mt-3 border bg-[#ffffff1a] rounded-md focus:ring focus:ring-white'
+              className="w-full p-4 mt-3 border bg-[#ffffff1a] rounded-md focus:ring focus:ring-white"
             />
 
-            <label className='text-xl font-semibold' htmlFor='password'>
-              Password
-            </label>
+            <label className="text-xl font-semibold">Password</label>
             <input
-              type='password'
-              placeholder='Enter Password'
+              type="password"
+              placeholder="Enter Password"
               value={formData.password}
-              name='password'
+              name="password"
               onChange={handleChange}
               required
-              className='w-full p-4 mt-3 border bg-[#ffffff1a] rounded-md focus:ring focus:ring-white'
+              className="w-full p-4 mt-3 border bg-[#ffffff1a] rounded-md focus:ring focus:ring-white"
             />
+
+            {/* ✅ ATTRACTIVE ROLE SELECTION */}
+            <div className="mt-6">
+              <label className="text-xl font-semibold mb-3 block">I am a...</label>
+              <div className="flex gap-6">
+                {/* Businessman Card */}
+                <div
+                  onClick={() => handleRoleSelect('businessman')}
+                  className={`cursor-pointer flex-1 border rounded-xl p-5 text-center transition-all duration-300 ${
+                    selectedRole === 'businessman'
+                      ? 'bg-gradient-to-r from-[#1AE1AB] to-[#712FFF] text-white border-transparent scale-105 shadow-lg'
+                      : 'bg-[#ffffff1a] border-gray-400 hover:border-white'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    id="businessman"
+                    name="role"
+                    checked={selectedRole === 'businessman'}
+                    readOnly
+                    className="hidden"
+                  />
+                  <label htmlFor="businessman" className="cursor-pointer text-lg font-semibold">
+                    👔 Businessman
+                  </label>
+                </div>
+
+                {/* Enthusiast Card */}
+                <div
+                  onClick={() => handleRoleSelect('enthusiast')}
+                  className={`cursor-pointer flex-1 border rounded-xl p-5 text-center transition-all duration-300 ${
+                    selectedRole === 'enthusiast'
+                      ? 'bg-gradient-to-r from-[#1AE1AB] to-[#712FFF] text-white border-transparent scale-105 shadow-lg'
+                      : 'bg-[#ffffff1a] border-gray-400 hover:border-white'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    id="enthusiast"
+                    name="role"
+                    checked={selectedRole === 'enthusiast'}
+                    readOnly
+                    className="hidden"
+                  />
+                  <label htmlFor="enthusiast" className="cursor-pointer text-lg font-semibold">
+                    🚗 Enthusiast
+                  </label>
+                </div>
+              </div>
+            </div>
 
             {error && (
-              <p className='text-red-500'>
+              <p className="text-red-500 mt-2 text-center">
                 {typeof error === 'string' ? error : error.message || 'An error occurred'}
               </p>
             )}
-            {success && <p className='text-green-400'>{success}</p>}
 
             <button
-              type='submit'
-              className='w-full cursor-pointer mt-2 bg-gradient-to-r from-[#1AE1AB] to-[#712FFF] text-white py-4 rounded-full hover:bg-blue-600'
+              type="submit"
+              className="w-full cursor-pointer mt-5 bg-gradient-to-r from-[#1AE1AB] to-[#712FFF] text-white py-4 rounded-full hover:opacity-90 transition-all"
             >
               Create My Account
             </button>
           </form>
 
-          <p className='text-center mt-4'>
+          <p className="text-center mt-4">
             Already have an account?{' '}
-            <Link to='/login' className='text-blue-400 hover:underline'>
+            <Link to="/login" className="text-blue-400 hover:underline">
               Log In
             </Link>
           </p>

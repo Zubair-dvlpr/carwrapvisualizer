@@ -2,6 +2,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { endPoints } from '../../constant';
 import axiosInstance from '../../http';
+import { compressBase64Image } from '../../../utils/compressBase64';
 
 // Login User API Fn
 export const getYearsAPIFn = createAsyncThunk(
@@ -53,6 +54,66 @@ export const generateCarImageAPIFn = createAsyncThunk(
       return data;
     } catch (error) {
       return rejectWithValue(error?.response?.data || 'Image generation failed');
+    }
+  }
+);
+
+// Create user post API (upload images)
+export const createUserPostAPIFn = createAsyncThunk(
+  'studio/createUserPost',
+  async ({ title, description, selectedImages, onProgress }, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+
+      for (const [idx, imgBase64] of selectedImages.entries()) {
+        const smallBase64 = await compressBase64Image(imgBase64, 1280, 0.7);
+        const byteString = atob(smallBase64.split(',')[1]);
+        const mimeString = smallBase64.split(',')[0].match(/:(.*?);/)[1];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
+        const blob = new Blob([ab], { type: mimeString });
+        const file = new File([blob], `image_${idx}.jpg`, { type: mimeString });
+        formData.append('images', file);
+      }
+
+      const { data } = await axiosInstance.post(
+        endPoints.createUserPost,
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          onUploadProgress: (progressEvent) => {
+            if (onProgress) {
+              const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+              onProgress(percent);
+            }
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || 'Failed to create post');
+    }
+  }
+);
+
+
+
+export const getPublicPostAPIFn = createAsyncThunk(
+  "studio/getPublicPost",
+  async (publicId, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.get(
+        `${endPoints.getPublicPost}/${publicId}`
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || "Failed to fetch public post"
+      );
     }
   }
 );

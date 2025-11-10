@@ -7,14 +7,34 @@ import { useSelector } from 'react-redux';
 
 const Router = () => {
   const user = useSelector(state => state?.currentUser?.currentUser);
-  // console.log(user);
+  // Define restricted routes for enthusiast users
+  const enthusiastAllowedPaths = [
+    '/dashboard',
+    '/profile',
+    '/tool',          // Studio
+    '/subscription',  // Plans
+  ];
+  // Filter only allowed routes for enthusiast
+  const enthusiastRoutes = privateRoutes.filter(route =>
+    enthusiastAllowedPaths.includes(route.path)
+  );
+  console.log("check current user login ", user);
   const role = user?.data?.user?.role?.role;
 
   const shopmanRoutes = [...privateRoutes].filter(item => item.path != "/subscription")
 
+  // Dynamic routing logic by role
+  let dynamicRoutes;
+  if (role === "shop-man") {
+    dynamicRoutes = shopmanRoutes;
+  } else if (role === "enthusiast") {
+    dynamicRoutes = enthusiastRoutes;
+  } else {
+    dynamicRoutes = privateRoutes; // default (admins, etc.)
+  }
 
-  const dynamicRoutes = role === "shop-man" ?  shopmanRoutes : privateRoutes;
-  
+  // const dynamicRoutes = role === "shop-man" ?  shopmanRoutes : privateRoutes;
+
   return (
     <Routes>
       <Route

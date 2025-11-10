@@ -8,7 +8,7 @@ import { stripeActiveSubscriptionsAPIFn, stripeFetchPlansAPIFn, stripeCheckoutSe
 const PlansList = ({ location }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state?.currentUser?.currentUser);
-  console.log("PlansList", user.data.user.accountType);
+  // console.log("PlansList", user.data.user.accountType);
   const [plans, setPlans] = useState([]);
   const [addon, setAddon] = useState([]);
   const [loadingPlans, setLoadingPlans] = useState(true);
@@ -26,6 +26,15 @@ const PlansList = ({ location }) => {
 
   // Dummy features list per plan id
   const planFeatures = {
+    "Enthusiast Plan": [
+    "Access to 1990–2026 vehicles across all makes & models",
+    "Finishes: Gloss, Satin, Matte, Carbon Fibre, Brushed Metal",
+    "1 seat/user login",
+    "Standard-resolution image exports",
+    "Instant color preview on all vehicles",
+    "Save favorite wraps to your personal gallery",
+    "Perfect for hobbyists, enthusiasts, and small creators",
+  ],
     "Basic Plan": [
       "250 wrap generations/month",
       "All vehicles (1990–2026), all makes & models",
@@ -66,6 +75,7 @@ const PlansList = ({ location }) => {
     setError(null);
     try {
       const data = await dispatch(stripeFetchPlansAPIFn());
+      console.log("ethiesssss plan ", data);
       if (data?.meta?.requestStatus === "fulfilled") {
         const stripePlans = data.payload?.data?.plans
         const addonPlan = stripePlans.filter(plan => plan.name == 'Shop Management Tool')
@@ -92,24 +102,25 @@ const PlansList = ({ location }) => {
     setError(null);
     try {
       const data = await dispatch(stripeActiveSubscriptionsAPIFn());
-      if (data?.meta?.requestStatus === "fulfilled") {
-        console.log("Active subscription:", data);
-        setActivePlan(data.payload.data)
-        // You can handle active subscription data here if needed
+
+      if (data?.meta?.requestStatus === "fulfilled" && data?.payload?.data) {
+        setActivePlan(data.payload.data);
       } else {
-        setError("Failed to load active subscription.");
-        console.error("Failed to fetch active subscription", data);
+        console.warn("No active subscription found — defaulting to Enthusiast or free user view");
+        setActivePlan(null); // <-- allow plans to load normally
       }
     } catch (err) {
-      setError("Unexpected error while loading subscription.");
-      console.error("Error fetching subscription", err);
+      console.error("Error fetching subscription:", err);
+      setActivePlan(null); // fallback instead of throwing error
     } finally {
       setLoadingSubscription(false);
     }
   };
 
+
   useEffect(() => {
     fetchPlans();
+    console.log("ethi ", plans);
     fetchActiveSubscription();
   }, []);
 
@@ -166,7 +177,7 @@ const PlansList = ({ location }) => {
     <div className="text-sm text-gray-500 mt-2">Loading Plans</div>
   </div>;
 
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (error && plans.length === 0) return <p className="text-red-500">{error}</p>;
 
   return (
     <>
@@ -176,6 +187,7 @@ const PlansList = ({ location }) => {
             const isSecondPlan = idx === 1;
             const priceObj = Array.isArray(plan.prices) ? plan.prices[0] : plan.prices;
             const priceId = priceObj?.id;
+            const isEnthusiast = plan.name === "Enthusiast Plan";
             const planDesc = plan?.description || "No description available.";
             const displayDesc = showFullDesc || planDesc.length <= MAX_LENGTH
               ? planDesc
@@ -280,7 +292,7 @@ const PlansList = ({ location }) => {
             </ul>
           </div>
         </div>
-        {console.log(addon)}
+        {/* {console.log(addon)} */}
         {/* Add-ons Button */}
         <div className="w-full mt-8 flex justify-center">
           {addon.map((plan, index) => {

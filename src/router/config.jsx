@@ -24,6 +24,7 @@ import SignUp from '../pages/SignUp/SignUp';
 import SucessfullUrl from '../pages/SucessfullUrl';
 import { userInfoAPIFn } from '../redux/features/auth/authFns';
 import VerifyOtp from '../pages/verifyOtp/VerifyOtp';
+import Post from '../pages/Post/Index';
 
 
 
@@ -237,6 +238,15 @@ export const commonRoutes = [
     element: (
       <DefaultLayout>
         <VerifyOtp />
+      </DefaultLayout>
+    )
+  },
+  {
+    path: '/post/:id',
+    moduleName: 'Post',
+    element: (
+      <DefaultLayout>
+        <Post />
       </DefaultLayout>
     )
   },

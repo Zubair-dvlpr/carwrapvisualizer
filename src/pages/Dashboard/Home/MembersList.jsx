@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addNewUserAPIFn, deleteShopManUserAPIFn, getAllUsersAPIFn, resetPasswordRequestAPIFn } from '../../../redux/features/newUser/newUser';
-import { FiTrash2, FiRefreshCcw } from 'react-icons/fi';
+import {
+  addNewUserAPIFn,
+  deleteShopManUserAPIFn,
+  getAllUsersAPIFn,
+  resetPasswordRequestAPIFn,
+} from '../../../redux/features/newUser/newUser';
+import { FiTrash2, FiRefreshCcw, FiChevronDown } from 'react-icons/fi';
 
 const MembersList = () => {
   const dispatch = useDispatch();
@@ -10,11 +15,13 @@ const MembersList = () => {
   const [showModal, setShowModal] = useState(false);
   const [resetPopupUser, setResetPopupUser] = useState(null);
   const [showResetPopup, setShowResetPopup] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
+    role: 'customer', // default role
   });
 
   useEffect(() => {
@@ -26,6 +33,11 @@ const MembersList = () => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleRoleSelect = (role) => {
+    setFormData((prev) => ({ ...prev, role }));
+    setDropdownOpen(false);
   };
 
   const addNewUser = async (e) => {
@@ -44,7 +56,7 @@ const MembersList = () => {
       if (data?.meta?.requestStatus === 'fulfilled') {
         // alert('✅ User added successfully!');
         setShowModal(false);
-        setFormData({ firstName: '', lastName: '', email: '', password: '' });
+        setFormData({ firstName: '', lastName: '', email: '', password: '', role: 'customer', });
         dispatch(getAllUsersAPIFn()); // Refresh user list
       } else {
         const errorMessage = data?.payload?.message || 'Something went wrong while adding the user.';
@@ -77,12 +89,9 @@ const MembersList = () => {
   const handleResetPassword = async (userId, user) => {
     try {
       const res = await dispatch(resetPasswordRequestAPIFn({ userId }));
-
       if (res?.meta?.requestStatus === 'fulfilled') {
-        setResetPopupUser(user);  // Set user info for popup
-        setShowResetPopup(true);  // Show popup
-
-        // Auto-close after 5 seconds (optional)
+        setResetPopupUser(user);
+        setShowResetPopup(true);
         setTimeout(() => {
           setShowResetPopup(false);
           setResetPopupUser(null);
@@ -92,7 +101,7 @@ const MembersList = () => {
       }
     } catch (error) {
       console.error(error);
-      alert('❌ Unexpected error occurred while resetting password.');
+      alert('Unexpected error occurred.');
     }
   };
 
@@ -122,7 +131,6 @@ const MembersList = () => {
         ) : (
           users.map((member, index) => (
             <div key={index} className="flex items-center  justify-between">
-
               <div className='flex items-center gap-4'>
                 <img
                   src={member?.avatar || `https://ui-avatars.com/api/?name=${member.firstName}+${member.lastName}`}
@@ -144,7 +152,7 @@ const MembersList = () => {
                 {/* Reset Password Icon */}
                 <button
                   onClick={() => handleResetPassword(member._id, member)}
-                  className="text-blue-500 hover:text-blue-700"
+                  className="text-blue-500 cursor-pointer hover:text-blue-700"
                   title="Reset Password"
                 >
                   <FiRefreshCcw size={20} />
@@ -153,7 +161,7 @@ const MembersList = () => {
                 {/* Delete Icon */}
                 <button
                   onClick={() => setSelectedUser(member)}
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 cursor-pointer hover:text-red-700"
                   title="Delete User"
                 >
                   <FiTrash2 size={20} />
@@ -165,59 +173,94 @@ const MembersList = () => {
         )}
       </div>
 
-      {/* Modal (same as before) */}
+      {/* ✨ Beautiful Add User Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-[#000000a8] backdrop-blur-sm bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg relative">
-            <h3 className="text-lg font-semibold mb-4">Add New User</h3>
-            <form onSubmit={addNewUser} className="space-y-3">
-              <input
-                type="text"
-                name="firstName"
-                placeholder="First Name"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded"
-                required
-              />
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Last Name"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded"
-                required
-              />
+        <div className="fixed inset-0 bg-[#000000b5] backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white border border-gray-200 backdrop-blur-lg rounded-2xl p-8 shadow-2xl w-full max-w-md relative animate-fadeIn">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+              Add New Member
+            </h3>
+
+            <form onSubmit={addNewUser} className="space-y-4">
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  name="firstName"
+                  placeholder="First Name"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  className="w-1/2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#712FFF] outline-none"
+                />
+                <input
+                  type="text"
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  className="w-1/2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#712FFF] outline-none"
+                />
+              </div>
+
               <input
                 type="email"
                 name="email"
-                placeholder="Email"
+                placeholder="Email Address"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
-                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#712FFF] outline-none"
               />
+
               <input
                 type="password"
                 name="password"
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
-                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#712FFF] outline-none"
               />
-              <div className="flex justify-end gap-2">
+
+              {/* Custom Role Dropdown */}
+              <div className="relative">
+                <div
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center justify-between p-3 border border-gray-300 rounded-lg cursor-pointer hover:border-[#712FFF]"
+                >
+                  <span className="capitalize text-gray-700">{formData.role}</span>
+                  <FiChevronDown
+                    className={`transition-transform duration-300 ${
+                      dropdownOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </div>
+
+                {dropdownOpen && (
+                  <div className="absolute mt-1 bg-white border border-gray-200 rounded-lg shadow-lg w-full z-10 animate-fadeIn">
+                    {['dealership', 'worker', 'customer'].map((role) => (
+                      <div
+                        key={role}
+                        onClick={() => handleRoleSelect(role)}
+                        className={`p-3 cursor-pointer capitalize hover:bg-[#712FFF]/10 ${
+                          formData.role === role ? 'bg-[#712FFF]/5 font-medium' : ''
+                        }`}
+                      >
+                        {role}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                  className="px-5 py-2  cursor-pointer rounded-lg border border-gray-400 text-gray-700 hover:bg-gray-100 transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                  className="px-5 py-2  cursor-pointer rounded-lg bg-gradient-to-r from-[#1AE1AB] to-[#712FFF] text-white font-medium hover:opacity-90 transition-all"
                 >
                   Add User
                 </button>
@@ -226,7 +269,6 @@ const MembersList = () => {
           </div>
         </div>
       )}
-
       {/* Confirmation Modal */}
       {selectedUser && (
         <div className="fixed inset-0 z-50 bg-[#000000a8] backdrop-blur-sm bg-opacity-30 flex items-center justify-center">
@@ -254,7 +296,6 @@ const MembersList = () => {
         </div>
       )}
 
-
       {showResetPopup && resetPopupUser && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#000000a8] backdrop-blur-sm  bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full">
@@ -277,7 +318,6 @@ const MembersList = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
