@@ -18,7 +18,7 @@ const Contact = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Submit logic here (API call or console log)
-        console.log("Form Data:", formData);
+        // console.log("Form Data:", formData);
         alert("Thank you for contacting us!");
         setFormData({ name: "", email: "", subject: "", message: "" });
     };

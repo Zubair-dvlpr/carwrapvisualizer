@@ -117,7 +117,7 @@ const ConfirmBooking = () => {
           <p className='text-white text-lg'>Booking Already {bookingData?.status}</p>
         ) : (
           <>
-          {console.log(bookingData)}
+          
             <button
               onClick={() => updateBookingStatus('accepted')}
               className='bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 cursor-pointer'

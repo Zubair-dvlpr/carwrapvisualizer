@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { userInfoAPIFn } from '../../redux/features/auth/authFns';
 import InProgressTable from './Components/InProgressTable';
-import { AuthContext } from '../../context/AuthContext';
 import { updateUser } from '../../redux/features/auth/authSlice';
 import Userdetails from '../../Components/Userdetails';
 import DateBooking from '../../Components/DateBooking';
@@ -71,7 +70,7 @@ const Overview = () => {
           dispatch(stripeFetchPlansAPIFn()),
           dispatch(stripeActiveSubscriptionsAPIFn())
         ]);
-        console.log("planRes", planRes)
+        // console.log("planRes", planRes)
 
         if (userRes?.meta?.requestStatus === 'fulfilled') {
           // console.log('userRes', userRes);

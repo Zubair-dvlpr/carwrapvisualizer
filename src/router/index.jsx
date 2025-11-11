@@ -9,7 +9,6 @@ const Router = () => {
   const user = useSelector(state => state?.currentUser?.currentUser);
   // Define restricted routes for enthusiast users
   const enthusiastAllowedPaths = [
-    '/dashboard',
     '/profile',
     '/tool',          // Studio
     '/subscription',  // Plans
@@ -18,7 +17,7 @@ const Router = () => {
   const enthusiastRoutes = privateRoutes.filter(route =>
     enthusiastAllowedPaths.includes(route.path)
   );
-  console.log("check current user login ", user);
+  // console.log("check current user login ", user);
   const role = user?.data?.user?.role?.role;
 
   const shopmanRoutes = [...privateRoutes].filter(item => item.path != "/subscription")
@@ -39,7 +38,7 @@ const Router = () => {
     <Routes>
       <Route
         path='*'
-        element={useIsAuthenticatedUser() ? <Navigate to='/dashboard' /> : <Navigate to='/' />}
+        element={useIsAuthenticatedUser() ? <Navigate to='/tool' /> : <Navigate to='/' />}
       />
       <Route element={<PrivateRoutes />}>
         {dynamicRoutes?.map((route, index) => (

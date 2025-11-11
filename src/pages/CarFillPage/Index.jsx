@@ -207,7 +207,7 @@ const CarFillPage = ({ bg }) => {
       setShowNoCreditsPopup(true);
       return;
     }
-    console.log(message);
+    // console.log(message);
     // Otherwise show the generic error popup
     setErrorTitle(title || 'Error');
     setErrorMessage(message || 'Something went wrong. Please try again.');

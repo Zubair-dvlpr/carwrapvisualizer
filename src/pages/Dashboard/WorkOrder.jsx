@@ -68,7 +68,7 @@ export default function WorkOrder() {
       const formatDate = isoString => {
         return isoString ? new Date(isoString).toISOString().split('T')[0] : '';
       };
-      console.log('Received booking:', booking);
+      // console.log('Received booking:', booking);
       setFormData(prev => ({
         ...prev,
         firstName: booking.firstName,
@@ -88,10 +88,6 @@ export default function WorkOrder() {
         dealership: booking.dealership || '',
 
         // NEW FIELDS from booking if available:
-        estimatedSQ: booking.estimatedSQ || '',
-        estimatedRolls: booking.estimatedRolls || '',
-        estimatedMaterialCost: booking.estimatedMaterialCost || '',
-        netMaterialRevenue: booking.netMaterialRevenue || '',
         ppfCost: booking.ppfCost || '',
         decalsCost: booking.decalsCost || '',
         windowTintingCost: booking.windowTintingCost || '',
@@ -133,11 +129,9 @@ export default function WorkOrder() {
 
   const formatCheckInTime = (timeStr, referenceDateStr = new Date().toISOString()) => {
     if (!timeStr || !/^\d{1,2}:\d{2}$/.test(timeStr)) return '';
-
     const [hoursStr, minutesStr] = timeStr.split(':');
     const hours = parseInt(hoursStr, 10);
     const minutes = parseInt(minutesStr, 10);
-
     // Validate hours and minutes
     if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
       return '';

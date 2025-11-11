@@ -41,7 +41,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   if (role === 'enthusiast') {
     // Enthusiast users: Only show Dashboard, Profile, Studio, Plans
     finalRoutes = menuItems.filter(item =>
-      ['/dashboard', '/profile', '/tool', '/subscription'].includes(
+      [ '/profile', '/tool', '/subscription'].includes(
         item.path.toLowerCase()
       )
     );

@@ -120,7 +120,7 @@ const PlansList = ({ location }) => {
 
   useEffect(() => {
     fetchPlans();
-    console.log("ethi ", plans);
+    // console.log("ethi ", plans);
     fetchActiveSubscription();
   }, []);
 

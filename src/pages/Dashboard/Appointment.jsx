@@ -77,7 +77,7 @@ const Appointment = () => {
     }, []);
 
     const handleDateSelect = async (selectedDate) => {
-        console.log("handleDateSelect", selectedDate)
+        // console.log("handleDateSelect", selectedDate)
         setLoading(true);
         try {
             const data = await dispatch(

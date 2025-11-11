@@ -58,8 +58,8 @@ const BookingAppointment = () => {
 
     
     const uploadImgs = async (bookingId, file) => {
-        console.log("bookingId", bookingId)
-        console.log("file", file)
+        // console.log("bookingId", bookingId)
+        // console.log("file", file)
         const formData = new FormData();
         formData.append('bookingId', bookingId);
         formData.append('images', file);

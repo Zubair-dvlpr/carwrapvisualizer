@@ -23,7 +23,7 @@ export const setAuthToken = token => {
       return config;
     },
     function (error) {
-      console.log('error from https', error);
+      // console.log('error from https', error);
       if (!navigator.onLine) {
         console.log('No internet connection');
       }

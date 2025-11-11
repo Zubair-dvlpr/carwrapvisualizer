@@ -12,7 +12,7 @@ const CustomCalendar = ({ full, onDateSelect }) => {
       return;
     }
     const formattedDate = date.toLocaleDateString('en-CA'); // Fix timezone issue
-    console.log("Formatted Date: ", formattedDate);
+    // console.log("Formatted Date: ", formattedDate);
     setValue(date); // Also update selected state
     onDateSelect(formattedDate);
   };

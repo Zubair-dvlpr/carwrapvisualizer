@@ -18,7 +18,7 @@ const VerifyOtp = () => {
     const [error, setError] = useState('');
 
     const handleVerify = async () => {
-        console.log('OTP:', otp, 'Email:', email); // Debug
+        // console.log('OTP:', otp, 'Email:', email); // Debug
         if (!otp || !email) {
             setError('Email or OTP is missing');
             return;

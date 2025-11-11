@@ -31,7 +31,7 @@ const DateBooking = () => {
   };
 
   const handleDateSelect = async (selectedDate) => {
-    console.log("handleDateSelect", selectedDate)
+    // console.log("handleDateSelect", selectedDate)
     setDateloading(true);
     try {
       const data = await dispatch(
