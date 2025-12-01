@@ -12,7 +12,7 @@ import DateBooking from '../../Components/DateBooking';
 
 const Profile = () => {
   const user = useSelector(state => state?.currentUser?.currentUser);
-  console.log("current user in router ", user.data.user.role.role);
+  // console.log("current user in router ", user.data.user.role.role);
   // const { todayBookings } = useContext(AuthContext);
   const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState({});

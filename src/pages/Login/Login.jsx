@@ -200,7 +200,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowForgotModal(true)}
-                  className="text-indigo-300 hover:underline"
+                  className="text-indigo-300 cursor-pointer hover:underline"
                 >
                   Forgot password?
                 </button>
@@ -212,7 +212,7 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-full bg-gradient-to-r from-teal-300 via-indigo-500 to-pink-500 font-semibold text-white mt-1"
+                className="w-full py-3 cursor-pointer rounded-full bg-gradient-to-r from-teal-300 via-indigo-500 to-pink-500 font-semibold text-white mt-1"
               >
                 Sign In
               </button>
@@ -227,7 +227,7 @@ const Login = () => {
                 Don’t have an account?{" "}
                 <Link
                   to="/signup"
-                  className="text-indigo-300 hover:underline"
+                  className="text-indigo-300 cursor-pointer hover:underline"
                 >
                   Create a free account
                 </Link>

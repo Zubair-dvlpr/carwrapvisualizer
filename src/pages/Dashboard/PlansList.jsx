@@ -27,14 +27,14 @@ const PlansList = ({ location }) => {
   // Dummy features list per plan id
   const planFeatures = {
     "Enthusiast Plan": [
-    "Access to 1990–2026 vehicles across all makes & models",
-    "Finishes: Gloss, Satin, Matte, Carbon Fibre, Brushed Metal",
-    "1 seat/user login",
-    "Standard-resolution image exports",
-    "Instant color preview on all vehicles",
-    "Save favorite wraps to your personal gallery",
-    "Perfect for hobbyists, enthusiasts, and small creators",
-  ],
+      "Access to 1990–2026 vehicles across all makes & models",
+      "Finishes: Gloss, Satin, Matte, Carbon Fibre, Brushed Metal",
+      "1 seat/user login",
+      "Standard-resolution image exports",
+      "Instant color preview on all vehicles",
+      "Save favorite wraps to your personal gallery",
+      "Perfect for hobbyists, enthusiasts, and small creators",
+    ],
     "Basic Plan": [
       "250 wrap generations/month",
       "All vehicles (1990–2026), all makes & models",
@@ -259,75 +259,77 @@ const PlansList = ({ location }) => {
           })
         }
       </div>
+      {user.data.user.role.role !== 'enthusiast' &&
+        <section
+          className=" mt-3  text-white bg-center bg-no-repeat bg-cover rounded-2xl  w-full mx-auto py-12 px-4 gap-4"
+          style={{ backgroundImage: `url(${pricebelowSection})` }}
+        >
+          <h3 className='text-3xl font-bold mb-4 text-center'>Wrap Shop Workflow</h3>
+          <div className='flex flex-col md:flex-row items-stretch justify-center'>
+            {/* Wrapflow Features */}
+            <div className="w-full md:w-1/2">
+              {/* <h3 className="text-2xl font-bold mb-4">Wrapflow</h3> */}
+              <ul className="space-y-3 text-base">
+                {Wrapflow.map((feature, i) => (
+                  <li key={i} className="flex items-center">
+                    <IoIosCheckmarkCircle className="text-white mr-3" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-      <section
-        className=" mt-3  text-white bg-center bg-no-repeat bg-cover rounded-2xl  w-full mx-auto py-12 px-4 gap-4"
-        style={{ backgroundImage: `url(${pricebelowSection})` }}
-      >
-        <h3 className='text-3xl font-bold mb-4 text-center'>Wrap Shop Workflow</h3>
-        <div className='flex flex-col md:flex-row items-stretch justify-center'>
-          {/* Wrapflow Features */}
-          <div className="w-full md:w-1/2">
-            {/* <h3 className="text-2xl font-bold mb-4">Wrapflow</h3> */}
-            <ul className="space-y-3 text-base">
-              {Wrapflow.map((feature, i) => (
-                <li key={i} className="flex items-center">
-                  <IoIosCheckmarkCircle className="text-white mr-3" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
+            {/* Ultimate Plans Features */}
+            <div className="w-full md:w-1/2">
+              {/* <h3 className="text-2xl font-bold mb-4">Ultimate Plans</h3> */}
+              <ul className="space-y-3 text-base">
+                {Ultimateplans.map((feature, i) => (
+                  <li key={i} className="flex items-center">
+                    <IoIosCheckmarkCircle className="text-white mr-3" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          {/* {console.log(addon)} */}
+          {/* Add-ons Button */}
+          <div className="w-full mt-8 flex justify-center">
+            {addon.map((plan, index) => {
+              const priceObj = Array.isArray(plan.prices)
+                ? plan.prices[0]
+                : plan.prices;
+              const price = priceObj?.unit_amount;
+              const currency = priceObj?.currency?.toUpperCase();
+              const interval = priceObj?.recurring?.interval || "one-time";
+
+              const isActive = user?.data?.user?.accountType === "addon_access_paid";
+
+              return (
+                <button
+                  key={index}
+                  onClick={() => !isActive && handleSubscribe(plan)}
+                  disabled={processingPlanId === plan.id || isActive}
+                  className={`${isActive ? "bg-[#bd4d7e] cursor-not-allowed" : "bg-[#ED217B] hover:bg-pink-700 cursor-pointer"
+                    } text-white font-semibold px-9 py-4 rounded-full transition`}
+                >
+                  {isActive
+                    ? "Add on Active"
+                    : processingPlanId === plan.id
+                      ? "Processing..."
+                      : `Add on – ${price !== undefined
+                        ? `$${(price / 100).toFixed(2)} ${currency} / ${interval}`
+                        : "Contact us for pricing"
+                      }`}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Ultimate Plans Features */}
-          <div className="w-full md:w-1/2">
-            {/* <h3 className="text-2xl font-bold mb-4">Ultimate Plans</h3> */}
-            <ul className="space-y-3 text-base">
-              {Ultimateplans.map((feature, i) => (
-                <li key={i} className="flex items-center">
-                  <IoIosCheckmarkCircle className="text-white mr-3" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        {/* {console.log(addon)} */}
-        {/* Add-ons Button */}
-        <div className="w-full mt-8 flex justify-center">
-          {addon.map((plan, index) => {
-            const priceObj = Array.isArray(plan.prices)
-              ? plan.prices[0]
-              : plan.prices;
-            const price = priceObj?.unit_amount;
-            const currency = priceObj?.currency?.toUpperCase();
-            const interval = priceObj?.recurring?.interval || "one-time";
 
-            const isActive = user?.data?.user?.accountType === "addon_access_paid";
+        </section>
 
-            return (
-              <button
-                key={index}
-                onClick={() => !isActive && handleSubscribe(plan)}
-                disabled={processingPlanId === plan.id || isActive}
-                className={`${isActive ? "bg-[#bd4d7e] cursor-not-allowed" : "bg-[#ED217B] hover:bg-pink-700 cursor-pointer"
-                  } text-white font-semibold px-9 py-4 rounded-full transition`}
-              >
-                {isActive
-                  ? "Add on Active"
-                  : processingPlanId === plan.id
-                    ? "Processing..."
-                    : `Add on – ${price !== undefined
-                      ? `$${(price / 100).toFixed(2)} ${currency} / ${interval}`
-                      : "Contact us for pricing"
-                    }`}
-              </button>
-            );
-          })}
-        </div>
-
-
-      </section>
+      }
     </>
   );
 };

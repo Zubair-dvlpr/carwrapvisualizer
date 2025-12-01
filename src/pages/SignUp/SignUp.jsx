@@ -74,7 +74,9 @@ const SignUp = () => {
 
         {/* Logo */}
         <div className="flex flex-col items-center mb-6">
-          <img src={logo} className="w-48 drop-shadow-xl" />
+          <Link to="/">
+            <img src={logo} className="w-48 drop-shadow-xl" />
+          </Link> 
         </div>
 
         {/* Text */}
@@ -253,7 +255,7 @@ const SignUp = () => {
           {/* CTA */}
           <button
             type="submit"
-            className="w-full mt-6 py-3 rounded-full bg-gradient-to-r from-teal-300 via-indigo-500 to-pink-500 font-semibold text-white shadow-lg"
+            className="w-full cursor-pointer mt-6 py-3 rounded-full bg-gradient-to-r from-teal-300 via-indigo-500 to-pink-500 font-semibold text-white shadow-lg"
           >
             Start My Free Trial
           </button>
@@ -273,7 +275,7 @@ const SignUp = () => {
           {/* Login */}
           <p className="text-center text-sm text-gray-300 mt-4">
             Already have an account?{" "}
-            <Link to="/login" className="text-indigo-300 hover:underline">
+            <Link to="/login" className="text-indigo-300 cursor-pointer hover:underline">
               Log In
             </Link>
           </p>
