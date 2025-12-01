@@ -4,13 +4,15 @@ import CreditsAndPlan from './Home/CreditsAndPlan';
 import MembersList from './Home/MembersList';
 import PersonalInformationForm from './Components/PersonalInformationForm';
 import { AuthContext } from '../../context/AuthContext';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userInfoAPIFn } from '../../redux/features/auth/authFns';
 import { stripeActiveSubscriptionsAPIFn, stripeFetchPlansAPIFn } from '../../redux/features/stripe/stripeFns';
 import Userdetails from '../../Components/Userdetails';
 import DateBooking from '../../Components/DateBooking';
 
 const Profile = () => {
+  const user = useSelector(state => state?.currentUser?.currentUser);
+  console.log("current user in router ", user.data.user.role.role);
   // const { todayBookings } = useContext(AuthContext);
   const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState({});
@@ -61,7 +63,7 @@ const Profile = () => {
 
 
   return (
-    <div className=" grid md:grid-cols-10 grid-cols-1 gap-10">
+    <div className={`grid ${user.data.user.role.role !== 'enthusiast' ? `md:grid-cols-10` :  `grid-cols-1`  } grid-cols-1 gap-10`}>
       <div className='md:col-span-6 col-span-full'>
         <Userdetails />
         <p className='text-[#858585] mt-2.5 text-[12px] max-w-[516px]'>Welcome to the Car Wrap Visualizer™ — Streamline your vehicle branding: design, preview, and approve wraps with precision.</p>
@@ -73,10 +75,14 @@ const Profile = () => {
         />
         <PersonalInformationForm userInfo={userInfo} />
       </div>
-      <div className='md:col-span-4 col-span-full p-4 flex flex-col gap-4 bg-[#F5F5F7] rounded-4xl'>
-        <DateBooking />
-        <MembersList />
-      </div>
+
+      {user.data.user.role.role !== 'enthusiast' &&
+        <div className='md:col-span-4 col-span-full p-4 flex flex-col gap-4 bg-[#F5F5F7] rounded-4xl'>
+          <DateBooking />{/* <h1>true</h1> */}
+          <MembersList />
+        </div>
+      }
+
     </div>
   );
 }

@@ -131,7 +131,7 @@ const PersonalInformationForm = ({ userInfo }) => {
   };
 
   return (
-    <div className="border-[#E1E1E1] mt-4 bg-[#F5F5F7] p-5 rounded-lg shadow-md max-w-4xl mx-auto">
+    <div className="border-[#E1E1E1] mt-4 bg-[#F5F5F7] p-5 rounded-lg shadow-md  mx-auto">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">Personal Information</h2>
 
       {errorMsg && <p className="text-red-600 mb-4">{errorMsg}</p>}

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 
 const Router = () => {
   const user = useSelector(state => state?.currentUser?.currentUser);
+  // console.log("current user in router ", user.data.user.role.role);
   // Define restricted routes for enthusiast users
   const enthusiastAllowedPaths = [
     '/profile',

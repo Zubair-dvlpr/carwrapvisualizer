@@ -328,3 +328,29 @@ input[type="range"]::-moz-range-thumb {
 .custom-shape-divider-bottom-1749603305 .shape-fill {
     fill: #12161F;
 }
+
+
+/* Custom premium scrollbar */
+.dropdown-scrollbar::-webkit-scrollbar {
+  width: 4px; /* very thin */
+}
+
+.dropdown-scrollbar::-webkit-scrollbar-track {
+  background: #111827; /* dark background */
+  border-radius: 20px;
+}
+
+.dropdown-scrollbar::-webkit-scrollbar-thumb {
+  background: #4b5563; /* gray-600 */
+  border-radius: 20px;
+}
+
+.dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6b7280; /* gray-500 on hover */
+}
+
+/* For Firefox */
+.dropdown-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 #111827;
+}
