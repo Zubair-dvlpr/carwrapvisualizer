@@ -1,6 +1,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import BoostSalesVisual from '../../../assets/images/BoostSalesVisual.png';
 import "swiper/css";
+import { Link } from "react-router-dom";
 
 export default function WrapPreviewSection() {
     // Dummy testimonial data
@@ -83,10 +84,10 @@ export default function WrapPreviewSection() {
                     </div>
                 </div>
                 {/* CTA BUTTON */}
-                <div className="text-center">
-                    <button className="mt-10 px-8 py-3 cursor-pointer bg-gradient-to-r from-[#F77442] via-[#E00265] to-[#BA02BA] transition-all rounded-full text-white font-semibold">
+                <div className="mt-16 text-center">
+                    <Link to={'/explore'} className=" px-8 py-3 cursor-pointer bg-gradient-to-r from-[#F77442] via-[#E00265] to-[#BA02BA] transition-all rounded-full text-white font-semibold">
                         Explore the features →
-                    </button>
+                    </Link>
                 </div>
             </div>
     

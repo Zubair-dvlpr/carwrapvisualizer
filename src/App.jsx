@@ -3,6 +3,7 @@ import './App.css';
 import AuthProvider from './context/AuthContext'; // Ensure Correct Path
 
 import Router from './router';
+import ScrollToTop from './Components/ScrollToTop';
 
 function App() {
 
@@ -13,7 +14,7 @@ function App() {
       
         <AuthProvider>
           {/* <ViewRoutes /> */}
-          
+          <ScrollToTop />
           <Router />
         </AuthProvider>
       </BrowserRouter>

@@ -1,6 +1,7 @@
 import { FaStar } from "react-icons/fa";
 
 import iphonegold from '../../../assets/images/iphonegold.webp';
+import { Link } from "react-router-dom";
 export default function VisualizeEasySection() {
   return (
     <section className="relative w-full bg-white pt-14 pb-22 px-6 overflow-hidden">
@@ -42,15 +43,17 @@ export default function VisualizeEasySection() {
           </p>
 
           {/* CTA BUTTON */}
-          <button className="mt-10 px-8 py-3 cursor-pointer bg-gradient-to-r from-[#F77442] via-[#E00265] to-[#BA02BA] rounded-full text-white font-semibold shadow-xl">
-            Explore the features →
-          </button>
+          <div className="mt-10">
+            <Link to={'/explore'} className=" px-8 py-3 cursor-pointer bg-gradient-to-r from-[#F77442] via-[#E00265] to-[#BA02BA] rounded-full text-white font-semibold shadow-xl">
+              Explore the features →
+            </Link>
+          </div>
         </div>
 
         {/* RIGHT SIDE MOCKUP */}
         <div className="relative flex justify-center lg:justify-end">
 
-         
+
           {/* FLOATING BOLT */}
           <img
             src={iphonegold}
@@ -58,7 +61,7 @@ export default function VisualizeEasySection() {
             className=" w-4/5 animate-[float_5s_ease-in-out_infinite]"
           />
 
-        
+
         </div>
       </div>
 

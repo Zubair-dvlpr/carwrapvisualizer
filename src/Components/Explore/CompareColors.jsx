@@ -31,7 +31,7 @@ const CompareColors = ({
             {description}
           </p>
 
-          {showStores && (
+          {/* {showStores && (
             <div className="flex gap-4">
               <div className="flex items-center gap-3 bg-black text-white px-4 py-2 rounded-lg">
                 <FaApple size={22} />
@@ -49,7 +49,7 @@ const CompareColors = ({
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </section>

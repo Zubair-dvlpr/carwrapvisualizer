@@ -4,7 +4,7 @@ import { useIsAuthenticatedUser } from '../utils/utils';
 // Local Imports
 
 const PrivateRoutes = () => {
-  return useIsAuthenticatedUser() ? <Outlet /> : <Navigate to='/' />;
+  return useIsAuthenticatedUser() ? <Outlet /> : <Navigate to='/login' />;
 };
 
 export default PrivateRoutes;

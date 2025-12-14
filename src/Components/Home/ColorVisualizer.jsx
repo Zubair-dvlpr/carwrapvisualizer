@@ -4,11 +4,12 @@ import { FaApple, FaGooglePlay } from "react-icons/fa";
 import colorCarImg from '../../assets/images/bannerImg.png';
 import gradientbg from '../../assets/images/gradientbg.webp';
 import ShapeDivider from "../ShapeDivider";
+import { Link } from "react-router-dom";
 
 const ColorVisualizer = ({ title, desc, app = false }) => {
     return (
         <section className=" bg-no-repeat bg-cover bg-center" style={{ backgroundImage: `url(${gradientbg})` }}>
-            <div className="grid md:grid-cols-2 px-3 sm:px-0 gap-8 max-w-[1400px] ml-auto text-white items-center py-20  relative ">
+            <div className="grid md:grid-cols-2 grid-cols-1 px-3 sm:px-0 gap-8 max-w-[1400px] ml-auto text-white items-center py-20  relative ">
 
                 {/* Text Section */}
                 <div className="z-10">
@@ -52,9 +53,12 @@ const ColorVisualizer = ({ title, desc, app = false }) => {
                         </>)}
 
                     {/* CTA Button */}
-                    <button className="bg-black cursor-pointer hover:scale-105   hover:bg-gray-900 text-white px-6 py-3 rounded-full text-lg font-medium shadow-md transition">
-                        Start Visualizing
-                    </button>
+                    <div className="mt-7">
+                        <Link to={'/tool'} className="bg-black cursor-pointer hover:scale-105   hover:bg-gray-900 text-white px-6 py-3 rounded-full text-lg font-medium shadow-md transition">
+                            Start Visualizing
+                        </Link>
+                    </div>
+
                 </div>
 
                 {/* Car Image Section */}
@@ -66,7 +70,7 @@ const ColorVisualizer = ({ title, desc, app = false }) => {
                     />
                 </div>
             </div>
-            
+
             {/* Optional Gradient Background Design */}
             {/* <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-pink-600/10 pointer-events-none" /> */}
         </section>

@@ -82,7 +82,7 @@ const WrapShop = () => {
                     {/* CTAs */}
                     <div className="flex flex-col items-center justify-center gap-4">
                         <Link
-                            to="/visualizer"
+                            to="/tool"
                             className="px-10 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:opacity-90 transition"
                         >
                             Get Started →

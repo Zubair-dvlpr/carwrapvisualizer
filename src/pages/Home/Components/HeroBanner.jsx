@@ -2,6 +2,7 @@ import { FaStar } from "react-icons/fa";
 import herobgtop from '../../../assets/images/hero-bg-top.png';
 import bannercar from '../../../assets/images/bannercar.png';
 import iPhone15 from '../../../assets/images/iPhone-15.webp';
+import { Link } from "react-router-dom";
 export default function HeroBanner() {
     return (
         <section className="relative w-full bg-black sm:pb-32 text-white overflow-hidden">
@@ -41,9 +42,9 @@ export default function HeroBanner() {
 
                 {/* CTA Button */}
                 <div className="mt-8">
-                    <button className="px-8 py-3 cursor-pointer bg-gradient-to-r from-[#F77442] via-[#E00265] to-[#BA02BA] transition-all rounded-full text-white font-semibold">
+                    <Link to={'/tool'} className="px-8 py-3 cursor-pointer bg-gradient-to-r from-[#F77442] via-[#E00265] to-[#BA02BA] transition-all rounded-full text-white font-semibold">
                         Start Visualizing
-                    </button>
+                    </Link>
                 </div>
 
 

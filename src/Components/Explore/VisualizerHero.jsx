@@ -22,7 +22,7 @@ const VisualizerHero = ({
           </p>
 
           <Link
-            to="/visualizer"
+            to="/tool"
             className="inline-block px-8 py-3 rounded-full text-white font-semibold bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:opacity-90 transition"
           >
             {ctaText}

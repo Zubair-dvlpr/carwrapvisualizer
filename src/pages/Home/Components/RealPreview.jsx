@@ -1,9 +1,10 @@
 // RealPreview.jsx
+import { Link } from 'react-router-dom';
 import goldcar from '../../../assets/images/goldcar.webp';
 import mapphoto from '../../../assets/images/mapphoto.png';
 export default function RealPreview() {
     return (
-        <div className="max-w-7xl mx-auto bg-no-repeat bg-bottom text-white py-20" style={{backgroundImage: `url(${mapphoto})`}}>
+        <div className="max-w-7xl mx-auto bg-no-repeat bg-bottom text-white py-20" style={{ backgroundImage: `url(${mapphoto})` }}>
             <div className="flex flex-col md:flex-row items-center gap-10">
 
                 {/* Car Image */}
@@ -26,9 +27,11 @@ export default function RealPreview() {
                         See how different finishes look on actual cars.
                     </p>
 
-                    <button className="mt-6 px-8 py-3 cursor-pointer bg-gradient-to-r from-[#F77442] via-[#E00265] to-[#BA02BA] transition-all rounded-full text-white font-semibold">
-                        Start Visualizing
-                    </button>
+                    <div className="mt-6">
+                        <Link to={'/tool'} className=" px-8 py-3 cursor-pointer bg-gradient-to-r from-[#F77442] via-[#E00265] to-[#BA02BA] transition-all rounded-full text-white font-semibold">
+                            Start Visualizing
+                        </Link>
+                    </div>
                 </div>
             </div>
 

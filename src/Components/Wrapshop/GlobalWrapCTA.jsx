@@ -93,7 +93,7 @@ const GlobalWrapCTA = () => {
 
             <div className="flex flex-wrap gap-4">
               <Link
-                to="/demo"
+                to="/tool"
                 className="px-6 py-3 rounded-full border border-gray-400 text-gray-300 hover:bg-white hover:text-black transition"
               >
                 Try Demo

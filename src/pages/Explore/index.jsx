@@ -73,14 +73,14 @@ const Explore = () => {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              to="/visualizer"
+              to="/tool"
               className="px-10 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:opacity-90 transition"
             >
               Start Visualizing
             </Link>
 
             <Link
-              to="/colors"
+              to="/tool"
               className="px-10 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-pink-600 to-purple-700 hover:opacity-90 transition"
             >
               Browse Colors

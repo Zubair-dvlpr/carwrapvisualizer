@@ -80,7 +80,7 @@ const Header = () => {
       {menuOpen && (
         <div className="md:hidden bg-black border-t border-white/10 px-6 py-6 space-y-4">
           <Link to="/" className="block text-white">Home</Link>
-          <Link to="/explore" className="block ">Explore</Link>
+          <Link to="/explore" className="block text-white ">Explore</Link>
           <Link to="/wrap-shops" className="block text-white">Wrap Shop</Link>
           <Link to="/blog" className="block text-white">Blog</Link>
 
