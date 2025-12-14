@@ -79,7 +79,6 @@ const Login = () => {
             <div className="flex items-center gap-3 mb-6">
               <Link to="/">
                 <img src={logo} alt="CarWrapVisualizer Logo" className="w-32 object-contain" />
-                
               </Link>
               <div className="flex flex-col">
                 <span className="text-[13px] tracking-[0.16em] uppercase text-indigo-300">

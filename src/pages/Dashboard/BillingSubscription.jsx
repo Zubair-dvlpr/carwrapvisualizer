@@ -6,7 +6,7 @@ import Userdetails from '../../Components/Userdetails';
 const BillingSubscription = () => {
   const user = useSelector(state => state?.currentUser?.currentUser);
   console.log("BillingSubscription user", user)
-  const userName = user?.data?.user?.firstName + user?.data?.user?.lastName;
+  // const userName = user?.data?.user?.firstName + user?.data?.user?.lastName;
   return (
     <div className="">
       <div className=''>

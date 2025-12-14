@@ -3,7 +3,7 @@ import { AuthContext } from "../../context/AuthContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signUpAPIFn } from "../../redux/features/auth/authFns.js";
-
+import loaderGif from "../../assets/loading.gif";
 // Your real logo
 import logo from "../../assets/images/logo.png";
 
@@ -44,7 +44,7 @@ const SignUp = () => {
         lastName: formData.sname,
         email: formData.email,
         password: formData.password,
-        phone: formData.phone,
+        // phone: formData.phone,
         isBusinessman: formData.isBusinessman
       })
     );
@@ -65,7 +65,7 @@ const SignUp = () => {
       {/* Loader */}
       {animation && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <img src="/loading.gif" className="w-32" />
+          <img src={loaderGif} className="w-32" />
         </div>
       )}
 

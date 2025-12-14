@@ -16,7 +16,7 @@ import apa from '../../assets/images/apa-logo.jpg';
 import frog from '../../assets/images/frog.png';
 import { AuthContext } from '../../context/AuthContext';
 import loaderGif from '../../assets/loading.gif';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { generateCarImageAPIFn } from '../../redux/features/Studio/studioFus';
 import { Link } from 'react-router-dom';
 // import { BrandDropdown } from './Components/BrandDropdown'; // desktop only now
@@ -28,7 +28,7 @@ import ShareModal from './Components/ShareModal';
 
 const CarFillPage = ({ bg }) => {
   const dispatch = useDispatch();
-
+  const user = useSelector(state => state?.currentUser?.currentUser);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const fullscreenRef = useRef(null);
 
@@ -351,37 +351,100 @@ const CarFillPage = ({ bg }) => {
         </div>
       )}
 
-      {showErrorPopup && (
+      {showNoCreditsPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#000000d8] backdrop-blur-sm">
           <div className="bg-[#0b0f1a] text-white rounded-2xl p-6 w-full max-w-md shadow-xl">
+
+            {/* Header */}
             <div className="flex items-center space-x-2 mb-4">
-              <span className="text-2xl">⚠️</span>
-              <h2 className="text-lg font-semibold">{errorTitle}</h2>
+              <span className="text-2xl">🚀</span>
+              <h2 className="text-lg font-semibold">
+                You've Used All Your Free Credits
+              </h2>
             </div>
-            <p className="text-sm text-gray-300 mb-4">{errorMessage}</p>
 
-            {/* Friendly, generic guidance that works for most errors */}
-            <ul className="text-xs text-gray-400 mb-4 list-disc pl-5 space-y-1">
-              <li>Double-check your selections and try again.</li>
-              <li>Agar queue busy ho to thori dair baad retry karain.</li>
-              <li>Agar yeh credits issue hai, upar “Buy More Credits” se plan upgrade karain.</li>
-            </ul>
+            {/* Enthusiast Specific UI */}
+            {user?.data?.user?.role?.role === 'enthusiast' ? (
+              <>
+                <p className="text-sm text-gray-300 mb-4">
+                  Unlock full access to Car Wrap Visualizer and preview ANY vehicle in ANY color.
+                </p>
 
+                <p className="text-sm font-semibold text-white mb-4">
+                  Enthusiast Plan — <span className="text-yellow-400">$2.49/week</span>
+                </p>
+
+                <ul className="text-sm text-gray-300 space-y-2 mb-6">
+                  <li>• Access all vehicles from 1990–2026</li>
+                  <li>• Preview any wrap color or finish instantly</li>
+                  <li>• Save your favorite designs</li>
+                  <li>• Export standard-resolution images</li>
+                  <li>• Perfect for hobbyists, creators, and everyday drivers</li>
+                </ul>
+
+                <Link
+                  to="/Subscription"
+                  className="w-full py-3 block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
+                >
+                  Upgrade to Enthusiast Plan
+                </Link>
+              </>
+            ) : (
+              <>
+                {/* Other Users (Shops / Business Users UI) */}
+                <p className="text-sm text-gray-300 mb-4">
+                  Continue generating customer previews, sending quotes, and managing jobs.
+                </p>
+
+                <p className="text-sm font-semibold text-white mb-2">
+                  Wrap Shop Plans start at <span className="text-yellow-400">$79/month</span>
+                </p>
+
+                <p className="text-sm font-semibold text-white mb-2">
+                  Get full access to :
+                </p>
+
+                <ul className="text-sm text-gray-300 space-y-1 mb-6">
+                  <li>• Professional wrap previews</li>
+                  <li>• Quote sending</li>
+                  <li>• Job & customer management</li>
+                  <li>• Higher conversion with real visuals</li>
+                </ul>
+
+                <div className="flex items-center space-x-2 mb-2">
+                  <span className="text-yellow-400 text-xl">➕</span>
+                  <p className="text-sm text-gray-300">
+                    Optional CRM Add-On ($49.99/month)
+                  </p>
+                </div>
+
+                <div className="flex items-center space-x-2 mb-6">
+                  <span className="text-yellow-300 text-xl">💡</span>
+                  <p className="text-sm text-gray-300">
+                    Automate follow-ups, marketing, and warranty tracking.
+                  </p>
+                </div>
+
+                <Link
+                  to="/Subscription"
+                  className="w-full py-3 block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
+                >
+                  Join Car Wrap Visualizer™
+                </Link>
+              </>
+            )}
+
+            {/* Close Button */}
             <button
-              onClick={() => setShowErrorPopup(false)}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
-            >
-              Okay, Got It
-            </button>
-            <button
-              onClick={() => setShowErrorPopup(false)}
+              onClick={() => setShowNoCreditsPopup(false)}
               className="mt-4 w-full text-sm text-gray-400 hover:text-gray-200 transition"
             >
-              Close
+              Maybe later
             </button>
           </div>
         </div>
       )}
+
 
 
       {showTooManyAnglesPopup && (

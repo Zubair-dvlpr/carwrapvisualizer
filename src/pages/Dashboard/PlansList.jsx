@@ -28,8 +28,8 @@ const PlansList = ({ location }) => {
   const planFeatures = {
     "Enthusiast Plan": [
       "Access to 1990–2026 vehicles across all makes & models",
+      "For $2.49 get 10 wrap credits",
       "Finishes: Gloss, Satin, Matte, Carbon Fibre, Brushed Metal",
-      "1 seat/user login",
       "Standard-resolution image exports",
       "Instant color preview on all vehicles",
       "Save favorite wraps to your personal gallery",
@@ -196,7 +196,7 @@ const PlansList = ({ location }) => {
             const price = priceObj?.unit_amount;
             const currency = priceObj?.currency?.toUpperCase();
             const interval = priceObj?.recurring?.interval || "one-time";
-
+            
             return (
               <div
                 key={plan.id}
@@ -206,6 +206,7 @@ const PlansList = ({ location }) => {
                   : { backgroundColor: 'transparent' }}
               >
                 <div>
+                  {console.log("activePlan?.priceId", activePlan?.priceId)}
                   <h3 className="text-xl font-bold mb-3">{plan.name}</h3>
                   <p className="mb-3">
                     {displayDesc}
@@ -259,7 +260,7 @@ const PlansList = ({ location }) => {
           })
         }
       </div>
-      {user.data.user.role.role !== 'enthusiast' &&
+      {user.data.user.role.role !== 'enthusiast' && activePlan?.priceId && (
         <section
           className=" mt-3  text-white bg-center bg-no-repeat bg-cover rounded-2xl  w-full mx-auto py-12 px-4 gap-4"
           style={{ backgroundImage: `url(${pricebelowSection})` }}
@@ -328,7 +329,7 @@ const PlansList = ({ location }) => {
 
 
         </section>
-
+      )
       }
     </>
   );

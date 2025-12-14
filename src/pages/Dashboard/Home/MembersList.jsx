@@ -141,8 +141,8 @@ const MembersList = () => {
                   <p className="text-gray-900 font-medium">
                     {member?.firstName} {member?.lastName}
                   </p>
-                  <p className="text-sm text-gray-500">
-                    {member?.role?.[0]?.role === 'shop-man' ? 'Shop Manager' : 'Member'}
+                  <p className="text-sm capitalize text-gray-500">
+                    {member?.role?.[0]?.role === 'shop-man' ? 'Shop Manager' : member?.role?.[0]?.role}
                   </p>
                 </div>
               </div>

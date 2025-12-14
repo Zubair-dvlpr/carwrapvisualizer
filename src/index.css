@@ -1,9 +1,17 @@
 @import "tailwindcss";
+@font-face {
+  font-family: BeniRegular;
+  font-style: normal;
+  font-weight: 200 700;
+  font-display: swap;
+  src: url("./assets/fonts/BeniRegular.ttf") format("truetype");
+}
 
 @theme {
   --font-Inter: "Inter", sans-serif; 
   --font-Poppins: "Poppins", sans-serif; 
   --font-Lato: "Lato", sans-serif; 
+  --font-BeniRegular: "BeniRegular", sans-serif; 
 }
 
 
@@ -136,7 +144,7 @@ html {
 
 
 body {
-    background-color: #12161F;
+    /* background-color: #12161F; */
 }
 
 .price {
@@ -354,3 +362,27 @@ input[type="range"]::-moz-range-thumb {
   scrollbar-width: thin;
   scrollbar-color: #4b5563 #111827;
 }
+
+.custom-shape-divider-bottom-1765568784 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-bottom svg {
+    position: relative;
+    display: block;
+    width: calc(266% + 1.3px);
+}
+
+
+.custom-shape-divider-bottom-1765570074 svg {
+    position: relative;
+    display: block;
+    width: calc(274% + 1.3px);
+
+}
+

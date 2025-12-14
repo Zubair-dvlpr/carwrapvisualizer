@@ -2,6 +2,7 @@
 // import dayjs from 'dayjs';
 import colorfulcarImg from '../../../assets/images/colorful-car-illustration.png';
 import creditslabel from '../../../assets/icons/creditslabel.svg';
+import { useSelector } from 'react-redux';
 // import { AuthContext } from '../../../context/AuthContext';
 // import { completedAppointmentAPIFn } from '../../../redux/features/booking/bookingFus';
 // import Credits from '../../../Components/Credits';
@@ -16,6 +17,7 @@ const getCreditsLimit = (planName) => {
 };
 
 const CreditsAndPlan = ({ userInfo, activePlan, plans, isLoading }) => {
+  const user = useSelector(state => state?.currentUser?.currentUser);
   // console.log("userInfo" ,userInfo)
   // console.log("activePlan" ,activePlan)
   // console.log("plans" ,plans)
@@ -56,7 +58,7 @@ const CreditsAndPlan = ({ userInfo, activePlan, plans, isLoading }) => {
         <p className='text-[#8F8F8F] text-[12px] font-medium'>Remaining Credits</p>
       </div>
       <div className='md:col-span-8  col-span-full'>
-        <div className='border-[#E1E1E1] rounded-[10px] border bg-[#F5F5F7] flex items-center justify-between'>
+        <div className={`border-[#E1E1E1] rounded-[10px] ${user.data.user.role.role == 'enthusiast' && "h-full" } border bg-[#F5F5F7] flex items-center justify-between`}>
           <div className='pl-4'>
             <div>
               {isLoading ? (
@@ -69,102 +71,92 @@ const CreditsAndPlan = ({ userInfo, activePlan, plans, isLoading }) => {
                   {mergedPlan?.name || "Free Trial"}
                 </h4>
               )}
-
-              {/* <p className='text-xs text-[#000] font-medium font-Lato'>Subscription Tier <span className='text-[#454545] font-light text-[10px] sm:ml-3 ml-1'>Trials Ends in 6 Days</span></p> */}
-
-              {/* <p className='text-xs text-[#000] font-medium font-Lato'>
-                Subscription Tier
-                {mergedPlan?.endDate && (
-                  <span className='text-[#454545] font-light text-[10px] sm:ml-3 ml-1'>
-                    Trial Ends in {dayjs(mergedPlan.endDate).diff(dayjs(), 'day')}
-                    Days
-                  </span>
-                )}
-              </p> */}
             </div>
           </div>
           <img src={colorfulcarImg} alt='' />
         </div>
-        <div className='grid grid-cols-2 mt-2 gap-4'>
-          <div className='bg-[#F5F5F7] rounded-[10px] p-3 flex items-center border border-[#E1E1E1]'>
-            <span className='h-[38px] w-[38px] flex justify-center items-center bg-white rounded-2xl'>
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='18'
-                height='18'
-                viewBox='0 0 18 18'
-                fill='none'
-              >
-                <path
-                  d='M16.5016 1.5L10.3516 7.65'
-                  stroke='#0071BC'
-                  strokeWidth='1.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-                <path
-                  d='M9.75 4.62695V8.24945H13.3725'
-                  stroke='#0071BC'
-                  strokeWidth='1.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-                <path
-                  d='M8.25 1.5H6.75C3 1.5 1.5 3 1.5 6.75V11.25C1.5 15 3 16.5 6.75 16.5H11.25C15 16.5 16.5 15 16.5 11.25V9.75'
-                  stroke='#0071BC'
-                  strokeWidth='1.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-              </svg>
-            </span>
-            <div className=' grow flex flex-col items-center  '>
-              <div className=''>
-                <h4 className='font-semibold font-Poppins leading-9 text-2xl'>0</h4>
-                <p className='text-[#8F8F8F] text-xs font-medium'>Deals Closed</p>
+        {user.data.user.role.role !== 'enthusiast' &&
+          <div className='grid grid-cols-2 mt-2 gap-4'>
+            <div className='bg-[#F5F5F7] rounded-[10px] p-3 flex items-center border border-[#E1E1E1]'>
+              <span className='h-[38px] w-[38px] flex justify-center items-center bg-white rounded-2xl'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='18'
+                  height='18'
+                  viewBox='0 0 18 18'
+                  fill='none'
+                >
+                  <path
+                    d='M16.5016 1.5L10.3516 7.65'
+                    stroke='#0071BC'
+                    strokeWidth='1.5'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                  <path
+                    d='M9.75 4.62695V8.24945H13.3725'
+                    stroke='#0071BC'
+                    strokeWidth='1.5'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                  <path
+                    d='M8.25 1.5H6.75C3 1.5 1.5 3 1.5 6.75V11.25C1.5 15 3 16.5 6.75 16.5H11.25C15 16.5 16.5 15 16.5 11.25V9.75'
+                    stroke='#0071BC'
+                    strokeWidth='1.5'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </span>
+              <div className=' grow flex flex-col items-center  '>
+                <div className=''>
+                  <h4 className='font-semibold font-Poppins leading-9 text-2xl'>0</h4>
+                  <p className='text-[#8F8F8F] text-xs font-medium'>Deals Closed</p>
+                </div>
+              </div>
+            </div>
+            <div className='bg-[#F5F5F7] rounded-[10px] p-3 flex items-center border border-[#E1E1E1]'>
+              <span className='h-[38px] w-[38px] flex justify-center items-center bg-white rounded-2xl'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='18'
+                  height='18'
+                  viewBox='0 0 18 18'
+                  fill='none'
+                >
+                  <path
+                    d='M16.5016 1.5L10.3516 7.65'
+                    stroke='#0071BC'
+                    strokeWidth='1.5'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                  <path
+                    d='M9.75 4.62695V8.24945H13.3725'
+                    stroke='#0071BC'
+                    strokeWidth='1.5'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                  <path
+                    d='M8.25 1.5H6.75C3 1.5 1.5 3 1.5 6.75V11.25C1.5 15 3 16.5 6.75 16.5H11.25C15 16.5 16.5 15 16.5 11.25V9.75'
+                    stroke='#0071BC'
+                    strokeWidth='1.5'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </span>
+              <div className=' grow flex flex-col items-center  '>
+                <div className=''>
+                  <h4 className='font-semibold font-Poppins leading-9 text-2xl'>0</h4>
+                  <p className='text-[#8F8F8F] text-xs font-medium'>Monthly Appointments</p>
+                </div>
               </div>
             </div>
           </div>
-          <div className='bg-[#F5F5F7] rounded-[10px] p-3 flex items-center border border-[#E1E1E1]'>
-            <span className='h-[38px] w-[38px] flex justify-center items-center bg-white rounded-2xl'>
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='18'
-                height='18'
-                viewBox='0 0 18 18'
-                fill='none'
-              >
-                <path
-                  d='M16.5016 1.5L10.3516 7.65'
-                  stroke='#0071BC'
-                  strokeWidth='1.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-                <path
-                  d='M9.75 4.62695V8.24945H13.3725'
-                  stroke='#0071BC'
-                  strokeWidth='1.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-                <path
-                  d='M8.25 1.5H6.75C3 1.5 1.5 3 1.5 6.75V11.25C1.5 15 3 16.5 6.75 16.5H11.25C15 16.5 16.5 15 16.5 11.25V9.75'
-                  stroke='#0071BC'
-                  strokeWidth='1.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-              </svg>
-            </span>
-            <div className=' grow flex flex-col items-center  '>
-              <div className=''>
-                <h4 className='font-semibold font-Poppins leading-9 text-2xl'>0</h4>
-                <p className='text-[#8F8F8F] text-xs font-medium'>Monthly Appointments</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        }
       </div>
     </div>
   );

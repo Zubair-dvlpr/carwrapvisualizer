@@ -25,6 +25,9 @@ import SucessfullUrl from '../pages/SucessfullUrl';
 import { userInfoAPIFn } from '../redux/features/auth/authFns';
 import VerifyOtp from '../pages/verifyOtp/VerifyOtp';
 import Post from '../pages/Post/Index';
+import Explore from '../pages/Explore';
+import WrapShop from '../pages/wrapShop';
+import Blog from '../pages/Blog';
 
 
 
@@ -172,7 +175,8 @@ export const publicRoutes = [
     path: '/signUp',
     moduleName: 'Sign Up',
     element: <SignUp />
-  }
+  },
+  
 ];
 
 export const commonRoutes = [
@@ -250,4 +254,31 @@ export const commonRoutes = [
       </DefaultLayout>
     )
   },
+  {
+    path: '/explore',
+    moduleName: 'EXPLORE',
+    element: (
+      <DefaultLayout>
+       <Explore />
+      </DefaultLayout>
+    )
+  },
+  {
+    path: '/wrap-shops',
+    moduleName: 'WRAP SHOPS',
+    element: (
+      <DefaultLayout>
+       <WrapShop />
+      </DefaultLayout>
+    )
+  },
+  {
+    path: '/blog',
+    moduleName: 'BLOG',
+    element: (
+      <DefaultLayout>
+       <Blog />
+      </DefaultLayout>
+    )
+  }
 ];
