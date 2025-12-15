@@ -19,9 +19,7 @@ const Footer = () => {
           <div className="space-y-4">
             <img src={newlogo} alt="Car Wrap Visualizer" className="w-20" />
             <p className="text-sm text-white">
-              © {new Date().getFullYear()}
-              Car Wrap Visualizer™
-              All rights reserved
+              © {new Date().getFullYear()}         Car Wrap Visualizer™  All rights reserved
             </p>
 
             {/* Social Icons */}
@@ -48,8 +46,8 @@ const Footer = () => {
           <div>
             <h4 className="text-sm font-semibold mb-4">Get to Know More</h4>
             <ul className="space-y-2 text-sm text-white">
-              <li><Link to="#/terms" className="hover:text-pink-500"> Terms of Service</Link></li>
-              <li><Link to="#/privacy-policy" className="hover:text-pink-500">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="hover:text-pink-500"> Terms of Service</Link></li>
+              <li><Link to="/privacy-policy" className="hover:text-pink-500">Privacy Policy</Link></li>
               <li><Link to="/login" className="hover:text-pink-500">Login</Link></li>
               <li><Link to="/signup" className="hover:text-pink-500">Register</Link></li>
             </ul>

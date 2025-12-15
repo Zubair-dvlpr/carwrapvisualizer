@@ -13,10 +13,9 @@ const ColorVisualizer = ({ title, desc, app = false }) => {
 
                 {/* Text Section */}
                 <div className="z-10">
-                    <h1 className="text-5xl md:text-6xl font-BeniRegular leading-tight mb-6">
-                        READY TO SEE YOUR  {title}
-                        CAR IN A WHOLE NEW
-                        COLOR?
+                    <h1 className="text-5xl md:text-8xl font-BeniRegular leading-tight mb-6">
+                          {title}
+                       
                     </h1>
                     <p className="text-lg mb-6">
                         {desc}

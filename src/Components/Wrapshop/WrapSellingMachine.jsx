@@ -1,6 +1,6 @@
 import React from "react";
 
-import logoimg from "../../assets/images/logoimg.png";
+import logoimg from "../../assets/images/carImgs/Porsche2.png";
 import ShapeDivider from "../ShapeDivider";
 const WrapSellingMachine = ({
   title = "TURN YOUR WEBSITE\nINTO A WRAP-SELLING\nMACHINE.",
@@ -17,7 +17,7 @@ const WrapSellingMachine = ({
             <img
               src={logoimg}
               alt="Wrap Selling Machine"
-              className="max-w-md w-full"
+              className="w-full"
             />
          
         </div>

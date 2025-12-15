@@ -33,8 +33,8 @@ const Header = () => {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-10 text-sm font-medium">
             <Link to="/" className="text-white hover:text-pink-500 transition">Home</Link>
-            <Link to="/explore" className=" text-white hover:text-pink-500">Explore</Link>
-            <Link to="/wrap-shops" className="text-white hover:text-pink-500 transition">Wrap Shop</Link>
+            <Link to="/explore" className="text-white hover:text-pink-500">Explore</Link>
+            <Link to="/wrap-shops" className="text-black bg-white py-2 px-1 rounded-sm hover:text-pink-500 transition">Wrap Shop</Link>
             <Link to="/blog" className="text-white hover:text-pink-500 transition">Blog</Link>
           </nav>
 
@@ -81,7 +81,7 @@ const Header = () => {
         <div className="md:hidden bg-black border-t border-white/10 px-6 py-6 space-y-4">
           <Link to="/" className="block text-white">Home</Link>
           <Link to="/explore" className="block text-white ">Explore</Link>
-          <Link to="/wrap-shops" className="block text-white">Wrap Shop</Link>
+          <Link to="/wrap-shops" className="block text-black bg-white rounded-sm px-1 py-2">Wrap Shop</Link>
           <Link to="/blog" className="block text-white">Blog</Link>
 
           <div className="pt-4 space-y-3">

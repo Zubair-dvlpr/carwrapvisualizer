@@ -28,6 +28,8 @@ import Post from '../pages/Post/Index';
 import Explore from '../pages/Explore';
 import WrapShop from '../pages/wrapShop';
 import Blog from '../pages/Blog';
+import Privacy from '../pages/Privacy/Index';
+import Terms from '../pages/Termsofserviece';
 
 
 
@@ -278,6 +280,25 @@ export const commonRoutes = [
     element: (
       <DefaultLayout>
        <Blog />
+      </DefaultLayout>
+    )
+  }
+  ,
+  {
+    path: '/privacy-policy',
+    moduleName: 'Privacy Policy',
+    element: (
+      <DefaultLayout>
+       <Privacy />
+      </DefaultLayout>
+    )
+  },
+  {
+    path: '/terms',
+    moduleName: ' Terms Of Serviece ',
+    element: (
+      <DefaultLayout>
+       <Terms />
       </DefaultLayout>
     )
   }
